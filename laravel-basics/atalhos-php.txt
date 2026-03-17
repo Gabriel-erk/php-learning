@@ -1,0 +1,1 @@
+pubf == cria um método com o modificador de acesso publico e toda estrutura que precisa: modificador de acesso + palavra reservada function + assinatura + espaço para parâmetros () + retorno esperado + corpo do método
