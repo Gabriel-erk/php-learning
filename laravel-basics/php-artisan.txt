@@ -1,0 +1,3 @@
+comandos php artisan e suas descições para facilitar minha vida
+
+- php artisan serve == permite subir um servidor já em uma porta especificada utilizando um host especificado (geralmente sobe um servidor no nosso "localhost" na porta 8000 // estamos subindo um servidor web usando o próprio servidor embutido do php, porém aqui com algumas facilidades do laravel como por exemplo: ao subirmos, já está redirecionando as requisições para o arquivo de "bootstrap" (que é tudo o que ele precisa para iniciar) do laravel), para especificar o host e porta seria: php artisan serve --host=0.0.0.0 --port=8000 // cntrl + c no terminal para interromper o servidor (e poder digitar qualquer outra coisa no terminal)
