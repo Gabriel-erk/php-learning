@@ -9,20 +9,36 @@ use Illuminate\Http\Request;
 class SeriesController extends Controller
 {
     // logo, como descrito acima, aqui estaremos recebdno uma requisição por parâmetro, que nos permite obter várias informações da requisição, como: URL, detalhes da queryString, input que viria de um formulário e etc, logo, também podemos retornar uma resposta (Response)
-    public function index(Request $request): string
-    {
-        $series = [
-            "Arcane",
-            "Haikyuu",
-            "You"
-        ];
-        $html = '<ul>';
-        foreach ($series as $serie) {
-            // $html .= "<li>$serie</li>" onde o operador de atribuição ".=" é em PHP uma atribuidor de atribuição de concatenação, ou seja, ele concatena o valor a direita ao final do valor a esquerda, ou seja, concatena "<li>$serie</li>" (valor a direita) com o final do valor a esquerda ($html), utilizada para juntar textos, construir strings longas ou adicionar textos ou elementos HTML 
-            $html .= "<li>$serie</li>";
-        }
-        $html .= '</ul>';
+    // public function index(Request $request): string
+    // {
+    //     $series = [
+    //         "Arcane",
+    //         "Haikyuu",
+    //         "You"
+    //     ];
+    //     $html = '<ul>';
+    //     foreach ($series as $serie) {
+    //          $html .= "<li>$serie</li>" onde o operador de atribuição ".=" é em PHP uma atribuidor de atribuição de concatenação, ou seja, ele concatena o valor a direita ao final do valor a esquerda, ou seja, concatena "<li>$serie</li>" (valor a direita) com o final do valor a esquerda ($html), utilizada para juntar textos, construir strings longas ou adicionar textos ou elementos HTML 
+    //         $html .= "<li>$serie</li>";
+    //     }
+    //     $html .= '</ul>';
 
-        return $html;
+    //     return $html;
+    // }
+
+    public function index(Request $request){
+        $series = [
+            'Arcane',
+            'Haikyuu!',
+            'You'
+        ];
+        // função view busca um arquivo de visualização(== view) e dessa view monta a resposta (view) do nosso conteúdo da resposta (Response), é como se pegasse aquele HTML (escrito na view que passamos de parâmetro para a função view aqui em nosso return) e retornasse a string, logo, como já anotamos, quando o laravel recebe um retorno de string, ele coloca isso no retorno da resposta, precisamos apenas colocar o nome da view (que ele já sabera procurar na pasta resources/views) que ele achará (a não ser, claro, que se estiver dentro de views dentro de outra pasta, ai temos de informa-la nas '' juntamente da view)
+        // como queremos passar nosso array de series, informamos o segundo parâmetro da função view ($data, que por padrão, vem com o valor null e é do tipo array), como é um array, abrimos colchetes e informamos o nome da váriavel que será criada na view, dentro de '' e logo após a flecha => informamos o nome da váriavel DENTRO DO CONTROLLER que terá seu valor passado para o nome informado em '' antes da flecha =>
+        // return view('index', [
+        //     'series' => $series
+        // ]);
+        // função compact é igual ao trecho acima: ['series' => $series], onde o parâmetro passado em ''(aqui == 'series') será o nome da váriavel que será criada na view e procurará no CONTROLLER uma váriavel com o mesmo nome que passamos em ''(aqui == 'series'), ou seja, achará nosso array $series, e criará uma variavel na view chamada '$series' para ser acessada e manipulada ao nosso bel prazer
+        // logo, passamos ela como segundo parâmetro da função view, logo, quando este controller for chamado (através da rota, na pasta Routes/webp.php) ele irá retornar a view index passando o array existente no nosso controller (com a assinatura de index) chamado series com o nome de series na view
+        return view('index', compact('series'));
     }
 }
