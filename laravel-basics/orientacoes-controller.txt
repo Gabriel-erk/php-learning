@@ -1,0 +1,1 @@
+- não damos "echo" em um controller, ou seja, não exibimos nada nele (apenas retornamos respostas (resposes), geralmente com base em alguma parte do conteúdo (URL, detalhes da queryString, input que viraria formulário...) de uma requisição (Request))
