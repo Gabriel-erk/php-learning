@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @vite(['resources/scss/app.scss'])
+    {{-- importando css e bootstrap através de gerenciador de dependências/pacotes do laravel: o vite --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- o title que irá aparecer no navegador (dentro da tag title abaixo) e o title da página (h1 dentro do body) serão os mesmos, logo, atribuo a eles o mesmo valor --}}
     <title>{{ $title }} - Controle de Séries</title>
 </head>
