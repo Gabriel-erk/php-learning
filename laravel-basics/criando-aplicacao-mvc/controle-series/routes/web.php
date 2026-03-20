@@ -18,3 +18,4 @@ Route::get('/', function () {
 // queremos utilizar o método da classe "SeriesController" quando a nossa rota (do tipo get) for chamada, então, primeiro criamos um array, onde a primeira posição é a classe que vamos usar (com essa sintaxe mesmo, SeriesController::class, para definir que usaremos esta classe nessa rota/que chamaremos um método dessa classe como segunda posição do nosso array) e o segundo o método que iremos chamar da mesma
 // por fim, de segunda posição do nosso array (1), o nome do método que será chamado da nossa classe na primeira posição (0) 
 Route::get("/series", [SeriesController::class,'index']);
+Route::get("/series/criar",[SeriesController::class, 'create']);
