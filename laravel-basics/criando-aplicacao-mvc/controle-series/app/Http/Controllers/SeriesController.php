@@ -39,6 +39,6 @@ class SeriesController extends Controller
         // ]);
         // função compact é igual ao trecho acima: ['series' => $series], onde o parâmetro passado em ''(aqui == 'series') será o nome da váriavel que será criada na view e procurará no CONTROLLER uma váriavel com o mesmo nome que passamos em ''(aqui == 'series'), ou seja, achará nosso array $series, e criará uma variavel na view chamada '$series' para ser acessada e manipulada ao nosso bel prazer
         // logo, passamos ela como segundo parâmetro da função view, logo, quando este controller for chamado (através da rota, na pasta Routes/webp.php) ele irá retornar a view index passando o array existente no nosso controller (com a assinatura de index) chamado series com o nome de series na view
-        return view('index', compact('series'));
+        return view('series.index', compact('series'));
     }
 }
