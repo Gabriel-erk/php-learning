@@ -16,25 +16,20 @@ return [
     | is explicitly specified when you execute a query / statement.
     |
     */
-
+    // esta linha define o TIPO de conexão que iremos utilizar (mysql, sqlserver, postgress ou sqlite)
+    // chave DB_CONNECTION para identificar que vamos definir o tipo de conexão apos a ","
+    // após a virgula vem qual tipo de conexão vamos usar, no nosso caso (e do treinamento) usaremos sqlite, pois ele não precisa de infraestrutura, não é necessário subir um servidor de banco de dados nem nada do tipo, com sqlite eu crio UM ARQUIVO e tenho um banco de dados criado
+    // aqui o método env() está lendo a variavel de ambiente == 'DB_CONNECTION' e retornando seu valor == 'sqlite'
     'default' => env('DB_CONNECTION', 'sqlite'),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Database Connections
-    |--------------------------------------------------------------------------
-    |
-    | Below are all of the database connections defined for your application.
-    | An example configuration is provided for each database system which
-    | is supported by Laravel. You're free to add / remove connections.
-    |
-    */
-
+    // para cada um dos tipos de banco de dados, ou seja, para cada valor que passarmos para DB_CONNECTION (na linha acima passamos 'sqlite') teremos uma conexão possivel, como podemos ver dentro da chave 'connections' abaixo, cada possivel valor de DB_CONNECTION (ou seja, cada db, sqlite, mysql...) possuem sua própria configuração de DB - em caso de um db diferente, precisamos de uma lib externa ou mexer nas configs do framework (que pode acarretar em problemas, mas é completamente possivel)
     'connections' => [
 
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
+            // algumas informações são necessárias para utilizarmos o sqlite, como por exemplo o campo abaixo 'database' que nada mais é que onde este banco de dados está/vai estar que por padrão está no caminho: "database.sqlite" (na nossa própria aplicação mesmo, se formos na pasta database/ encontraremos o arquivo database.sqlite lá) como podemos ver abaixo, onde o método database_path(ou em português: caminho do banco de dados) rastreia o caminho do arquivo dentro das suas () e o interpreta como o caminho do banco de dados
+            // método env que está engolobando a linha abaixo: env('DB_DATABASE', database_path('database.sqlite')) lê uma váriavel de ambiente e retorna seu valor, ou seja, aqui abaixo o método env() está lendo a variavel de ambiente: DB_DATABASE e retornando seu valor: database_path('database.sqlite')
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
