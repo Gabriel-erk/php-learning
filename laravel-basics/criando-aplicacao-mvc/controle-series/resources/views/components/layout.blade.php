@@ -12,10 +12,14 @@
 </head>
 
 <body>
-    <h1>{{ $title }}</h1>
-    {{-- a estrutura em volta daqui será a mesma para todas as views, logo, estarei as repetindo, a única diferença que cada view terá da outra é o seu "corpo/conteudo", logo: a única coisa que cada view irá implementar ficará dentro de {{ $slot }} "herdando" o restante da página: não precisando criar outro body, outro head, tag de abrir/fechar html etc  --}}
-    {{ $slot }}
+    <div class="container">
 
+        <h1>{{ $title }}</h1>
+
+        {{-- a estrutura em volta daqui será a mesma para todas as views, logo, estarei as repetindo, a única diferença que cada view terá da outra é o seu "corpo/conteudo", logo: a única coisa que cada view irá implementar ficará dentro de {{ $slot }} "herdando" o restante da página: não precisando criar outro body, outro head, tag de abrir/fechar html etc  --}}
+        {{ $slot }}
+
+    </div>
 </body>
 
 </html>
