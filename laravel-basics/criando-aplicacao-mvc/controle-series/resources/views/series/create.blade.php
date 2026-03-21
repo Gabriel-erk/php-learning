@@ -4,7 +4,8 @@
         @csrf
         <div class="mb-3">
             <label for="nome" class="form-label">Nome:</label>
-            <input type="text" id="nome" class="form-control">
+            {{-- campo name extremamente importante, pois, sem ele, indicando qual input estou passando para o db, ele não recebe nenhum valor, sem o campo name aqui, mesmo preenchendo o input, ao submeter isso (ao clicar no botão adicionar, nada seria passado, para cada campo de formulário/input responsável por passar valor a um campo da minha tabela no db, é necessário um campo "name" na tag HTML input responsável pelo mesmo, logo, meu campo input "email", precisa do name="email" para quando clicar no botão do tipo submit no meu form ele passar o valor corretamente associando: valor digitado no input com atributo name="email" E associar com minha tabela no banco que possui o campo email, para que ela possa receber e manipular esse valor (adicionando, atualizando, removendo...)) --}}
+            <input type="text" id="nome" name="nome" class="form-control">
         </div>
         <button type="submit" class="btn btn-dark">Adicionar</button>
     </form>
