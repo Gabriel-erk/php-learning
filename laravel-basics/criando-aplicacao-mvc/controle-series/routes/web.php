@@ -19,3 +19,4 @@ Route::get('/', function () {
 // por fim, de segunda posição do nosso array (1), o nome do método que será chamado da nossa classe na primeira posição (0) 
 Route::get("/series", [SeriesController::class,'index']);
 Route::get("/series/criar",[SeriesController::class, 'create']);
+Route::post("/series/salvar",[SeriesController::class, 'store']);
