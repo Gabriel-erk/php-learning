@@ -26,9 +26,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/series/criar">Cadastrar</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/series/excluir">Excluir</a>
-                        </li>
                     </ul>
                     <span class="navbar-text">
                         Sistema de crud de séries.

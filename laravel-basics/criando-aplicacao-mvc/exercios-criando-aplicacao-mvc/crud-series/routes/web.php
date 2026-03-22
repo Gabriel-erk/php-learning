@@ -14,3 +14,4 @@ Route::post('/series/salvar',[SeriesController::class, 'store']);
 Route::get('/series/editar/{id}', [SeriesController::class, 'edit']);
 // verbo http put para dizer que vou atualizar um registro
 Route::put('/series/atualizar/{id}', [SeriesController::class, 'update']);
+Route::delete('/series/deletar/{id}', [SeriesController::class, 'destroy']);

@@ -51,7 +51,12 @@ class SeriesController extends Controller
         $serie->nome = $novoNomeSerie;
         $serie->save();
 
-        return redirect('series');
+        return redirect('/series');
+    }
 
+    public function destroy(int $id) {
+        Serie::destroy($id);
+
+        return redirect('/series');
     }
 }
