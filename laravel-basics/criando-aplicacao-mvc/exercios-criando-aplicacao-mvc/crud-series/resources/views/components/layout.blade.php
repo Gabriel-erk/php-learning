@@ -27,9 +27,6 @@
                             <a class="nav-link" href="/series/criar">Cadastrar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/series/editar">Editar</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="/series/excluir">Excluir</a>
                         </li>
                     </ul>

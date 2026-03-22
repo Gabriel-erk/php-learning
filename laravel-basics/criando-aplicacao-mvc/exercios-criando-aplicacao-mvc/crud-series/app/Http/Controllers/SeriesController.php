@@ -18,17 +18,40 @@ class SeriesController extends Controller
         return view('series.index', compact('series'));
     }
 
-    public function create(){
+    public function create()
+    {
         return view('series.criar');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $nomeSerie = $request->input('nome');
         $serie = new Serie();
         $serie->nome = $nomeSerie;
 
         $serie->save();
-        // dando certo ou errado, retorno para a home, pois se deu certo, já vai estar listando a serie, se não, não
-        return redirect()->back();
+        // dando certo ou errado, retorno para a página atual (pois se mandar para a home vai dar um erro dizendo que a váriavel $series não existe)
+        return view('series.criar');
+    }
+
+    public function edit(int $id)
+    {
+        $serie = Serie::find($id);
+
+        return view('series.editar', compact('serie'));
+    }
+
+    // recebo uma requisição (informações do formulário/informações que irei substituir da série atual) e o id da série que irei atualizar, pois preciso encontra-la no banco para atualizar os campos selecionados
+    public function update(Request $request, int $id)
+    {
+        // aqui só vou receber o nome da série para atualizar, então posso ir atrás apenas desse campo
+        $novoNomeSerie = $request->input('nome');
+        // encontro a série no banco de dados para substituir o nome dela no banco pelo novo
+        $serie = Serie::find($id);
+        $serie->nome = $novoNomeSerie;
+        $serie->save();
+
+        return redirect('series');
+
     }
 }
