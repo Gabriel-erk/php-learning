@@ -11,5 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 // logo, com a mesma classe (Serie), consigo criar queries/querys/consultas no banco ($series = Serie::query()->orderBy('nome', 'asc')->get()), inserir dados no banco ($serie->save()) e consigo representar um objeto do meu domínio ($serie = new Serie())
 class Serie extends Model
 {
-    //
+    // propriedade protegida chamada "$fillable" que nos pede para informar quais campos do nosso model (== tabela series) podem receber "mass assignement", ou seja, inserção de dados em massa, onde nos permitirá usar métodos do nosso model que nos permitem esse tipo de comportamento como Serie::create([]) que faz uma inserção de dados em massa, diferente do que vimos no outro curso: $serie->save() que não faz isso, se não teriamos sido barrados com um erro pedindo que informassemos o "token" (como acontece caso tentarmos usar Serie::create([]) sem a propriedade $fillable definida corretamente em nosso model nas PROPRIEDADES DA NOSSA TABELA que podem receber inserção em massa de dados) 
+    protected $fillable = [
+        "nome"
+    ];
 }
