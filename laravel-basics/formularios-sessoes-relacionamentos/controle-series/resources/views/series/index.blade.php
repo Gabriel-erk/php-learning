@@ -1,6 +1,7 @@
 {{-- atributo personalizado do html, onde caso nosso layout esteja criado corretamente com a estrutura components/layout  apenas uso na tag x-layout que irá chama-lá corretamente // como criamos a váriavel $title, ela será passada como parâmetro juntamenta na definição da tag // tudo que colcoarmos dentro do nosso x-layout será jogado para a váriavel: $slot definida dentro do body de components/layout // x-layout == componente // x-nomeDoComponenteAquiDentroDaPastaComponents --}}
 <x-layout title="Séries">
-    <a href="/series/criar" class="btn btn-dark mb-2">Adicionar</a>
+    {{-- para chamar uma rota por apelido, primeiro adicionamos as {{  }} para informar que usaremos uma função/código bruto php e chamamos a função route() passando de parâmetro o apelido que definimos para nossa rota em "web.php" --}}
+    <a href="{{ route('series.create') }}" class="btn btn-dark mb-2">Adicionar</a>
 
     <ul class="list-group">
         @foreach ($series as $serie)
