@@ -20,12 +20,14 @@ Route::get('/', function () {
 // por fim, de segunda posição do nosso array (1), o nome do método que será chamado da nossa classe na primeira posição (0) 
 // Route::get("/series", [SeriesController::class,'index']);
 
-// linha abaixo, meio muito UTIL de simplificar definição de rotas, pesquisar na doc ou jogar no chat para melhor implementação do mesmo
-// Route::resource('/series', SeriesController::class);
-
 // através do método estático controller de "Route" (== Route::controller), nós conseguimos agrupar as rotas por controller, onde passando por parâmetro para o método estatico "controller" de Route QUAL CONTROLLER iremos agrupar e depois usamos o método "group" passando como parâmetro uma função anônima onde, seu corpo irá ter as rotas (url's de cada uma e QUAL método do "controller pai" irá disparar, como por exemplo, a primeira rota: Route::get("/series", 'index')), na rota "/series" na URL irá chamar o método 'index' do "controller pai" == SeriesController (como definimos na linha 26 com: Route::controller(SeriesController::class)->group(function() { rotas aqui }))
-Route::controller(SeriesController::class)->group(function () {
-    Route::get("/series", 'index')->name('series.index');
-    Route::get("/series/criar", 'create')->name('series.create'); // por exemplo, caso a url para esta rota mude (atual: /series/criar e mude para: /series/create, teria de acessar TODAS as rotas que tinham /series/criar e alterar para /series/create, o que seria meio trabalhoso? não? por isso, vem o conveito a seguir chamado de "rotas nomeadas"), não quero ter que ter todo esse trabalho, logo, podemos adicionar um apelido para está rota, onde, em cada lugar que chamava a rota: "/series/criar" apenas chamamos o apelido novo: 'series.create', que definimos no método "->name('apelidoDaRotaAqui')", onde, por padrão usamos essa convenção para definir apelidos: ->name(nomeGeralRota/prefixoDaPalavraControllerNoControllerResponsavelPorEssaRota.nomeDoMetodoChamadoParaEsta rota) ou seja == ->name('series.create'); // claro, neste caso, nosso conjunto de rotas é baseado em "series" devido a nossa tabela ser chamada series (controller == series e Model Serie) e depois o método que aquela rota ali está disparando
-    Route::post("/series/salvar", 'store')->name('series.store');
-});
+// Route::controller(SeriesController::class)->group(function () {
+//     Route::get("/series", 'index')->name('series.index');
+    // por exemplo, caso a url para esta rota mude (atual: /series/criar e mude para: /series/create, teria de acessar TODAS as rotas que tinham /series/criar e alterar para /series/create, o que seria meio trabalhoso? não? por isso, vem o conveito a seguir chamado de "rotas nomeadas"), não quero ter que ter todo esse trabalho, logo, podemos adicionar um apelido para está rota, onde, em cada lugar que chamava a rota: "/series/criar" apenas chamamos o apelido novo: 'series.create', que definimos no método "->name('apelidoDaRotaAqui')", onde, por padrão usamos essa convenção para definir apelidos: ->name(nomeGeralRota/prefixoDaPalavraControllerNoControllerResponsavelPorEssaRota.nomeDoMetodoChamadoParaEsta rota) ou seja == ->name('series.create'); // claro, neste caso, nosso conjunto de rotas é baseado em "series" devido a nossa tabela ser chamada series (controller == series e Model Serie) e depois o método que aquela rota ali está disparando
+//     Route::get("/series/criar", 'create')->name('series.create'); 
+//     Route::post("/series/salvar", 'store')->name('series.store');
+// });
+
+// lmeio útil para simplificar a criação de rotas para nós, onde, apens definimos o prefixo de cada rota, no nosso caso: '/series' e definirmos o nosso controller
+// após isso ele por debaixo dos panos irá criar manualmente e apelidar nossas rotas com base nos métodos padrão, ou seja, podemos acessar na url igual antes a rota: /series (que irá disparar o método index do meu SeriesController) e ir até a página inicial, para criar uma séries, utilizaremos o apelido "series.create" que irá levar até a tela de cadastro, o método para salvar: /series/store agora: series.store (disparando o método store quando chamada....) e nem precisamos escrever isso de fato
+Route::resource('/series', SeriesController::class);

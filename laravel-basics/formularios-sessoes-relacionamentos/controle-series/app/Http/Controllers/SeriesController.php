@@ -30,7 +30,11 @@ class SeriesController extends Controller
         // caso darmos um dd($request) veremos que ele traz um array associativo que mostra o seu corpo (que contém as informações do formulário em um array associativo, onde por ex: input com o name = "nome" com o valor Game of Thrones e um input com o name = "genero" com o valor Ação Medieval, ao clicar no botão do tipo submit dentro da tag html "forms" com um action direcionado para a rota DESTE método que estamos (store em SeriesController) será passado uma requisição para a nossa váriavel no parâmetro DESTE método, e o corpo desta requisição será o VALOR da nossa váriavel de parâmetro ($request) e esse valor estará da seguinte forma: "nome" => "Game of Thrones", "genero" => "Ação Medieval", este será o valor de $request (caso tenha um token (graças ao @csrf que passamos em cada formulário ao utilizar o laravel) ele estará lá também), e então preencherá corretamente o array associativo que devriamos colocar para cada campo da nossa tabela série dentro do array que Serie::create(estouFalandoDesseArrayAquiÒcasoVaVerComOMouseEmcimaDe:Serie::create(VereiQueOvalorPassadoAquiTemQueSerUmArray,Logo,OretornoDe$request->all()éUmArrayComOcampoTokenEnomeOndeNomeFoiPassadoNoFormQueChamaArotaQueDisparaEsteMétodoAqui)) pede, por isso não temos que escrever algo como: Serie::create("nome" => $request->nome) pois a sintax, o corpo de $request->all() já nos entrega isso corretamente (claro, dependendo da estrutura do formulário, se o formulário estiver com os campos corretos/correspondentes ao que minha série precisa para ser criada, irá funcionar, pois não faz sentido eu disparar esse create aqui em um formulário que passaria para minha $request de parâmetro os campos: cidade, uf, rua...pois não tem nada haver com oq o model que está NESSE REQUEST aqui, ele NÃO PRECISA DESSAS CAMPOS NADA HAVER (cidade, uf, ruia....)) )
         // dd($request->all());
         Serie::create($request->all());
-        
-        return redirect('/series');
+        // devolvendo/retornando uma resposta de redirecionamento para a minha rota "series.index", que chama o método "index" do controller series, a sintaxe abaixo é a mais "amigavel/profissional" quando queremos utilizar rotas + apelidos (abaixo estamos chamando a rota pelo seu apelido == series.index), da mesma forma que a outra sintax que aprendemos para fazer a mesma coisa: redirect()->route('series.index') porém de uma forma mais simplificada e interessante aqui 
+        return to_route('series.index');
+    }
+
+    public function show(){
+
     }
 }
