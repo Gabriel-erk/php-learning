@@ -1,5 +1,7 @@
 <?php 
 
+namespace Fix\Enums;
+
     enum StatusPedido {
         case PENDENTE;
         case PAGO;

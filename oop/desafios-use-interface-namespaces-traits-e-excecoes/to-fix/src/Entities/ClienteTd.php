@@ -1,5 +1,7 @@
 <?php
 
+namespace Fix\Entities;
+
 class ClienteTd
 {
    static int $id = -1;
