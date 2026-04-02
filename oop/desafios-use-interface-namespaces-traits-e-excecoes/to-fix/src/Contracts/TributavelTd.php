@@ -2,6 +2,6 @@
 
 namespace Fix\Contracts;
 
-interface Tributavel {
+interface TributavelTd {
     public function calcularTaxa(): float;
 }

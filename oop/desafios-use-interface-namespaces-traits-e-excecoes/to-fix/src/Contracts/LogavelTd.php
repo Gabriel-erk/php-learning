@@ -2,6 +2,6 @@
 
 namespace Fix\Contracts;
 
-interface Logavel {
+interface LogavelTd {
     public function log(string $mensagem): void;
 }

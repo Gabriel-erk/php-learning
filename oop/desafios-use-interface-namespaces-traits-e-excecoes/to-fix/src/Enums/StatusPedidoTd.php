@@ -2,7 +2,7 @@
 
 namespace Fix\Enums;
 
-    enum StatusPedido {
+    enum StatusPedidoTd {
         case PENDENTE;
         case PAGO;
         case CANCELADO;
