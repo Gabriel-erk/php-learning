@@ -12,15 +12,17 @@ class PedidoFisicoTd extends PedidoTd implements TributavelTd
     {
         return parent::__construct($cliente);
     }
-    
+
     public function calcularTaxa(): float
     {
+        $this->calcularTotal();
+        return $this->valorTotal / 0.5 + self::FRETE;
+    }
+    
+    public function valorTotal(): void
+    {
         // sem () para dar prioridade a alguma operação pois a divisão (/) na "cadeia alimetar" de execução das operações, já vem primeiro, logo, ela será executada antes da soma (como desejamos)
-        $totalPedido = $this->getTotal() / 0.5 + self::FRETE;
-
-        if ($this->getTotal()) {
-            # code...
-        }
-        return 0.0;
+        $taxaPedido = $this->calcularTaxa();
+        $this->valorTotal -= $taxaPedido;
     }
 }

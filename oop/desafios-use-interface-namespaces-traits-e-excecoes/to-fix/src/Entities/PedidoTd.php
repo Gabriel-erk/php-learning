@@ -12,7 +12,8 @@ abstract class PedidoTd implements ProcessavelTd, LogavelTd
     private int $id;
     private array $produtos;
     private StatusPedidoTd $status;
-    private float $valorTotal;
+    // protected pois classes filhas PRECISAM acessar esse valor para altera-lo depois
+    protected float $valorTotal;
 
     // sem algum modificador de acesso (readonly,public,private...) o atributo não tem seu valor atribuido automaticamente no momento da instancia de um objeto do tipo "PedidoTd"
     public function __construct(readonly ClienteTd $cliente){
@@ -31,20 +32,22 @@ abstract class PedidoTd implements ProcessavelTd, LogavelTd
     public function log(string $mensagem):void{}
 
     public function adicionarProduto(ProdutoTd $produto): bool{
-        $this->produtos[] = $produto;
-
-        return True; 
+        if ($produto->preco > 0) {
+            $this->produtos[] = $produto;
+            return true;
+        }
+        return false; 
     }
 
-    private function calcularTotal(): float{
+    public function calcularTotal(): void{
         foreach ($this->produtos as $produto) {
             $somaValorProdutos = $produto->preco;
         }
-        return $somaValorProdutos;
+        $this->valorTotal = $somaValorProdutos;
     }
 
     public function getTotal(): float{
-        return $this->calcularTotal();
+        return $this->valorTotal;
     }
 
     public function getStatus(): string{
