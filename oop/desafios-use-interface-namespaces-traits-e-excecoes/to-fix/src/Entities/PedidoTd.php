@@ -53,6 +53,11 @@ abstract class PedidoTd implements ProcessavelTd, LogavelTd
 
     // a implementar
     public function cancelar(): bool{
-        return true;
+        // se ele não foi pago e JÁ não foi cancelado, ainda é válido cancela-lo
+        if ($this->status != StatusPedidoTd::CANCELADO && $this->status != StatusPedidoTd::PAGO) {
+            $this->status = StatusPedidoTd::CANCELADO;
+            return true;
+        }
+        return false;
     }
 }
