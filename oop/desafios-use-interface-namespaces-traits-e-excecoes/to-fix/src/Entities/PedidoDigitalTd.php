@@ -17,5 +17,6 @@ class PedidoDigitalTd extends PedidoTd
             $valorDesconto = $this->valorTotal / $porcentagemDesconto;
             $this->valorTotal -= $valorDesconto;
         }
+        
     }
 }
