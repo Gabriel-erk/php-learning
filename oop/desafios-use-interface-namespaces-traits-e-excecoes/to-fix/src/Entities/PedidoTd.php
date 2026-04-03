@@ -4,14 +4,19 @@ namespace Fix\Entities;
 
 use Fix\Contracts\{ProcessavelTd, LogavelTd};
 use Fix\Enums\StatusPedidoTd;
+use Fix\Traits\LoggerTraitTd;
 
 abstract class PedidoTd implements ProcessavelTd, LogavelTd
 {
+    use LoggerTraitTd;
+    private int $id;
     private array $produtos;
     private StatusPedidoTd $status;
     private float $valorTotal;
 
-    public function __construct(ClienteTd $cliente){
+    // sem algum modificador de acesso (readonly,public,private...) o atributo não tem seu valor atribuido automaticamente no momento da instancia de um objeto do tipo "PedidoTd"
+    public function __construct(readonly ClienteTd $cliente){
+        $this->id = $this->identificadorPedidoTrait();
         $this->produtos = [];
         $this->status = StatusPedidoTd::PENDENTE;
         $this->valorTotal = 0;
