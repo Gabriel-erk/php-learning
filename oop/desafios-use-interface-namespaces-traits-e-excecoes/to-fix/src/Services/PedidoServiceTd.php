@@ -1,7 +1,7 @@
 <?php 
 
 namespace Fix\Services;
-use Fix\Entities\PedidoTd;
+use Fix\Entities\{PedidoTd, ProdutoTd};
 
 class PedidoServiceTd 
 {
@@ -11,8 +11,10 @@ class PedidoServiceTd
     }
 
     // adiciona produto ao pedido
-    public function adicionarProduto(){
+    public function adicionarProduto(PedidoTd $pedido, ProdutoTd $produto): string{
 
+        $pedido->adicionarProduto($produto);
+        return "Peidido adicionado com sucesso.";
     }
 
     public function processarPedido(){
