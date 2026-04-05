@@ -8,7 +8,7 @@ use App\Models\Serie;
 use Illuminate\Http\Request;
 
 // todo controller que criamos é um "Controller" ou seja, eles extedem da classe "Controller", são classes filhas do mesmo e tem acesso a tudo o que ele tem (métodos, atributos, constantes....) - "Controller" é uma super classe
-class SeriesController extends Controller
+class SeriesControllerB extends Controller
 {
     public function index(){
         $series = Serie::query()->orderBy('nome', 'asc')->get();

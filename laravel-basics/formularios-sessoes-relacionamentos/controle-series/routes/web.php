@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{SeriesController};
+use App\Http\Controllers\SeriesControllerB;
 // utilizo a classe "Route" + :: + verbo http que espero receber aquela requisição (no nosso caso, como estamos acessando direto no navegador (acessando a rota no caso através do navegador, onde após o "dominio" == por padrão é nosso localhost + porta 8000 e incluindo "/" que o primeiro parâmetro que este método get pede, temos acesso a view "welcome" que se encontra dentro do corpo da função passada como segundo parâmetro) GET)
 // POST = para receber dados de um formulário
 // caso fosse API = posso usar todos os verbos HTTP
@@ -30,4 +30,4 @@ Route::get('/', function () {
 
 // lmeio útil para simplificar a criação de rotas para nós, onde, apens definimos o prefixo de cada rota, no nosso caso: '/series' e definirmos o nosso controller
 // após isso ele por debaixo dos panos irá criar manualmente e apelidar nossas rotas com base nos métodos padrão, ou seja, podemos acessar na url igual antes a rota: /series (que irá disparar o método index do meu SeriesController) e ir até a página inicial, para criar uma séries, utilizaremos o apelido "series.create" que irá levar até a tela de cadastro, o método para salvar: /series/store agora: series.store (disparando o método store quando chamada....) e nem precisamos escrever isso de fato
-Route::resource('/series', SeriesController::class);
+Route::resource('/series', SeriesControllerB::class);
