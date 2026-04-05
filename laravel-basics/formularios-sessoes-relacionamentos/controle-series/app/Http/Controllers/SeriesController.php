@@ -34,6 +34,12 @@ class SeriesController extends Controller
         return to_route('series.index');
     }
 
+    public function destroy(Request $request){
+        // posso passar um array para deletar várias séries, mas aqui quero deletar apenas uma
+        Serie::destroy($request->serie);
+        return to_route('series.index');
+    }
+
     public function show(){
 
     }
