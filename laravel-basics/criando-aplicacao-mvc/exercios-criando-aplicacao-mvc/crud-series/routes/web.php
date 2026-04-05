@@ -7,11 +7,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/series', [SeriesController::class, 'index']);
-Route::get('/series/criar', [SeriesController::class, 'create']);
-Route::post('/series/salvar',[SeriesController::class, 'store']);
+Route::get('/series', [SeriesController::class, 'indexExercicioA']);
+Route::get('/series/criar', [SeriesController::class, 'criarExercicioA']);
+Route::post('/series/salvar',[SeriesController::class, 'salvarExercicioA']);
 // entre chaves para informar que vou passar um id para o método "edit" através da url == /series/editar/{idDaSerie}
-Route::get('/series/editar/{id}', [SeriesController::class, 'edit']);
+Route::get('/series/editar/{id}', [SeriesController::class, 'editarExercicioA']);
 // verbo http put para dizer que vou atualizar um registro
-Route::put('/series/atualizar/{id}', [SeriesController::class, 'update']);
-Route::delete('/series/deletar/{id}', [SeriesController::class, 'destroy']);
+Route::put('/series/atualizar/{id}', [SeriesController::class, 'atualizarExercicioA']);
+Route::delete('/series/deletar/{id}', [SeriesController::class, 'destruirExercicioA']);

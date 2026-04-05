@@ -8,7 +8,7 @@ use Ramsey\Collection\Collection;
 
 class SeriesController extends Controller
 {
-    public function index()
+    public function indexExercicioA()
     {
         // orderBy pede 2 parâmetros, por qual campo da tabela quero ordenar (no meu caso, campo nome) e o segundo a FORMA q isso vai acontecer, por padrão vem asc == A-Z, mas especifiquei para ficar mais claro
         // caso fosse apenas o queryBuilder (== query()) + o orderBy(parametrosAqui) me retornaria apenas uma query para a váriavel $series, porém estou usando ->get() no final para garantir que pegarei o retorno de toda essa consulta (== query), por fim, me retornando uma Collection (lista de dados do banco de dados, onde cada objeto possuem funções/métodos) para váriavel $series
@@ -18,12 +18,12 @@ class SeriesController extends Controller
         return view('series.index', compact('series'));
     }
 
-    public function create()
+    public function criarExercicioA()
     {
         return view('series.criar');
     }
 
-    public function store(Request $request)
+    public function salvarExercicioA(Request $request)
     {
         $nomeSerie = $request->input('nome');
         $serie = new Serie();
@@ -34,7 +34,7 @@ class SeriesController extends Controller
         return view('series.criar');
     }
 
-    public function edit(int $id)
+    public function editarExercicioA(int $id)
     {
         $serie = Serie::find($id);
 
@@ -42,7 +42,7 @@ class SeriesController extends Controller
     }
 
     // recebo uma requisição (informações do formulário/informações que irei substituir da série atual) e o id da série que irei atualizar, pois preciso encontra-la no banco para atualizar os campos selecionados
-    public function update(Request $request, int $id)
+    public function atualizarExercicioA(Request $request, int $id)
     {
         // aqui só vou receber o nome da série para atualizar, então posso ir atrás apenas desse campo
         $novoNomeSerie = $request->input('nome');
@@ -54,7 +54,7 @@ class SeriesController extends Controller
         return redirect('/series');
     }
 
-    public function destroy(int $id) {
+    public function destruirExercicioA(int $id) {
         Serie::destroy($id);
 
         return redirect('/series');
