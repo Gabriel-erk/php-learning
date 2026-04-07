@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 // essa classe representa uma série, sabe se salvar no banco de dados (exemplo do método store em SeriesController na linha: $serie->save() onde salva todas suas informações no banco) e permite que executemos consultas (como no método index, onde trazemos TODAS as séries do banco e as listamos: $series->Serie::all() - assim retornando uma collection com todas as séries existentes no banco)
 // podemos utilizar query builder nessa nossa entidade também (query builer == criador de query, ou seja, algo que nos permite montar consultar como trazer séries ordenadas pelo nome: $series = Serie::query()->orderBy('nome') trazendo as séries ordenadas pelo campo NOME e podendo personalizar mais, como: ordem crescente (asc) ou descrescente (desc), como $series = Serie::query()->orderBy('nome', 'desc')) que no fim das contas retorna uma query para a váriavel $series onde para eu executar essa query e pegar as informações dela (trazer todas as séries do banco ordenas pelo nome de forma ascendente == ordem alfabética == A-Z) preciso aplicar o ->get() para pegar/buscar esse resultado e retornar uma Collection com todos esses dados pra a váriavel $series, ficando: $series = Serie::query()->orderBy('nome', 'asc')->get(); (fiando em ordem alfabetica)
 // logo, com a mesma classe (Serie), consigo criar queries/querys/consultas no banco ($series = Serie::query()->orderBy('nome', 'asc')->get()), inserir dados no banco ($serie->save()) e consigo representar um objeto do meu domínio ($serie = new Serie())
-class Serie extends Model
+class SerieB extends Model
 {
     //
 }

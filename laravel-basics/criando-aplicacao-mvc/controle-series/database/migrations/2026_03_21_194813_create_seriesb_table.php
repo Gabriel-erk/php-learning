@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('series', function (Blueprint $table) {
+        Schema::create('seriesb', function (Blueprint $table) {
             // campo id já é criado automaticamente como chave primária auto-incrementável
             $table->id();
             // criando um campo do tipo: string, chamando esse campo de: nome e definindo que o tamanho máximo de caracteres que ele aceita são 128
