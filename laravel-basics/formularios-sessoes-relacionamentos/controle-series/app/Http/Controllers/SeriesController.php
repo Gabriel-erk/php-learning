@@ -34,9 +34,12 @@ class SeriesController extends Controller
         return to_route('series.index');
     }
 
-    public function destroy($id){
+    // através de uma sessão, podemos guardar uma informação temporariamente no servidor, onde ele irá nos devolver um cookie dizendo que a sessão pertence a nós
+    public function destroy(Request $request, $id){
         // posso passar um array para deletar várias séries, mas aqui quero deletar apenas uma
         Serie::destroy($id);
+        // para pegar os dados de uma sessão usamos o método session, que é possivel acessar através de um objeto/variavel do tipo Request, onde em session, tenho acesso a vários outros métodos para trabalhar com uma sesssão
+        $request->session()
         return to_route('series.index');
     }
 

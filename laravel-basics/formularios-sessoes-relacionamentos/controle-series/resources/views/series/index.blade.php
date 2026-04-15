@@ -3,6 +3,13 @@
     {{-- para chamar uma rota por apelido, primeiro adicionamos as {{  }} para informar que usaremos uma função/código bruto php e chamamos a função route() passando de parâmetro o apelido que definimos para nossa rota em "web.php" --}}
     <a href="{{ route('series.create') }}" class="btn btn-dark mb-2">Adicionar</a>
 
+    {{-- quero exibir o valor de $mensagemSucesso apenas se ela possuir algum valor, onde o isset nos ajuda nesse caso, onde verificamos, onde @isset($mensagemSucesso) resume um if para nós, no caso um if ($mensagemSucesso != null){exiba o conteúdo aqui}, é exatamente isso que ela faz, caso retorne false em @isset($mensagemSucesso) ele não execute o corpo do mesmo e não cria a div --}}
+    @isset($mensagemSucesso)
+        <div class="alert alert-success">
+            {{ $mensagemSucesso }}
+        </div>
+    @endisset
+
     <ul class="list-group">
         @foreach ($series as $serie)
             {{-- para colocar a váriavel recebida pelo controller, colocamos dentro de chaves duplas == {{ $variavel_objeto_chamadaDeMetodo/funcao_aqui_etc }} --}}
