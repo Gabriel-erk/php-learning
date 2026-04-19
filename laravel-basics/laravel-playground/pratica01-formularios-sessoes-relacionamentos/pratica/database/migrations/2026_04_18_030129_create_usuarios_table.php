@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome');
             $table->string('sobrenome');
+            $table->string('senha');
             $table->string('email');
             $table->string('celular');
             $table->timestamps();
