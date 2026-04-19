@@ -10,6 +10,7 @@ class UsuarioTa extends Model
     protected $fillable = [
         'nome',
         'sobrenome',
+        'senha',
         'email',
         'celular'
     ];

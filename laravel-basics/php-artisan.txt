@@ -1,8 +1,14 @@
 comandos php artisan e suas descições para facilitar minha vida
 
+** GERAR KEY **
+
 - php artisan key:generate == permite gerar uma chave, que preenche a váriavel de ambiente "APP_KEY" no arquivo .env, que é usada para criptografia (senha, sessão, cookies...) e segurança geral da aplicação
 
+** SUBIR SERVIDOR **
+
 - php artisan serve == permite subir um servidor já em uma porta especificada utilizando um host especificado (geralmente sobe um servidor no nosso "localhost" na porta 8000 // estamos subindo um servidor web usando o próprio servidor embutido do php, porém aqui com algumas facilidades do laravel como por exemplo: ao subirmos, já está redirecionando as requisições para o arquivo de "bootstrap" (que é tudo o que ele precisa para iniciar) do laravel), para especificar o host e porta seria: php artisan serve --host=0.0.0.0 --port=8000 // cntrl + c no terminal para interromper o servidor (e poder digitar qualquer outra coisa no terminal)
+
+** MAKE **
 
 - php artisan make:controller NomeDoControllerAqui == serve para criarmos um controller através da linha de comando, será jogado para a pasta correta (app/http/controllers) trazendo os use e com o namespace definido corretamente
 
@@ -14,8 +20,14 @@ comandos php artisan e suas descições para facilitar minha vida
 
 - php artisan make:migration create_nomeDaTabelaAqui_table == cria uma migration em database/migrations, que nada mais é que uma tabela para seu banco de dados (migration == ponto de alteração no seu banco de dados, que pode ser desfeita/refeita de forma simples, como o versionamento do git), o nome da serie, como descrito na definição do comandos, está em volto de uma convenção padrão no começo (create_) e no final (_table) ficando == create_nomeDaTabelaAqui_table que quando criado, ao abrirmos o arquivo, podemos ver que ele nos entrega uma nova classe que extende de "Migration" (ou seja, ela É uma Migration)
 
+** MIGRATES ** 
+
 - php artisan migrate == com isso teremos todas as migrações (migrations em: database/migrations), as que já existiam e as que criamos (na explicação acima, ou seja, a nova tabela "series") sendo executadas (e agora, temos nosso banco de dados criado, claro, se as configurações em config/database.php e em .env foram feitas corretamente, fazendo com que vá essa nossa nova tabela (series) para o nosso db configurado == sqlite, que fica no arquivo == database/database.sqlite onde caso queiramos, podemos abrir e ver as nossas tabelas lá também(as tabelas criadas com php artisan migrate também foram criadas no nosso arquivo do banco de dados == database.sqlite)) obs: ao rodar o php artisan migrate pela primeira vez, ele gerará uma tabela chamada de "migrations" que, armazena quais tabelas já foram criadas para em caso de que quando eu criar uma nova tabela, ele não gere/tente novamente as que JÁ EXISTEM (logo, rodei pela primeira vez, fui rodar na segunda vez sem ter feito NENHUMA alteração nas migrations, ele não tentará recriar as que já existem devido a "mémoria/histórico" de tabelas já criadas que estará dentro da tabela "migrations" que ele gera por padrão ao rodar php artisan migrate e apenas nos retornará no terminal a mensagem: nothing to migrate, pois não há nada para migrar, nada para criar)
 
 - php artisan migrate:rollback == desfaz a ultima migration feita, logo, se eu rodar: php artisan migrate e logo em seguida php artisan migrate:rollback, ele irá desfazer esse último "php artisan migrate" que eu fiz
 
 - php artisan migrate: rollback --step 5 == desfaz várias migrations, nesse caso, desfazendo 5, mas poderia alterar o número para quantos eu quissesse
+
+** ROTAS **
+
+- php artisan route:list == lista todas as rotas existentes no sistema, contendo seu verbo http (get, post, put, delete..), URL (pratica/usuarios/create, pratica/usuarios (com verbo get) para chamar o método index), apelido da rota, como: verbo get + pratica/usuarios == usuarios.index e etc

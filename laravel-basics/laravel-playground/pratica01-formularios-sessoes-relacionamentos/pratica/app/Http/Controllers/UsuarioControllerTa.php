@@ -14,7 +14,7 @@ class UsuarioControllerTa extends Controller
     public function index()
     {
         $usuarios = UsuarioTa::all();
-        $mensagemSucesso = session('mensagem.sucesso');
+        $mensagemSucesso = session('mensagem.status');
 
         return view('usuarios', compact('usuarios', 'mensagemSucesso'));
     }
@@ -48,7 +48,7 @@ class UsuarioControllerTa extends Controller
                 'celular' => $request->celular
             ]);
 
-            $request->session()->flash('mensagem.sucesso', 'Usuário criado com sucesso.');
+            $request->session()->flash('mensagem.status', 'Usuário criado com sucesso.');
 
             return to_route('usuarios.index');
         } catch (\Throwable $th) {
