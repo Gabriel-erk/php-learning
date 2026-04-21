@@ -24,7 +24,7 @@ class UsuarioControllerTa extends Controller
      */
     public function create()
     {
-        //
+        return to_route('usuarios.index');
     }
 
     /**
@@ -63,7 +63,16 @@ class UsuarioControllerTa extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $usuario = UsuarioTa::findOrFail($id);
+
+            return view('usuarios.show', compact('usuario'));
+        } catch (\Throwable $th) {
+            $mensagemErro = $th->getMessage();
+            session()->flash('mensagem.status', "Não foi possível recuperar o usuário: {$mensagemErro}");
+
+            return to_route('usuarios.index');
+        }
     }
 
     /**
@@ -71,7 +80,16 @@ class UsuarioControllerTa extends Controller
      */
     public function edit(string $id)
     {
-        //
+        try {
+            $usuario = UsuarioTa::findOrFail($id);
+
+            return view('usuarios.index', compact('usuario'));
+        } catch (\Throwable $th) {
+            $mensagemErro = $th->getMessage();
+            session()->flash('mensagem.status', "Não foi possível recuperar o usuário: {$mensagemErro}");
+
+            return to_route('usuarios.index');
+        }
     }
 
     /**
@@ -79,7 +97,30 @@ class UsuarioControllerTa extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $request->validate([
+                'nome' => 'required|min:5',
+                'sobrenome' => 'required|min:5',
+                'senha' => 'required|min:6',
+                'email' => 'required|email|unique:usuarios.email',
+                'celular' => 'required'
+            ]);
+
+            $usuario = UsuarioTa::findOrFail($id);
+
+            $usuario->update([
+                'nome' => $request->nome,
+                'sobrenome' => $request->sobrenome,
+                'senha' => Hash::make($request->senha),
+                'celular' => $request->celular
+            ]);
+
+            $request->session()->flash('mensagem.status', 'Usuário atualizado com sucesso!');
+        } catch (\Throwable $th) {
+            $mensagemErro = $th->getMessage();
+            $request->session()->flash('mensagem.status', "Não foi possível atualizar o usuário: {$mensagemErro}");
+        }
+        return to_route('usuarios.index');
     }
 
     /**
@@ -87,6 +128,16 @@ class UsuarioControllerTa extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            UsuarioTa::destroy($id);
+            session()->flash('mensagem.status', 'Usuário deletado com sucesso!');
+
+            return to_route('usuarios.index');
+        } catch (\Throwable $th) {
+            $mensagemErro = $th->getMessage();
+            session()->flash('mensagem.status', "Não foi possível deletar o usuário {$mensagemErro}");
+
+            return to_route('usuarios.index');
+        }
     }
 }

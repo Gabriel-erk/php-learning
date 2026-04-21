@@ -69,10 +69,18 @@ class FilmeControllerTa extends Controller
 
             $filme = FilmeTa::findOrFail($id);
 
-            $filme::update([]);
+            $filme::update([
+                'nome' => $request->nome,
+                'genero' => $request->genero,
+                'duracaoEmMinutos' => $request->duracaoEmMinutos
+            ]);
+
+            $request->session()->flash('mensagem.status', 'Usuário atualizado com sucesso.');
         } catch (\Throwable $th) {
-            //throw $th;
+            $mensagemErro = $th->getMessage();
+            $request->session()->flash('mensagem.status', "Não foi possível atualizar as informações do usuário: {$mensagemErro}");
         }
+        return to_route('filmes.index');
     }
 
     public function destroy(string $id)
