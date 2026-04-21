@@ -34,25 +34,22 @@ class FilmeControllerTa extends Controller
                 'duracaoEmMinutos' => $request->duracaoEmMinutos
             ]);
 
-            $request->session()->flash('mensagem.status', 'Usuário criado com sucesso!');
-
-            return to_route('filmes.index');
+            $request->session()->flash('mensagem.status', 'Filme criado com sucesso!');
         } catch (\Throwable $th) {
             $mensagemErro = $th->getMessage();
-            $request->session()->flash('mensagem.status', "Erro ao criar usuário: $mensagemErro");
-
-            return to_route('filmes.index');
+            $request->session()->flash('mensagem.status', "Erro ao criar filme: $mensagemErro");
         }
+        return to_route('filmes.index');
     }
 
     public function edit(string $id)
     {
         try {
             $filme = FilmeTa::findOrFail($id);
-            return to_route('filmes.edit');
+            return view('filmes.edit', compact('filme'));
         } catch (\Throwable $th) {
             $mensagemErro = $th->getMessage();
-            session()->flash('mensagem.status', "Erro ao encontrar usuário: $mensagemErro");
+            session()->flash('mensagem.status', "Erro ao encontrar filme: $mensagemErro");
 
             return to_route('filmes.index');
         }
@@ -75,10 +72,10 @@ class FilmeControllerTa extends Controller
                 'duracaoEmMinutos' => $request->duracaoEmMinutos
             ]);
 
-            $request->session()->flash('mensagem.status', 'Usuário atualizado com sucesso.');
+            $request->session()->flash('mensagem.status', 'Filme atualizado com sucesso.');
         } catch (\Throwable $th) {
             $mensagemErro = $th->getMessage();
-            $request->session()->flash('mensagem.status', "Não foi possível atualizar as informações do usuário: {$mensagemErro}");
+            $request->session()->flash('mensagem.status', "Não foi possível atualizar as informações do filme: {$mensagemErro}");
         }
         return to_route('filmes.index');
     }
@@ -90,7 +87,7 @@ class FilmeControllerTa extends Controller
             session()->flash('mensagem.status', 'Filme excluído com sucesso.');
         } catch (\Throwable $th) {
             $mensagemErro = $th->getMessage();
-            session()->flash('mensagem.status', "Não foi possível deletar o usuário: {$mensagemErro}");
+            session()->flash('mensagem.status', "Não foi possível deletar o filme: {$mensagemErro}");
         }
         return to_route('filmes.index');
     }
