@@ -53,7 +53,7 @@ class UsuarioControllerTa extends Controller
             return to_route('usuarios.index');
         } catch (\Throwable $th) {
             $mensagemErro = $th->getMessage();
-            $request->session()->flash('mensagem.status', 'Erro ao criar usuário: $mensagemErro');
+            $request->session()->flash('mensagem.status', "Erro ao criar usuário: $mensagemErro");
             return to_route('usuarios.index');
         }
     }

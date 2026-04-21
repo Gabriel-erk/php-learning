@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FilmeControllerTa;
 use App\Http\Controllers\UsuarioControllerTa;
 use Illuminate\Support\Facades\Route;
 
@@ -9,3 +10,4 @@ Route::get('/', function () {
 
 
 Route::resource('/pratica/usuarios', UsuarioControllerTa::class);
+Route::resource('/pratica/filmes', FilmeControllerTa::class);
