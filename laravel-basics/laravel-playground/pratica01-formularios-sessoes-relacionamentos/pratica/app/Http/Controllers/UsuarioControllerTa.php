@@ -14,9 +14,9 @@ class UsuarioControllerTa extends Controller
     public function index()
     {
         $usuarios = UsuarioTa::all();
-        $mensagemSucesso = session('mensagem.status');
+        $mensagemStatus = session('mensagem.status');
 
-        return view('usuarios', compact('usuarios', 'mensagemSucesso'));
+        return view('usuarios', compact('usuarios', 'mensagemStatus'));
     }
 
     /**
