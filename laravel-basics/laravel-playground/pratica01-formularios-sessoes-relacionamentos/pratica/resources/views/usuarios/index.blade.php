@@ -6,7 +6,7 @@
     @endisset
 
     <ul class="list-group">
-        <table class="table table-striped-columns">
+        <table class="table table-striped-columns table-hover">
             <thead>
                 <tr>
                     <th scope="col">#</th>
