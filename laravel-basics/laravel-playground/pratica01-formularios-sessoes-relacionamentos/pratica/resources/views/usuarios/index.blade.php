@@ -6,10 +6,35 @@
     @endisset
 
     <ul class="list-group">
-        @foreach ($usuarios as $usuario)
-            <li class="list-group-item d-flex align-items-center justify-content-between">
-                
-            </li>
-        @endforeach
+        <table class="table table-striped-columns">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Sobrenome</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($usuarios as $usuario)
+                    <tr>
+                        <th scope="row">{{ $usuario->id }}</th>
+                        <td>{{ $usuario->nome }}</td>
+                        <td>{{ $usuario->sobrenome }}</td>
+                        <td>{{ $usuario->email }}</td>
+                        <td class="d-flex justify-content-between align-items-center">
+                            <button class="btn btn-primary">Editar</button>
+                            <form action="
+                            {{ route('usuarios.destroy', $usuario->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </ul>
 </x-layout>
