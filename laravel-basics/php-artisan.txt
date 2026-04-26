@@ -18,6 +18,8 @@ comandos php artisan e suas descições para facilitar minha vida
 
 - php artisan make:model NomeDoModelAqui == cria nova classe que é uma Model do Eloquent ORM e nos dá algumas facilidades
 
+- php artisan make:model Produto -m == cria o model produto e a migration para ele
+
 - php artisan make:migration create_nomeDaTabelaAqui_table == cria uma migration em database/migrations, que nada mais é que uma tabela para seu banco de dados (migration == ponto de alteração no seu banco de dados, que pode ser desfeita/refeita de forma simples, como o versionamento do git), o nome da serie, como descrito na definição do comandos, está em volto de uma convenção padrão no começo (create_) e no final (_table) ficando == create_nomeDaTabelaAqui_table que quando criado, ao abrirmos o arquivo, podemos ver que ele nos entrega uma nova classe que extende de "Migration" (ou seja, ela É uma Migration)
 
 ** MIGRATES ** 
