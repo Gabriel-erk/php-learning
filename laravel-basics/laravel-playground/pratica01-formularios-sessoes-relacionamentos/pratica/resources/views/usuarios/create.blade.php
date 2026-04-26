@@ -35,6 +35,9 @@
             <input type="tel" class="form-control" id="celular" name="celular" placeholder="Número de celular">
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Voltar</a>
+        </div>
     </form>
 </x-layout>

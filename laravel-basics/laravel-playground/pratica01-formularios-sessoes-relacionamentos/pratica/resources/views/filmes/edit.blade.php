@@ -23,6 +23,9 @@
                 value="{{ $filme['duracaoEmMinutos'] }}">
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{{ route('filmes.index') }}" class="btn btn-secondary">Voltar</a>
+        </div>
     </form>
 </x-layout>

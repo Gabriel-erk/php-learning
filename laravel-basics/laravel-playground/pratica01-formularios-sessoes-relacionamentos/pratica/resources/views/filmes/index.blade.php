@@ -30,6 +30,7 @@
                         <td>{{ $filme->duracaoEmMinutos }}</td>
                         <td class="d-flex flex-column flex-md-row gap-2 justify-content-md-between align-items-center">
                             <a class="btn btn-primary" href="{{ route('filmes.edit', $filme->id) }}">Edit</a>
+                            <a class="btn btn-primary" href="{{ route('filmes.show', $filme->id) }}">View</a>
                             <form action="
                             {{ route('filmes.destroy', $filme->id) }}"
                                 method="POST">

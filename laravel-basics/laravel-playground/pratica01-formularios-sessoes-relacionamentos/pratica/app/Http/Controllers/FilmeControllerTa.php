@@ -20,6 +20,19 @@ class FilmeControllerTa extends Controller
         return view('filmes.create');
     }
 
+    public function show(string $id) {
+        try {
+            $filme = FilmeTa::findOrFail($id);
+
+            return view('filmes.show', compact('filme'));
+        } catch (\Throwable $th) {
+            $mensagemErro = $th->getMessage();
+
+            session()->flash('mensagem.staus', "Erro ao encontrar filme: {$mensagemErro}");
+            return to_route('filmes.index');
+        }
+    }
+
     public function store(Request $request)
     {
         try {
