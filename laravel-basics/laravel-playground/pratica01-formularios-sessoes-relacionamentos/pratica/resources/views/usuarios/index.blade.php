@@ -30,6 +30,7 @@
                         <td>{{ $usuario->email }}</td>
                         <td class="d-flex flex-column flex-md-row gap-2 justify-content-md-between align-items-center">
                             <a class="btn btn-primary" href="{{ route('usuarios.edit', $usuario->id) }}">Edit</a>
+                            <a class="btn btn-primary" href="{{ route('usuarios.show', $usuario->id) }}">View</a>
                             <form action="
                             {{ route('usuarios.destroy', $usuario->id) }}"
                                 method="POST">
