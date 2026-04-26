@@ -15,8 +15,8 @@ class FilmeSeederTa extends Seeder
     {
         for($i = 0; $i < 5; $i++){
             FilmeTa::create([
-                'nome' => 'Filme $i',
-                'genero' => 'Genêro $i',
+                'nome' => "Filme $i",
+                'genero' => "Genêro $i",
                 'duracaoEmMinutos' => $i * 60
             ]);
         }

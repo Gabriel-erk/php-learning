@@ -1,4 +1,7 @@
 <x-layout title="Cadastro - Usuários">
+    <div id="titulo" class="d-flex justify-content-between mb-3">
+        <h2>Cadastro de Usuários</h2>
+    </div>
     <form action="{{ route('usuarios.store') }}" method="POST">
         @csrf
         <div class="mb-3">
@@ -13,7 +16,8 @@
 
         <div class="mb-3">
             <label for="inputPassword5" class="form-label">Password</label>
-            <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" name="senha">
+            <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock"
+                name="senha">
             <div id="passwordHelpBlock" class="form-text">
                 Your password must be 6-20 characters long, contain letters and numbers, and must not contain spaces,
                 special characters, or emoji.
@@ -22,7 +26,8 @@
 
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" name="email">
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com"
+                name="email">
         </div>
 
         <div class="mb-3">

@@ -10,13 +10,14 @@ class FilmeControllerTa extends Controller
     public function index()
     {
         $filmes = FilmeTa::all();
+        $mensagemStatus = session('mensagem.status');
 
-        return view('filmes.index', compact('filmes'));
+        return view('filmes.index', compact('filmes', 'mensagemStatus'));
     }
 
     public function create()
     {
-        return to_route('filmes.create');
+        return view('filmes.create');
     }
 
     public function store(Request $request)
