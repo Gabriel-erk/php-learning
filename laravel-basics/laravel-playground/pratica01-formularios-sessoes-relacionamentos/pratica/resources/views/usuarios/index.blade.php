@@ -4,7 +4,7 @@
             {{ $mensagemStatus }}
         </div>
     @endisset
-    
+
     <div id="titulo" class="d-flex justify-content-between mb-3">
         <h2>Listagem de Usuários</h2>
 
@@ -16,7 +16,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Nome</th>
-                    <th scope="col">Sobrenome</th>
+                    {{-- <th scope="col">Sobrenome</th> --}}
                     <th scope="col">E-mail</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -26,15 +26,16 @@
                     <tr>
                         <th scope="row">{{ $usuario->id }}</th>
                         <td>{{ $usuario->nome }}</td>
-                        <td>{{ $usuario->sobrenome }}</td>
+                        {{-- <td>{{ $usuario->sobrenome }}</td> --}}
                         <td>{{ $usuario->email }}</td>
-                        <td class="d-flex justify-content-between align-items-center">
-                            <a class="btn btn-primary" href="{{ route('usuarios.edit', $usuario->id) }}">Editar</a>
+                        <td class="d-flex flex-column flex-md-row gap-2 justify-content-md-between align-items-center">
+                            <a class="btn btn-primary" href="{{ route('usuarios.edit', $usuario->id) }}">Edit</a>
                             <form action="
-                            {{ route('usuarios.destroy', $usuario->id) }}" method="POST">
+                            {{ route('usuarios.destroy', $usuario->id) }}"
+                                method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Excluir</button>
+                                <button type="submit" class="btn btn-danger">Del</button>
                             </form>
                         </td>
                     </tr>

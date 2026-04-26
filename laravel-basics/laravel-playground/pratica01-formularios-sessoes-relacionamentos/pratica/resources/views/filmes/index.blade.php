@@ -28,14 +28,14 @@
                         <td>{{ $filme->nome }}</td>
                         <td>{{ $filme->genero }}</td>
                         <td>{{ $filme->duracaoEmMinutos }}</td>
-                        <td class="d-flex justify-content-between align-items-center">
-                            <a class="btn btn-primary" href="{{ route('filmes.edit', $filme->id) }}">Editar</a>
+                        <td class="d-flex flex-column flex-md-row gap-2 justify-content-md-between align-items-center">
+                            <a class="btn btn-primary" href="{{ route('filmes.edit', $filme->id) }}">Edit</a>
                             <form action="
                             {{ route('filmes.destroy', $filme->id) }}"
                                 method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Excluir</button>
+                                <button type="submit" class="btn btn-danger">Del</button>
                             </form>
                         </td>
                     </tr>
