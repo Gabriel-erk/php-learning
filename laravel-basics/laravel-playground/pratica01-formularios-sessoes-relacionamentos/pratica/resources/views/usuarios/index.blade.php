@@ -29,7 +29,7 @@
                         <td>{{ $usuario->sobrenome }}</td>
                         <td>{{ $usuario->email }}</td>
                         <td class="d-flex justify-content-between align-items-center">
-                            <button class="btn btn-primary">Editar</button>
+                            <a class="btn btn-primary" href="{{ route('usuarios.edit', $usuario->id) }}">Editar</a>
                             <form action="
                             {{ route('usuarios.destroy', $usuario->id) }}" method="POST">
                                 @csrf
