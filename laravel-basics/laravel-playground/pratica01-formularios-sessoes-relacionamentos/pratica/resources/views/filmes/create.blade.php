@@ -18,7 +18,7 @@
 
         <div class="mb-3">
             <label for="duracaoEmMinutos" class="form-label">Duração em minutos</label>
-            <input type="tel" class="form-control" id="duracaoEmMinutos" name="duracaoEmMinutos"
+            <input type="number" class="form-control" id="duracaoEmMinutos" name="duracaoEmMinutos"
                 placeholder="Duração em minutos">
         </div>
 

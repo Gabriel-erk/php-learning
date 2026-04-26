@@ -67,7 +67,7 @@ class FilmeControllerTa extends Controller
 
             $filme = FilmeTa::findOrFail($id);
 
-            $filme::update([
+            $filme->update([
                 'nome' => $request->nome,
                 'genero' => $request->genero,
                 'duracaoEmMinutos' => $request->duracaoEmMinutos

@@ -1,4 +1,7 @@
 <x-layout title="Editar - Usuários">
+    <div id="titulo" class="d-flex justify-content-between mb-3">
+        <h2>Atualização de Usuários</h2>
+    </div>
     <form action="{{ route('usuarios.update', $usuario['id']) }}" method="POST">
         @csrf
         @method('PUT')
