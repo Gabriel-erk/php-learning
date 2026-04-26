@@ -16,7 +16,7 @@ class UsuarioControllerTa extends Controller
         $usuarios = UsuarioTa::all();
         $mensagemStatus = session('mensagem.status');
 
-        return view('usuarios', compact('usuarios', 'mensagemStatus'));
+        return view('usuarios.index', compact('usuarios', 'mensagemStatus'));
     }
 
     /**

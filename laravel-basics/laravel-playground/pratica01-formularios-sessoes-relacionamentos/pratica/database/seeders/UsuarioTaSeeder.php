@@ -16,10 +16,10 @@ class UsuarioTaSeeder extends Seeder
     {
         for ($i=0; $i < 10; $i++) { 
             UsuarioTa::create([
-                'nome' => 'Usuário $i',
-                'sobrenome' => 'Sobrenome Usuário $i',
+                'nome' => "Usuário $i",
+                'sobrenome' => "Sobrenome Usuário $i",
                 'senha' => Hash::make('123456'),
-                'email' => 'user$1@gmail.com',
+                'email' => "user$i@gmail.com",
                 'celular' => '+55 (xx) XXXXX-XXXX'
             ]);
         }
