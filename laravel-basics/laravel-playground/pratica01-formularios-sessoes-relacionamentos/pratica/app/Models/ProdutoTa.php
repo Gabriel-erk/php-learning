@@ -11,5 +11,6 @@ class ProdutoTa extends Model
         'nome',
         'preco',
         'descricao',
+        'ativo'
     ];
 }
