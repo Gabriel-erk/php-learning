@@ -24,7 +24,7 @@ class UsuarioControllerTa extends Controller
      */
     public function create()
     {
-        return to_route('usuarios.create');
+        return view('usuarios.create');
     }
 
     /**
@@ -37,7 +37,7 @@ class UsuarioControllerTa extends Controller
                 'nome' => 'required|min:5',
                 'sobrenome' => 'required|min:5',
                 'senha' => 'required|min:6',
-                'email' => 'required|email|unique:usuarios.email',
+                'email' => 'required|email|unique:usuarios,email',
                 'celular' => 'required'
             ]);
 
@@ -45,6 +45,7 @@ class UsuarioControllerTa extends Controller
                 'nome' => $request->nome,
                 'sobrenome' => $request->sobrenome,
                 'senha' => Hash::make($request->senha),
+                'email' => $request->email,
                 'celular' => $request->celular
             ]);
 
@@ -83,7 +84,7 @@ class UsuarioControllerTa extends Controller
         try {
             $usuario = UsuarioTa::findOrFail($id);
 
-            return view('usuarios.index', compact('usuario'));
+            return view('usuarios.edit', compact('usuario'));
         } catch (\Throwable $th) {
             $mensagemErro = $th->getMessage();
             session()->flash('mensagem.status', "Não foi possível recuperar o usuário: {$mensagemErro}");
@@ -102,7 +103,7 @@ class UsuarioControllerTa extends Controller
                 'nome' => 'required|min:5',
                 'sobrenome' => 'required|min:5',
                 'senha' => 'required|min:6',
-                'email' => 'required|email|unique:usuarios.email',
+                'email' => 'required|email|unique:usuarios,email,' . $id,
                 'celular' => 'required'
             ]);
 

@@ -31,3 +31,7 @@ comandos php artisan e suas descições para facilitar minha vida
 ** ROTAS **
 
 - php artisan route:list == lista todas as rotas existentes no sistema, contendo seu verbo http (get, post, put, delete..), URL (pratica/usuarios/create, pratica/usuarios (com verbo get) para chamar o método index), apelido da rota, como: verbo get + pratica/usuarios == usuarios.index e etc
+
+** CACHE **
+
+php artisan view:clear == limpa cache das views, coisa que as vezes pode impedir verificar mudança em tempo real das views devido a cache cheio
