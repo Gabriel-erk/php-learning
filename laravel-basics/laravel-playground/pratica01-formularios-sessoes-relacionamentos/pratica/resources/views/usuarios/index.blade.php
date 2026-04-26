@@ -1,16 +1,16 @@
 <x-layout title="Home - Usuários">
     @isset($mensagemStatus)
-        <div class="alert alert-success">
+        <div class="alert alert-success mb-2">
             {{ $mensagemStatus }}
         </div>
     @endisset
     
-    <div id="titulo" class="d-flex justify-content-between my-3">
+    <div id="titulo" class="d-flex justify-content-between mb-3">
         <h2>Listagem de Usuários</h2>
 
         <a class="btn btn-primary" href="{{ route('usuarios.create') }}">Add</a>
     </div>
-    <ul class="list-group">
+    <div class="table-responsive">
         <table class="table table-striped-columns table-hover">
             <thead>
                 <tr>
@@ -41,5 +41,5 @@
                 @endforeach
             </tbody>
         </table>
-    </ul>
+    </div>
 </x-layout>

@@ -24,7 +24,7 @@ class UsuarioControllerTa extends Controller
      */
     public function create()
     {
-        return to_route('usuarios.index');
+        return to_route('usuarios.create');
     }
 
     /**
