@@ -32,21 +32,23 @@ class SeriesController extends Controller
         // para realizarmos a inserção de dados em massa (== passar várias informações de uma vez só para nossa Model, como por ex: preencher mais de um campo da "model" já seria considerado uma inserção de dados em massa) na nossa tabela, o Eloquent nos permite utilizar um método estático chamado create, que recebe um array associativo de parâmetro com todas as propriedades/colunas do db que quero armazenar (por ex, quero preencher o campo nome e genero da minha série == Serie::create([ 'nome' => $request->nome, 'genero' => $request->genero ])), que já vai inserir no banco de dados uma nova série com o nome e o genero que veio em nosso request
         // caso darmos um dd($request) veremos que ele traz um array associativo que mostra o seu corpo (que contém as informações do formulário em um array associativo, onde por ex: input com o name = "nome" com o valor Game of Thrones e um input com o name = "genero" com o valor Ação Medieval, ao clicar no botão do tipo submit dentro da tag html "forms" com um action direcionado para a rota DESTE método que estamos (store em SeriesController) será passado uma requisição para a nossa váriavel no parâmetro DESTE método, e o corpo desta requisição será o VALOR da nossa váriavel de parâmetro ($request) e esse valor estará da seguinte forma: "nome" => "Game of Thrones", "genero" => "Ação Medieval", este será o valor de $request (caso tenha um token (graças ao @csrf que passamos em cada formulário ao utilizar o laravel) ele estará lá também), e então preencherá corretamente o array associativo que devriamos colocar para cada campo da nossa tabela série dentro do array que Serie::create(estouFalandoDesseArrayAquiÒcasoVaVerComOMouseEmcimaDe:Serie::create(VereiQueOvalorPassadoAquiTemQueSerUmArray,Logo,OretornoDe$request->all()éUmArrayComOcampoTokenEnomeOndeNomeFoiPassadoNoFormQueChamaArotaQueDisparaEsteMétodoAqui)) pede, por isso não temos que escrever algo como: Serie::create("nome" => $request->nome) pois a sintax, o corpo de $request->all() já nos entrega isso corretamente (claro, dependendo da estrutura do formulário, se o formulário estiver com os campos corretos/correspondentes ao que minha série precisa para ser criada, irá funcionar, pois não faz sentido eu disparar esse create aqui em um formulário que passaria para minha $request de parâmetro os campos: cidade, uf, rua...pois não tem nada haver com oq o model que está NESSE REQUEST aqui, ele NÃO PRECISA DESSAS CAMPOS NADA HAVER (cidade, uf, ruia....)) )
         // dd($request->all());
-        Serie::create($request->all());
-        $request->session()->flash('mensagem.sucesso', 'Série adicionada com sucesso.');
+        $serie = Serie::create($request->all());
+        $request->session()->flash('mensagem.sucesso', "Série '{$serie->nome}' adicionada com sucesso.");
         // devolvendo/retornando uma resposta de redirecionamento para a minha rota "series.index", que chama o método "index" do controller series, a sintaxe abaixo é a mais "amigavel/profissional" quando queremos utilizar rotas + apelidos (abaixo estamos chamando a rota pelo seu apelido == series.index), da mesma forma que a outra sintax que aprendemos para fazer a mesma coisa: redirect()->route('series.index') porém de uma forma mais simplificada e interessante aqui 
         return to_route('series.index');
     }
 
     // através de uma sessão, podemos guardar uma informação temporariamente no servidor, onde ele irá nos devolver um cookie dizendo que a sessão pertence a nós
-    public function destroy(Request $request, $id){
-        // posso passar um array para deletar várias séries, mas aqui quero deletar apenas uma
-        Serie::destroy($id);
+    // passando o parâmetro to tipo $serie, por debaixo dos panos ele realiza essa linha: Serie::findOrFail($serie), logo, no corpo do método não precisamos dela, pois o laravel já vai encontra-la para nos, e só vai entrar no corpo do método "destroy" se possui um valor como parâmetro do tipo serie (e sempre passamos para o destroy, como parâmetro, um objeto do tipo série)
+    // nome do parâmetro aqui, precisa estar alinhado com o nome do parâmetro que a rota que leva até este método pede
+    public function destroy(Serie $series){
+        // se essa série aqui existe, ele apaga para nós, se não, não faz nada
+        $series->delete();
         // para pegar os dados de uma sessão usamos o método session, que é possivel acessar através de um objeto/variavel do tipo Request, onde em session, tenho acesso a vários outros métodos para trabalhar com uma sesssão
         // em session chamo o método flash, que me permite adicionar normalmente um item de sessão, onde, na próxima atualização da página, vai fazer com que aquela sessão (contendo os valores que armazenei) seja "apagada" da sessão atual automaticamente
         // flash == dado que adiciono na minha sessão que só dura UM request
         // mensagem.sucesso == chave que vou usar para me referenciar a essa sessão, como a sessão que estou passando, o dado que estou passando, é apenas uma mensagem de sucesso, então simplifico para este nome: 'mensagem.sucesso'
-        $request->session()->flash('mensagem.sucesso', 'Série removida com sucesso.');
+        session()->flash('mensagem.sucesso', "Série '{$series->nome}' removida com sucesso.");
         return to_route('series.index');
     }
 
