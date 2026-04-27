@@ -23,9 +23,17 @@
             <textarea class="form-control" id="descricao" name="descricao" value="{{ $produto['descricao'] }}"></textarea>
         </div>
 
-        <div class="mb-3">
-            <label for="ativo" class="form-label">Status</label>
-            <input type="number" class="form-control" id="ativo" name="ativo" value="{{ $produto['ativo'] }}">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="ativo" value="1" {{ $produto['ativo'] == 1 ? 'checked' : '' }}>
+            <label class="form-check-label" for="ativo">
+                Ativo
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="ativo" value="0" {{ $produto['ativo'] == 0 ? 'checked' : '' }}>
+            <label class="form-check-label" for="ativo">
+                Inativo
+            </label>
         </div>
 
         <div class="mt-4 d-flex gap-2">

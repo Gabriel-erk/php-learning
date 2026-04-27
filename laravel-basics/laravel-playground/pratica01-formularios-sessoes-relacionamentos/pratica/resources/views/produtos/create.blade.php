@@ -23,9 +23,18 @@
             <textarea class="form-control" id="descricao" name="descricao" placeholder="Informe a descrição do produto"></textarea>
         </div>
 
-        <div class="mb-3">
-            <label for="ativo" class="form-label">Status</label>
-            <input type="number" class="form-control" id="ativo" name="ativo" placeholder="Informe o status do produto">
+        <p class="m-0 pb-1">Status</p>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="ativo" value="1">
+            <label class="form-check-label" for="ativo">
+                Ativo
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="ativo" value="0">
+            <label class="form-check-label" for="ativo">
+                Inativo
+            </label>
         </div>
 
         <div class="mt-4 d-flex gap-2">
