@@ -1,4 +1,4 @@
-<x-layout title="Cadastro - Filmes">
+<x-layout title="Atualização - Filmes">
 
     <div id="titulo" class="d-flex justify-content-between mb-3">
         <h2>Atualização de Filmes</h2>
