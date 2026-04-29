@@ -41,6 +41,7 @@ class SeriesController extends Controller
     // através de uma sessão, podemos guardar uma informação temporariamente no servidor, onde ele irá nos devolver um cookie dizendo que a sessão pertence a nós
     // passando o parâmetro to tipo $serie, por debaixo dos panos ele realiza essa linha: Serie::findOrFail($serie), logo, no corpo do método não precisamos dela, pois o laravel já vai encontra-la para nos, e só vai entrar no corpo do método "destroy" se possui um valor como parâmetro do tipo serie (e sempre passamos para o destroy, como parâmetro, um objeto do tipo série)
     // nome do parâmetro aqui, precisa estar alinhado com o nome do parâmetro que a rota que leva até este método pede
+    // laravel trás facilidades como: "route model binding" == quando passamos um parâmetro do tipo "model" para um método de um controller, o laravel já se encarrega de buscar a instância dessa model no banco de dados, utilizando o valor passado na rota (que é o id da série) e já nos entrega essa instância/model pronta para ser utilizada dentro do corpo do método, ou seja, não precisamos fazer uma consulta manual para buscar a série pelo id, o laravel já faz isso para nós, basta apenas passarmos o parâmetro do tipo "model" (no caso aqui, "Serie") e o nome do parâmetro (no caso aqui, "$series") que deve ser igual ao nome do parâmetro que a rota pede (no caso aqui, "{series}")
     public function destroy(Serie $series){
         // se essa série aqui existe, ele apaga para nós, se não, não faz nada
         $series->delete();
@@ -48,8 +49,10 @@ class SeriesController extends Controller
         // em session chamo o método flash, que me permite adicionar normalmente um item de sessão, onde, na próxima atualização da página, vai fazer com que aquela sessão (contendo os valores que armazenei) seja "apagada" da sessão atual automaticamente
         // flash == dado que adiciono na minha sessão que só dura UM request
         // mensagem.sucesso == chave que vou usar para me referenciar a essa sessão, como a sessão que estou passando, o dado que estou passando, é apenas uma mensagem de sucesso, então simplifico para este nome: 'mensagem.sucesso'
-        session()->flash('mensagem.sucesso', "Série '{$series->nome}' removida com sucesso.");
-        return to_route('series.index');
+        // session()->flash('mensagem.sucesso', "Série '{$series->nome}' removida com sucesso.");
+
+        // ao utilizarmos métodos de redirecionamentos (como o to_route, redirect(), redirect()->route() etc..) nos temos nosso método "with()" que realiza o nosso redirecionamento com a nossa flash message (que faziamos com: $request->flash('mensagem.sucesso', 'mensagemAqui') ou session()->flash('mensagem.sucesso','mensagemAqui')), utilizando quase a mesma sintaxe, então seria: with('nomeDaFlashMessageAqui', 'mensagemDaFlashAqui')
+        return to_route('series.index')->with('mensagem.sucesso', "Série '{$series->nome}' removida com sucesso.");
     }
 
     public function show(){
