@@ -18,7 +18,6 @@
                 {{ $serie->nome }}
 
                 <span class="d-flex">
-
                     <a href="{{ route('series.edit', $serie->id) }}" class="btn btn-primary btn-sm me-2">E</a>
                     <form action="{{ route('series.destroy', $serie->id) }}" method="POST">
                         @csrf

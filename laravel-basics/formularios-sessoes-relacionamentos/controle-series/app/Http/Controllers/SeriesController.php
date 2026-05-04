@@ -19,10 +19,7 @@ class SeriesController extends Controller
         return view('series.index', compact('series', 'mensagemSucesso'));
     }
 
-    public function create()
-    {
-        return view('series.create');
-    }
+    public function show() {}
 
     public function edit(Serie $series)
     {
@@ -30,7 +27,19 @@ class SeriesController extends Controller
         return view('series.edit')->with('serie', $series);
     }
 
-    public function show() {}
+    public function update(Request $request, Serie $series)
+    {
+        // método fill faz a filtragem de tudo que pode receber dados em massa (que está no fillable da model que estamos manipulando agora) e permite o preenchimento de todos os campos, sem que nós tenhamos que ficar colocando linha por linha, atributo por atributo, ex: $series->nome = $request->nome, $series->descricao = $request->descricao e etc, com o fill ele já preenche TODOS os campos que estao para receber dados em massa, automaticamente e nosso request->all() passa o valor de todos os campos de formulário que ele possui
+        $series->fill($request->all());
+        $series->save();
+        
+        return to_route('series.index')->with('mensagem.sucesso', "Série '{$series->nome}' atualizada com sucesso!");
+    }
+
+    public function create()
+    {
+        return view('series.create');
+    }
 
     public function store(Request $request)
     {
