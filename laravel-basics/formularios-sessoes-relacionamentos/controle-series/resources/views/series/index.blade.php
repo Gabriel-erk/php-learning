@@ -16,12 +16,16 @@
             {{-- exibir apenas $serie seria a mesma coisa que dar um var_dump em um objeto, por isso, na nossa serie, queremos acessar o campo "nome" e para isso, temos de especificar aqui (pois nossa serie é um objeto e queremos mostrar apenas UMA de suas propriedades // laravel podia ter trazido uma rray associativo onde a sintax para exibir seria: $serie['nome'] porém trouxe um objeto, logo, a sintax de acesso a propriedade nome é: $serie->nome) --}}
             <li class="list-group-item d-flex align-items-center justify-content-between">
                 {{ $serie->nome }}
-                <a class="btn btn-danger btn-sm" href="{{ route('series.edit', $serie->id) }}" type="submit">editar</a>
-                <form action="{{ route('series.destroy', $serie->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger btn-sm" type="submit">X</button>
-                </form>
+
+                <span class="d-flex">
+
+                    <a href="{{ route('series.edit', $serie->id) }}" class="btn btn-primary btn-sm me-2">E</a>
+                    <form action="{{ route('series.destroy', $serie->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm" type="submit">X</button>
+                    </form>
+                </span>
             </li>
         @endforeach
     </ul>

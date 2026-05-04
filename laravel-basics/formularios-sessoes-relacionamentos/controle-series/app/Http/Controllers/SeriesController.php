@@ -26,7 +26,8 @@ class SeriesController extends Controller
 
     public function edit(Serie $series)
     {
-        return view('series.edit', compact('series'));
+        // quando não estou usando em um redirecionamento (to_route, redirect) e sim carregando uma view (com o método view(viewAqui)), ao utilizar o "with" ele permite que eu passe uma váriavel para aquela view com esta sintaxe aqui: with('nomeQueAvariavel/objetoTeraNaview', nomeDaVariavel/ObjetoQueVouPassarParaMinhaView)
+        return view('series.edit')->with('serie', $series);
     }
 
     public function show() {}
