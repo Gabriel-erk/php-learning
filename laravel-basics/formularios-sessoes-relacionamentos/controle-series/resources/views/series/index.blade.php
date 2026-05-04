@@ -13,9 +13,10 @@
     <ul class="list-group">
         @foreach ($series as $serie)
             {{-- para colocar a váriavel recebida pelo controller, colocamos dentro de chaves duplas == {{ $variavel_objeto_chamadaDeMetodo/funcao_aqui_etc }} --}}
-            {{-- exibir apenas $serie seria a mesma coisa que dar um var_dump em um objeto, por isso, na nossa serie, queremos acessar o campo "nome" e para isso, temos de especificar aqui (pois nossa serie é um objeto e queremos mostrar apenas UMA de suas propriedades // laravel podia ter trazido uma rray associativo onde a sintax para exibir seria: $serie['nome'] porém trouxe um objeto, logo, a sintax de acesso a propriedade nome é: $serie->nome)--}}
+            {{-- exibir apenas $serie seria a mesma coisa que dar um var_dump em um objeto, por isso, na nossa serie, queremos acessar o campo "nome" e para isso, temos de especificar aqui (pois nossa serie é um objeto e queremos mostrar apenas UMA de suas propriedades // laravel podia ter trazido uma rray associativo onde a sintax para exibir seria: $serie['nome'] porém trouxe um objeto, logo, a sintax de acesso a propriedade nome é: $serie->nome) --}}
             <li class="list-group-item d-flex align-items-center justify-content-between">
                 {{ $serie->nome }}
+                <a class="btn btn-danger btn-sm" href="{{ route('series.edit', $serie->id) }}" type="submit">editar</a>
                 <form action="{{ route('series.destroy', $serie->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
