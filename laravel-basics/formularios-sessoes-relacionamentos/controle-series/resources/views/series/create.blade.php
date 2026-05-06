@@ -1,5 +1,5 @@
 <x-layout title="Cadastro Série">
     {{-- series pois está dentro da pasta series (que está dentro de: components e o ".form" é pq o nome do componente é form), graças aos ":" antes do action (parâmetro que nosso componente form pede), podemos informar dentro das aspas do ":action" um código php/blade normalmente sem o uso de {{  }} que ele irá interpretar corretamente --}}
     {{--  laravel nos entrega um método interessante devido a estarmos usando requisićoes, onde, o método 'old' guarde TODOS os dados na nossa ÚLTIMA requisićao, logo, caso tentemos fazer o submit, dê errado, ele nos retorna para essa view aqui (graćas ao validate em nosso controller no método store), e o método old entra em aćao, pois ele guarda TODAS as informaćoes da requisićao anterior que deu errado, onde um dos campos dela é: 'nome', ou seja, o antigo valor de $request->nome (traduzindo para termos de controller)    --}}
-    <x-series.form :action="route('series.store')" :nome="old('nome')"/>
+    <x-series.form :action="route('series.store')" :nome="old('nome')" :update="false"/>
 </x-layout>

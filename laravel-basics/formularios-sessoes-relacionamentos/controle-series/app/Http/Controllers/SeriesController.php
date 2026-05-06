@@ -45,7 +45,7 @@ class SeriesController extends Controller
     {
         // caso tentemos preencher um campo da nossa tabela (como exemplo aqui: series), através do request ($serie->nome = $request->nome) e esse campo "nome" venha nullo no request, o laravel NAO tentará preenche-lo e passará para o nosso campo nome da tabela series algo nullo, porém especificamos na criacao da tabela que aquele campo NAO e nullo, o que nos gerará um erro nada amigável
         // método validate do request espera algumas regras serem passadas para ele (aqui, o que cada campo precisa ter para ser considerado válido em nosso sistema, ex: nome obrigatório, minímo 3 letras e etc)
-        // caso algum campo nao passe na validacao, o usuário será redirecionado para a view que fez a requisicao (aqui, series.create), onde criará uma flash session e nos informará melhor os erros através de um json, onde além dessa flash com tudo que deu errado na requisicao, coloca uma váriavel na view chamada: $errors (que sempre vai existir naquela view)
+        // caso algum campo nao passe na validacao, o usuário será redirecionado para a view que fez a requisicao (aqui, series.create, ou melhor dizendo: a view anterior), onde criará uma flash session e nos informará melhor os erros através de um json, onde além dessa flash com tudo que deu errado na requisicao, coloca uma váriavel na view chamada: $errors (que sempre vai existir naquela view)
         $request->validate([
             // aqui temos um array de regras, que, particularmente falando, achei mais organizado que a maneira convencional: 'nome' => 'required|min:3 e etc', a funcionalidade é a mesma, única coisa que muda é a sintaxe 
             'nome' => ['required', 'min:3']
