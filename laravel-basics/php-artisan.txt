@@ -16,6 +16,8 @@ comandos php artisan e suas descições para facilitar minha vida
 
 - php artisan make:component NomeDoComponenteAqqui (com letra maiúscula) == gera um componente dentro da pasta components (caso não exista, ou ele cria ou devemos criar manualmente dentro da pasta views) + uma classe para esse mesmo componente, na pasta app/View/Components, por isso, ao criar um componente na linha de comando(terminal) devemos colocar o nome do componente em letra maiúscula, onde a classe que vem nos permite realizar alguma lógica/manipular atributos que serão renderizados na view (coisas que não são tão comuns, mas caso precise, é nesse local que ficam)
 
+- php artisan make:Request NomeDoRequestAqui == cria uma nova classe do tipo Request para criamos nossa request personalizada (que será localizada em: app/http/requests)
+
 - php artisan make:model NomeDoModelAqui == cria nova classe que é uma Model do Eloquent ORM e nos dá algumas facilidades
 
 - php artisan make:model Produto -m == cria o model produto e a migration para ele
