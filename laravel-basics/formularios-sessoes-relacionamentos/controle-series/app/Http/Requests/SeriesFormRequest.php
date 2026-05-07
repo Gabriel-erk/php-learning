@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 // esta classe já extende de 'FormRequest', então em nossa classe personalizada (SeriesFormRequest) podemos fazer TUDO que uma requisićão normal já faz
+// esta é uma classe específica que eu tenho para representar minha requisićao
 class SeriesFormRequest extends FormRequest
 {
     /**
@@ -26,7 +27,7 @@ class SeriesFormRequest extends FormRequest
     {
         // aqui entra o que realmente precisamos, as regras de validaćão
         return [
-            //
+            'nome' => ['required', 'min:3']
         ];
     }
 }

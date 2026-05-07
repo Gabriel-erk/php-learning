@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Serie;
+use App\Http\Requests;
+use App\Http\Requests\SeriesFormRequest;
 // classe "Request" é uma classe do Laravel que representa uma requisição HTTP feita pelo cliente, ela encapsula todas as informações relacionadas a essa requisição, como os dados enviados, os parâmetros da URL, os cabeçalhos, entre outros. Ela é usada para acessar e manipular os dados da requisição de forma fácil e organizada dentro dos controladores do Laravel.
 // classe já é importada automaticamente ao gerarmos um controller via linha de comando (terminal), pois o controller em si (como descrito no Notion) recebe uma requisição (Request) e retorna uma resposta (Response), então sempre que falamos de Http no geral, esse é o comportamento esperado de um controller (tanto que os controllers (ou controladores em portugues) no laravel ficam dentro da pasta Http, para ilustrar isso melhor)
 use Illuminate\Http\Request;
@@ -27,7 +29,7 @@ class SeriesController extends Controller
         return view('series.edit')->with('serie', $series);
     }
 
-    public function update(Request $request, Serie $series)
+    public function update(SeriesFormRequest $request, Serie $series)
     {
         // método fill faz a filtragem de tudo que pode receber dados em massa (que está no fillable da model que estamos manipulando agora) e permite o preenchimento de todos os campos, sem que nós tenhamos que ficar colocando linha por linha, atributo por atributo, ex: $series->nome = $request->nome, $series->descricao = $request->descricao e etc, com o fill ele já preenche TODOS os campos que estao para receber dados em massa, automaticamente e nosso request->all() passa o valor de todos os campos de formulário que ele possui
         $series->fill($request->all());
@@ -41,28 +43,37 @@ class SeriesController extends Controller
         return view('series.create');
     }
 
-    public function store(Request $request)
-    {
-        // caso tentemos preencher um campo da nossa tabela (como exemplo aqui: series), através do request ($serie->nome = $request->nome) e esse campo "nome" venha nullo no request, o laravel NAO tentará preenche-lo e passará para o nosso campo nome da tabela series algo nullo, porém especificamos na criacao da tabela que aquele campo NAO e nullo, o que nos gerará um erro nada amigável
-        // método validate do request espera algumas regras serem passadas para ele (aqui, o que cada campo precisa ter para ser considerado válido em nosso sistema, ex: nome obrigatório, minímo 3 letras e etc)
-        // caso algum campo nao passe na validacao, o usuário será redirecionado para a view que fez a requisicao (aqui, series.create, ou melhor dizendo: a view anterior), onde criará uma flash session e nos informará melhor os erros através de um json, onde além dessa flash com tudo que deu errado na requisicao, coloca uma váriavel na view chamada: $errors (que sempre vai existir naquela view)
-        $request->validate([
-            // aqui temos um array de regras, que, particularmente falando, achei mais organizado que a maneira convencional: 'nome' => 'required|min:3 e etc', a funcionalidade é a mesma, única coisa que muda é a sintaxe 
-            'nome' => ['required', 'min:3']
-        ]);
-        // outra forma de acesar um atributo/campo de formulário passado para minha requisição ao apertar um botão do tipo submit fazendo com que o form dispare este métodoa aqui é da forma abaixo (acessando o campo nome com a sintaxe: $request->nomeDoAtributoAqui) 
-        // pegando o campo/propriedade "nome" que vem no CORPO da requisição (request)
-        // $nomeSerie = $request->nome;
-        // $serie = new Serie();
-        // $serie->nome = $nomeSerie;
-        // para realizarmos a inserção de dados em massa (== passar várias informações de uma vez só para nossa Model, como por ex: preencher mais de um campo da "model" já seria considerado uma inserção de dados em massa) na nossa tabela, o Eloquent nos permite utilizar um método estático chamado create, que recebe um array associativo de parâmetro com todas as propriedades/colunas do db que quero armazenar (por ex, quero preencher o campo nome e genero da minha série == Serie::create([ 'nome' => $request->nome, 'genero' => $request->genero ])), que já vai inserir no banco de dados uma nova série com o nome e o genero que veio em nosso request
-        // caso darmos um dd($request) veremos que ele traz um array associativo que mostra o seu corpo (que contém as informações do formulário em um array associativo, onde por ex: input com o name = "nome" com o valor Game of Thrones e um input com o name = "genero" com o valor Ação Medieval, ao clicar no botão do tipo submit dentro da tag html "forms" com um action direcionado para a rota DESTE método que estamos (store em SeriesController) será passado uma requisição para a nossa váriavel no parâmetro DESTE método, e o corpo desta requisição será o VALOR da nossa váriavel de parâmetro ($request) e esse valor estará da seguinte forma: "nome" => "Game of Thrones", "genero" => "Ação Medieval", este será o valor de $request (caso tenha um token (graças ao @csrf que passamos em cada formulário ao utilizar o laravel) ele estará lá também), e então preencherá corretamente o array associativo que devriamos colocar para cada campo da nossa tabela série dentro do array que Serie::create(estouFalandoDesseArrayAquiÒcasoVaVerComOMouseEmcimaDe:Serie::create(VereiQueOvalorPassadoAquiTemQueSerUmArray,Logo,OretornoDe$request->all()éUmArrayComOcampoTokenEnomeOndeNomeFoiPassadoNoFormQueChamaArotaQueDisparaEsteMétodoAqui)) pede, por isso não temos que escrever algo como: Serie::create("nome" => $request->nome) pois a sintax, o corpo de $request->all() já nos entrega isso corretamente (claro, dependendo da estrutura do formulário, se o formulário estiver com os campos corretos/correspondentes ao que minha série precisa para ser criada, irá funcionar, pois não faz sentido eu disparar esse create aqui em um formulário que passaria para minha $request de parâmetro os campos: cidade, uf, rua...pois não tem nada haver com oq o model que está NESSE REQUEST aqui, ele NÃO PRECISA DESSAS CAMPOS NADA HAVER (cidade, uf, ruia....)) )
-        // dd($request->all());
+    // public function store(Request $request)
+    // {
+    //     // caso tentemos preencher um campo da nossa tabela (como exemplo aqui: series), através do request ($serie->nome = $request->nome) e esse campo "nome" venha nullo no request, o laravel NAO tentará preenche-lo e passará para o nosso campo nome da tabela series algo nullo, porém especificamos na criacao da tabela que aquele campo NAO e nullo, o que nos gerará um erro nada amigável
+    //     // método validate do request espera algumas regras serem passadas para ele (aqui, o que cada campo precisa ter para ser considerado válido em nosso sistema, ex: nome obrigatório, minímo 3 letras e etc)
+    //     // caso algum campo nao passe na validacao, o usuário será redirecionado para a view que fez a requisicao (aqui, series.create, ou melhor dizendo: a view anterior), onde criará uma flash session e nos informará melhor os erros através de um json, onde além dessa flash com tudo que deu errado na requisicao, coloca uma váriavel na view chamada: $errors (que sempre vai existir naquela view)
+    //     $request->validate([
+    //         // aqui temos um array de regras, que, particularmente falando, achei mais organizado que a maneira convencional: 'nome' => 'required|min:3 e etc', a funcionalidade é a mesma, única coisa que muda é a sintaxe 
+    //         'nome' => ['required', 'min:3']
+    //     ]);
+    //     // outra forma de acesar um atributo/campo de formulário passado para minha requisição ao apertar um botão do tipo submit fazendo com que o form dispare este métodoa aqui é da forma abaixo (acessando o campo nome com a sintaxe: $request->nomeDoAtributoAqui) 
+    //     // pegando o campo/propriedade "nome" que vem no CORPO da requisição (request)
+    //     // $nomeSerie = $request->nome;
+    //     // $serie = new Serie();
+    //     // $serie->nome = $nomeSerie;
+    //     // para realizarmos a inserção de dados em massa (== passar várias informações de uma vez só para nossa Model, como por ex: preencher mais de um campo da "model" já seria considerado uma inserção de dados em massa) na nossa tabela, o Eloquent nos permite utilizar um método estático chamado create, que recebe um array associativo de parâmetro com todas as propriedades/colunas do db que quero armazenar (por ex, quero preencher o campo nome e genero da minha série == Serie::create([ 'nome' => $request->nome, 'genero' => $request->genero ])), que já vai inserir no banco de dados uma nova série com o nome e o genero que veio em nosso request
+    //     // caso darmos um dd($request) veremos que ele traz um array associativo que mostra o seu corpo (que contém as informações do formulário em um array associativo, onde por ex: input com o name = "nome" com o valor Game of Thrones e um input com o name = "genero" com o valor Ação Medieval, ao clicar no botão do tipo submit dentro da tag html "forms" com um action direcionado para a rota DESTE método que estamos (store em SeriesController) será passado uma requisição para a nossa váriavel no parâmetro DESTE método, e o corpo desta requisição será o VALOR da nossa váriavel de parâmetro ($request) e esse valor estará da seguinte forma: "nome" => "Game of Thrones", "genero" => "Ação Medieval", este será o valor de $request (caso tenha um token (graças ao @csrf que passamos em cada formulário ao utilizar o laravel) ele estará lá também), e então preencherá corretamente o array associativo que devriamos colocar para cada campo da nossa tabela série dentro do array que Serie::create(estouFalandoDesseArrayAquiÒcasoVaVerComOMouseEmcimaDe:Serie::create(VereiQueOvalorPassadoAquiTemQueSerUmArray,Logo,OretornoDe$request->all()éUmArrayComOcampoTokenEnomeOndeNomeFoiPassadoNoFormQueChamaArotaQueDisparaEsteMétodoAqui)) pede, por isso não temos que escrever algo como: Serie::create("nome" => $request->nome) pois a sintax, o corpo de $request->all() já nos entrega isso corretamente (claro, dependendo da estrutura do formulário, se o formulário estiver com os campos corretos/correspondentes ao que minha série precisa para ser criada, irá funcionar, pois não faz sentido eu disparar esse create aqui em um formulário que passaria para minha $request de parâmetro os campos: cidade, uf, rua...pois não tem nada haver com oq o model que está NESSE REQUEST aqui, ele NÃO PRECISA DESSAS CAMPOS NADA HAVER (cidade, uf, ruia....)) )
+    //     // dd($request->all());
+    //     $serie = Serie::create($request->all());
+    //     // $request->session()->flash('mensagem.sucesso', "Série '{$serie->nome}' adicionada com sucesso.");
+    //     // devolvendo/retornando uma resposta de redirecionamento para a minha rota "series.index", que chama o método "index" do controller series, a sintaxe abaixo é a mais "amigavel/profissional" quando queremos utilizar rotas + apelidos (abaixo estamos chamando a rota pelo seu apelido == series.index), da mesma forma que a outra sintax que aprendemos para fazer a mesma coisa: redirect()->route('series.index') porém de uma forma mais simplificada e interessante aqui 
+    //     return to_route('series.index')->with('mensagem.sucesso', "Série '{$serie->nome}' adicionada com sucesso.");
+    // }
+
+
+    public function store(SeriesFormRequest $request) {
+        // não precisamos mais realizar o processo de validaćao em nosso código pois nossa classe SeriesFormRequest já realiza isso para nós por debaixo do panos seguindo todas as regras que colocamos
         $serie = Serie::create($request->all());
-        // $request->session()->flash('mensagem.sucesso', "Série '{$serie->nome}' adicionada com sucesso.");
-        // devolvendo/retornando uma resposta de redirecionamento para a minha rota "series.index", que chama o método "index" do controller series, a sintaxe abaixo é a mais "amigavel/profissional" quando queremos utilizar rotas + apelidos (abaixo estamos chamando a rota pelo seu apelido == series.index), da mesma forma que a outra sintax que aprendemos para fazer a mesma coisa: redirect()->route('series.index') porém de uma forma mais simplificada e interessante aqui 
-        return to_route('series.index')->with('mensagem.sucesso', "Série '{$serie->nome}' adicionada com sucesso.");
+
+        return to_route('series.index')->with('mensagem.sucesso', "Série '{$serie->nome}' criada com sucesso!");
     }
+
 
     // através de uma sessão, podemos guardar uma informação temporariamente no servidor, onde ele irá nos devolver um cookie dizendo que a sessão pertence a nós
     // passando o parâmetro to tipo $serie, por debaixo dos panos ele realiza essa linha: Serie::findOrFail($serie), logo, no corpo do método não precisamos dela, pois o laravel já vai encontra-la para nos, e só vai entrar no corpo do método "destroy" se possui um valor como parâmetro do tipo serie (e sempre passamos para o destroy, como parâmetro, um objeto do tipo série)

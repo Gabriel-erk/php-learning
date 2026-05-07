@@ -39,3 +39,13 @@ comandos php artisan e suas descições para facilitar minha vida
 ** CACHE **
 
 php artisan view:clear == limpa cache das views, coisa que as vezes pode impedir verificar mudança em tempo real das views devido a cache cheio
+
+** TRADUZIR PARA PT-BR A APLICAĆAO, RETORNOS DE ERRO DE VALIDAĆÃO E ETC **
+
+// IMPORTAR PACOTE DE TRADUĆÃO VIA COMPOSER
+composer require lucascudo/laravel-pt-br-localization --dev
+
+// publicar os arquivos de linguagem manualmente, para trazer os arquivos de linguagem do laravel para o sistema, modificado aqui para trazer em os arquivos de configuraćão em pt_BR (pasta lang)
+php artisan vendor:publish --tag=laravel-pt-br-localization
+
+// trocar em config/app.php o atributo 'locale' para pt_BR juntamente da váriavel de ambiente: APP_LOCALE no .env para pt_BR também para concluid a tradućão do nosso sistema para português
