@@ -15,4 +15,16 @@ class Serie extends Model
     protected $fillable = [
         "nome"
     ];
+
+    // método de relacionamento, onde o nome do método é o nome que eu quero usar para ACESSAR esse relacionamento em CADA instância (objeto) da classe Serie, logo, seria algo como: $serieUm->temporadas()
+    // lógica: para cada série, eu quero poder acessar as temporadas que ela têm
+    public function temporadas()
+    {
+        // este método de relacionamento precisa RETORNAR ALGUMA forma de relacionamento (1:1, 1:N, N:N etc..)
+        // aqui, uma série TEM várias temporadas e VÁRIAS temporadas TEM uma série
+        // $this == ESSA SERIE (serie atual, do objeto que chamar este método)
+        // hasMany == TEM MUITAS(Aqui, O QUE ela tem muitas, no caso, ela tem MUITAS 'Season' == temporadas, ou seja, cada série PODE ter MUITOS vínculos em da classe/modelo Season == temporada)
+        // resumo da linha abaixo: está dizendo que a classe/modelo Series tem um relacionamento com a classe Season, do tipo: 1 para muitos (1:N), onde UMA série possui VÁRIAS temporadas
+        return $this->hasMany(Season::class);
+    }
 }
