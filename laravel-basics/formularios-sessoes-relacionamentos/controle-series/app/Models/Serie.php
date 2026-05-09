@@ -25,6 +25,8 @@ class Serie extends Model
         // $this == ESSA SERIE (serie atual, do objeto que chamar este método)
         // hasMany == TEM MUITAS(Aqui, O QUE ela tem muitas, no caso, ela tem MUITAS 'Season' == temporadas, ou seja, cada série PODE ter MUITOS vínculos em da classe/modelo Season == temporada)
         // resumo da linha abaixo: está dizendo que a classe/modelo Series tem um relacionamento com a classe Season, do tipo: 1 para muitos (1:N), onde UMA série possui VÁRIAS temporadas
-        return $this->hasMany(Season::class);
+        // como segundo parâmetro, podemos passar qual o nome da chave estrangeira que estará presente na tabela/classe/modelo 'Season', chave estrangeira, campo do tipo inteiro que irá representar a minha série atual (série que está chamando este método de relacionamento aqui: temporadas, logo, cada campo 'series_id' tem vínculo com a nossa tabela/classe/model Serie e TODAS a informaćoes na mesma linha de qualquer campo "series_id" (campo que estamos referenciando/criando na linha abaixo) também "pertencerão" a série com o mesmo id na tabela series)
+        // caso queiramos que nosso segundo parâmetro (series_id, vulgo: coluna que será criada na tabela/classe/modelo Season) para o método hasMany referenciasse uma coluna que JÁ EXISTE na nossa tabela ATUAL que está criado o relacionamento (Serie) basta apenas passarmos um terceiro parâmetro dizendo qual o nome da coluna, onde no nosso caso PODERIAMOS referenciar apenas a nossa chave primária (da tabela series) que por padrão, se chama: id
+        return $this->hasMany(Season::class, 'series_id');
     }
 }
