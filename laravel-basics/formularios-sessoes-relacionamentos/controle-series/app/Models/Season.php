@@ -16,6 +16,6 @@ class Season extends Model
     public function episodes()
     {
         // UMA temporada, possui VÁRIOS episódios
-        return $this->hasMany(Episode::class);
+        return $this->hasMany(Episode::class);aaaa
     }
 }
