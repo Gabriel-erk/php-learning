@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
+use Override;
 
 // quando temos uma Model do Eloquente ORM (como está aqui (serie)) ela é mapeada/configurada/direcionada para uma tabela do banco, logo, se eu tenho uma Model/Classe chamada: Serie(como está aqui) o Eloquent ORM vai procurar uma tabela do banco com o nome: "series" (sim, no plural e dentro de database/migrations/nomeDaMigrationQueBateComNomeDoModelELoquentORM), porém em uma situação onde temos uma tabela chamada: seriados, poderiamos ter a linha: protected $table = 'nomeDaTabelaAqui' (ou seja, protected $table = 'seriados'), pois não teria como ele colocar 'seriados' no plural na hora da busca assim como ele fez com "serie" que ao invés de buscar "serie" buscaria "series"
 // esta classe extende Model, logo, ela É UM MODEL (consequentemente, existem vários métodos que podemos utilizar)
@@ -28,5 +30,18 @@ class Serie extends Model
         // como segundo parâmetro, podemos passar qual o nome da chave estrangeira que estará presente na tabela/classe/modelo 'Season', chave estrangeira, campo do tipo inteiro que irá representar a minha série atual (série que está chamando este método de relacionamento aqui: temporadas, logo, cada campo 'series_id' tem vínculo com a nossa tabela/classe/model Serie e TODAS a informaćoes na mesma linha de qualquer campo "series_id" (campo que estamos referenciando/criando na linha abaixo) também "pertencerão" a série com o mesmo id na tabela series)
         // caso queiramos que nosso segundo parâmetro (series_id, vulgo: coluna que será criada na tabela/classe/modelo Season) para o método hasMany referenciasse uma coluna que JÁ EXISTE na nossa tabela ATUAL que está criado o relacionamento (Serie) basta apenas passarmos um terceiro parâmetro dizendo qual o nome da coluna, onde no nosso caso PODERIAMOS referenciar apenas a nossa chave primária (da tabela series) que por padrão, se chama: id
         return $this->hasMany(Season::class, 'series_id');
+    }
+
+    // sempre que for "Buscar as séries, sempre que for encontrar algumas séries, faća um ESCOPO de busca", como por exemplo, sempre que for buscar QUALQUER tipo de série que possua vínculo com o arquivo Model "Serie" traga em ordem alfabética e o nome dessa técnica é justamente: escopo
+    // escopos locais == quero pegar as séries DESSE ESCOPO QUE EU ESPEFICAR
+    // método booted vai fazer com que quando esta model (Serie) estiver sendo inicializada eu adicione este escopo, no nosso caso será um escopo GLOBAL, logo, não preciso especificar nenhum, será como uma "regra geral da classe" 
+    #[Override]
+    protected static function booted()
+    {
+        // podemos passar um nome para este escopo, mas não precisamos, logo, quando não definimos um nome, estamos criando um escopo ANÔNIMO, mas aqui, vamos definir com: 'ordered', logo, o segundo parâmetro é uma funćão anônima que vai CONFIGURAR o meu escopo, que, por padrão, recebe um queryBuilder
+        self::addGlobalScope('ordered', function (Builder $queryBuilder) {
+            // aqui, aplicamos uma query através do noss parâmetro/variável $queryBuilder que ordena TODAS as vezes que realizarmos qualquer busca no Model Serie através do campo nome (por padrão, em ordem alfabética mas podendo ser alterado para outras formas) com a linha: $queryBuilder->orderBy('nome')
+            $queryBuilder->orderBy('nome');
+        });
     }
 }
