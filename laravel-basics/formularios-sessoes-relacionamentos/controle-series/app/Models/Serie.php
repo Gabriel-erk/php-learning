@@ -17,6 +17,8 @@ class Serie extends Model
     protected $fillable = [
         "nome"
     ];
+    // este atributo protegido chamado with vai permitir que passemos para ele um array, onde cada posićão dele vai representar um relacionamento relacionado a nossa Model Serie, como podemos ver abaixo, a forma de passar esse relacionamento é chamando o MÉTODO de relacionamento que a model atual tem, no caso da Model atual, o nome de método de relacionamento é temporadas, e toda vez que carregarmos as informaćões de uma $serie, queremos trazer as temporadas junto e evitar ficar fazendo consultas e requisićões sempre a partir da série para ficar pegando suas temporadas, ao carregar uma série, carrega junto suas temporadas
+    protected $with = ['temporadas'];
 
     // método de relacionamento, onde o nome do método é o nome que eu quero usar para ACESSAR esse relacionamento em CADA instância (objeto) da classe Serie, logo, seria algo como: $serieUm->temporadas()
     // lógica: para cada série, eu quero poder acessar as temporadas que ela têm

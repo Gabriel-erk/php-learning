@@ -14,6 +14,8 @@ class SeriesController extends Controller
     public function index()
     {
         $series = Serie::query()->orderBy('nome', 'asc')->get();
+        // trazendo TODAS as minhas séries + todos os vínculos que cada uma tem com a tabela temporadas (seasons), então, ao invés de pegar a série e fazer requisićões manualmente para achar as temporadas de cada série, ao consultar todas de uma só vez pelo método index (que estamos agora) já trazemos cada série com sua respectiva temporada graćas ao método with (aqui manipulando modelo ele tem um comportamento e quando usamos em métodos de redirecionamento outro), onde dentro do with passamos um array com TODOS os relacionamentos que temos, no caso passamos o nome do método de relacionamento que temos na nossa model Serie que temos (método de relacionamento que criamos na model Serie) e por fim usamos o verbo get, pois após queries, geralmente é sempre necessário ele para pegarmos o resultado de colećões que as queries podem nos trazer eventualmente 
+        // $series = Serie::with(['temporadas'])->get();
         // método que o laravel chama de "helper" que nos permite buscar dados da sessão
         $mensagemSucesso = session('mensagem.sucesso');
 
