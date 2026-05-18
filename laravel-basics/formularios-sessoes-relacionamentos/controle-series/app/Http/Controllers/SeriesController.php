@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Serie;
+use App\Models\Series;
 use App\Http\Requests\SeriesFormRequest;
 // classe "Request" é uma classe do Laravel que representa uma requisição HTTP feita pelo cliente, ela encapsula todas as informações relacionadas a essa requisição, como os dados enviados, os parâmetros da URL, os cabeçalhos, entre outros. Ela é usada para acessar e manipular os dados da requisição de forma fácil e organizada dentro dos controladores do Laravel.
 // classe já é importada automaticamente ao gerarmos um controller via linha de comando (terminal), pois o controller em si (como descrito no Notion) recebe uma requisição (Request) e retorna uma resposta (Response), então sempre que falamos de Http no geral, esse é o comportamento esperado de um controller (tanto que os controllers (ou controladores em portugues) no laravel ficam dentro da pasta Http, para ilustrar isso melhor)
@@ -13,7 +13,7 @@ class SeriesController extends Controller
 {
     public function index()
     {
-        $series = Serie::query()->orderBy('nome', 'asc')->get();
+        $series = Series::query()->orderBy('nome', 'asc')->get();
         // trazendo TODAS as minhas séries + todos os vínculos que cada uma tem com a tabela temporadas (seasons), então, ao invés de pegar a série e fazer requisićões manualmente para achar as temporadas de cada série, ao consultar todas de uma só vez pelo método index (que estamos agora) já trazemos cada série com sua respectiva temporada graćas ao método with (aqui manipulando modelo ele tem um comportamento e quando usamos em métodos de redirecionamento outro), onde dentro do with passamos um array com TODOS os relacionamentos que temos, no caso passamos o nome do método de relacionamento que temos na nossa model Serie que temos (método de relacionamento que criamos na model Serie) e por fim usamos o verbo get, pois após queries, geralmente é sempre necessário ele para pegarmos o resultado de colećões que as queries podem nos trazer eventualmente 
         // $series = Serie::with(['temporadas'])->get();
         // método que o laravel chama de "helper" que nos permite buscar dados da sessão
@@ -24,13 +24,13 @@ class SeriesController extends Controller
 
     public function show() {}
 
-    public function edit(Serie $series)
+    public function edit(Series $series)
     {
         // quando não estou usando em um redirecionamento (to_route, redirect) e sim carregando uma view (com o método view(viewAqui)), ao utilizar o "with" ele permite que eu passe uma váriavel para aquela view com esta sintaxe aqui: with('nomeQueAvariavel/objetoTeraNaview', nomeDaVariavel/ObjetoQueVouPassarParaMinhaView)
         return view('series.edit')->with('serie', $series);
     }
 
-    public function update(SeriesFormRequest $request, Serie $series)
+    public function update(SeriesFormRequest $request, Series $series)
     {
         // método fill faz a filtragem de tudo que pode receber dados em massa (que está no fillable da model que estamos manipulando agora) e permite o preenchimento de todos os campos, sem que nós tenhamos que ficar colocando linha por linha, atributo por atributo, ex: $series->nome = $request->nome, $series->descricao = $request->descricao e etc, com o fill ele já preenche TODOS os campos que estao para receber dados em massa, automaticamente e nosso request->all() passa o valor de todos os campos de formulário que ele possui
         $series->fill($request->all());
@@ -70,7 +70,7 @@ class SeriesController extends Controller
 
     public function store(SeriesFormRequest $request) {
         // não precisamos mais realizar o processo de validaćao em nosso código pois nossa classe SeriesFormRequest já realiza isso para nós por debaixo do panos seguindo todas as regras que colocamos
-        $serie = Serie::create($request->all());
+        $serie = Series::create($request->all());
 
         return to_route('series.index')->with('mensagem.sucesso', "Série '{$serie->nome}' criada com sucesso!");
     }
@@ -80,7 +80,7 @@ class SeriesController extends Controller
     // passando o parâmetro to tipo $serie, por debaixo dos panos ele realiza essa linha: Serie::findOrFail($serie), logo, no corpo do método não precisamos dela, pois o laravel já vai encontra-la para nos, e só vai entrar no corpo do método "destroy" se possui um valor como parâmetro do tipo serie (e sempre passamos para o destroy, como parâmetro, um objeto do tipo série)
     // nome do parâmetro aqui, precisa estar alinhado com o nome do parâmetro que a rota que leva até este método pede
     // laravel trás facilidades como: "route model binding" == quando passamos um parâmetro do tipo "model" para um método de um controller, o laravel já se encarrega de buscar a instância dessa model no banco de dados, utilizando o valor passado na rota (que é o id da série) e já nos entrega essa instância/model pronta para ser utilizada dentro do corpo do método, ou seja, não precisamos fazer uma consulta manual para buscar a série pelo id, o laravel já faz isso para nós, basta apenas passarmos o parâmetro do tipo "model" (no caso aqui, "Serie") e o nome do parâmetro (no caso aqui, "$series") que deve ser igual ao nome do parâmetro que a rota pede (no caso aqui, "{series}")
-    public function destroy(Serie $series)
+    public function destroy(Series $series)
     {
         // se essa série aqui existe, ele apaga para nós, se não, não faz nada
         $series->delete();

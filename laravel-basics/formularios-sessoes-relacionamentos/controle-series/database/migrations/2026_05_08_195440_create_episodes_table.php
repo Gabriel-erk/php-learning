@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('episodes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedTinyInteger('numero');
-            $table->foreignId('season_id')->constrained();
+            $table->unsignedTinyInteger('number'); // numero do episodio
+            $table->foreignId('season_id')->constrained()->onDelete('cascade'); // mesma coisa de seasons, uma série for apagada na tabela series e ela tiver seu id presente em QUALQUER registro da tabela episodes, os registros da tabela episodes que possuiam vínculo com o registro na tabela series que foi apagado, TAMBÉM será apagado consequentemente
         });
     }
 

@@ -10,7 +10,7 @@ class Season extends Model
     public function series()
     {
         // relacionamento "inverso" agora, uma Season (temporada) pertence a uma série, uma Season TEM uma série e nada mais
-        return $this->belongsTo(Serie::class);
+        return $this->belongsTo(Series::class);
     }
 
     public function episodes()
