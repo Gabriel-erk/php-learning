@@ -8,6 +8,11 @@ use Override;
 
 class User extends Model
 {
+    protected $fillable = [
+        'name',
+        'email',
+        'password'
+    ];
     protected $with = ['reserves'];
     public function reserves()
     {

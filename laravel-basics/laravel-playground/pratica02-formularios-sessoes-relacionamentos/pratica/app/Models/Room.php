@@ -8,6 +8,13 @@ use Override;
 
 class Room extends Model
 {
+    protected $fillable = [
+        'name',
+        'capacity'
+    ];
+    protected $with = [
+        'reserves'
+    ];
     public function reserves()
     {
         $this->hasMany(Reserve::class, 'room_id'); // cada sala pode ter VÁRIAS reservas ligadas a ela
