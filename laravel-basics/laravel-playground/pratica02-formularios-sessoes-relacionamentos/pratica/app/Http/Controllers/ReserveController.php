@@ -14,10 +14,10 @@ class ReserveController extends Controller
     {
         try {
             $reserves = Reserve::all();
-
-            return view('reserves.index', compact('reserves'));
+            return view('reserves.index', compact('reserves'))->with('message.status');
         } catch (\Throwable $th) {
-            //throw $th;
+            $errorMessage = $th->getMessage();
+            return to_route('reserves.index')->with('message.status', "Não foi possível recuperar as reservas '{$errorMessage}'");
         }
     }
 
@@ -26,7 +26,7 @@ class ReserveController extends Controller
      */
     public function create()
     {
-        //
+        return view('reserves.create');
     }
 
     /**
@@ -34,7 +34,11 @@ class ReserveController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     /**
@@ -42,7 +46,13 @@ class ReserveController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $reserve = Reserve::findOrFail($id);
+            return view('reserves.show', compact('reserve'));
+        } catch (\Throwable $th) {
+            $errorMessage = $th->getMessage();
+            return to_route('reserves.index')->with('message.status', "Não foi possível recuperar a reserva '{$errorMessage}'"); 
+        }
     }
 
     /**
@@ -50,7 +60,13 @@ class ReserveController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        try {
+            $reserve = Reserve::findOrFail($id);
+            return view('reserves.edit', compact('reserve'));
+        } catch (\Throwable $th) {
+            $errorMessage = $th->getMessage();
+            return to_route('reserves.index')->with('message.status', "Não foi possível recuperar a reserva '{$errorMessage}'");
+        }
     }
 
     /**
@@ -66,6 +82,13 @@ class ReserveController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            Reserve::destroy($id);
+
+            return to_route('reserve.index')->with('message.status', "Reserva com id:'{$id}' foi excluída com sucesso!");
+        } catch (\Throwable $th) {
+            $th->getMessage();
+            return to_route('reserves.index', "Não foi possível excluir a reservacom id: '{$id}'.");
+        }
     }
 }
