@@ -5,7 +5,7 @@ namespace App\Http\Requests\Reserve;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReserveStoreRequest extends FormRequest
+class ReserveUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,12 @@ class ReserveStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'integer'],
-            'room_id' => ['required', 'integer'],
-            'reserve_date' => ['required', 'date'],
-            'start_time' => ['required', 'date', 'after:end_time'],
-            'end_time' => ['required', 'date', 'before:start_time'],
-            'observation' => ['required', 'string']
+            'user_id' => ['sometimes', 'integer'],
+            'room_id' => ['sometimes', 'integer'],
+            'reserve_date' => ['sometimes', 'date'],
+            'start_time' => ['sometimes', 'date', 'after:end_time'],
+            'end_time' => ['sometimes', 'date', 'before:start_time'],
+            'observation' => ['sometimes', 'string']
         ];
     }
 }

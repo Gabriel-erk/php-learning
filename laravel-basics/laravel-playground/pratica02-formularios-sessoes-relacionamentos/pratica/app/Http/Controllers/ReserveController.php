@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Reserve\ReserveStoreRequest;
+use App\Http\Requests\Reserve\ReserveUpdateRequest;
 use App\Models\Reserve;
 use Illuminate\Http\Request;
 
@@ -32,12 +34,15 @@ class ReserveController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ReserveStoreRequest $request)
     {
         try {
-            
+            Reserve::create()->fill($request->all());
+
+            return to_route('reserves.index')->with('mensagem.sucesso', "Reserva criada com sucesso!");
         } catch (\Throwable $th) {
-            //throw $th;
+            $errorMessage = $th->getMessage();
+            return to_route('reserves.index')->with('message.status', "Não foi possível realizar a reserva '{$errorMessage}'");
         }
     }
 
@@ -51,7 +56,7 @@ class ReserveController extends Controller
             return view('reserves.show', compact('reserve'));
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('message.status', "Não foi possível recuperar a reserva '{$errorMessage}'"); 
+            return to_route('reserves.index')->with('message.status', "Não foi possível recuperar a reserva '{$errorMessage}'");
         }
     }
 
@@ -72,9 +77,15 @@ class ReserveController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ReserveUpdateRequest $request, Reserve $reserve)
     {
-        //
+        try {
+            $reserve->update($request->all());
+            return to_route('reserves.index')->with('message.status', 'Reserva atualizada com sucesso!');
+        } catch (\Throwable $th) {
+            $errorMessage = $th->getMessage();
+            return to_route('reserves.index')->with('message.status', "Não foi possível atualizar a Reserva: '{$errorMessage}'");
+        }
     }
 
     /**
