@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Reserve\ReserveStoreRequest;
 use App\Http\Requests\Reserve\ReserveUpdateRequest;
 use App\Models\Reserve;
+use App\Models\Room;
+use App\Models\User;
+use Error;
 use Illuminate\Http\Request;
 
 class ReserveController extends Controller
@@ -17,7 +20,7 @@ class ReserveController extends Controller
         $horariosIndisponiveis = [];
 
         foreach ($reservasAtivas as $reservaAtiva) {
-            $horariosIndisponiveis[] = $reservaAtiva->start_time;
+            $horariosIndisponiveis[] = $reservaAtiva->start_time->format('H:i');
         }
 
         return $horariosIndisponiveis;
@@ -54,9 +57,28 @@ class ReserveController extends Controller
         return $horariosDisponiveis;
     }
 
-    public function reserve(Request $request): void
+    public function reserve(ReserveStoreRequest $request, User $user, Room $room)
     {
-        # code...
+        try {
+            $horariosDisponiveis = $this->horariosDisponiveis($room->id);
+
+            if (in_array($request->start_time, $horariosDisponiveis)) {
+                Reserve::create([
+                    'user_id' => $user->id,
+                    'room_id' => $room->id,
+                    'reserve_date' => $request->reserve_date,
+                    'start_time' => $request->start_time,
+                    'end_time' => $request->end_time,
+                    'observation' => $request->observation
+                ]);
+                return to_route('reserves.index')->with('message.status', "Reserva realizada com sucesso!");
+            }
+
+            throw new Error("Horário '$request->start_time' indisponível para reservas.");
+        } catch (\Throwable $th) {
+            $errorMessage = $th->getMessage();
+            return to_route('reserves.index')->with('message.status', "Não foi possível realizar a reserva '{$errorMessage}'");
+        }
     }
     /**
      * Display a listing of the resource.
