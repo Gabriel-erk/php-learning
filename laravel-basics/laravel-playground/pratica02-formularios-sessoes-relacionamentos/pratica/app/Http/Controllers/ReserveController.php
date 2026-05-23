@@ -9,6 +9,55 @@ use Illuminate\Http\Request;
 
 class ReserveController extends Controller
 {
+
+    protected function findUnavaliableTimes(int $roomId): array
+    {
+        $reservasAtivas = Reserve::where('room_id', $roomId)->get();
+
+        $horariosIndisponiveis = [];
+
+        foreach ($reservasAtivas as $reservaAtiva) {
+            $horariosIndisponiveis[] = $reservaAtiva->start_time;
+        }
+
+        return $horariosIndisponiveis;
+    }
+
+    protected function findAvaliableTimes(array $horariosIndisponiveis): array
+    {
+        $horarios = [
+            '08:00',
+            '10:00',
+            '12:00',
+            '14:00',
+            '16:00',
+            '18:00',
+            '20:00'
+        ];
+
+        $horariosDisponiveis = [];
+
+        foreach ($horarios as $horario) {
+            if (!in_array($horario, $horariosIndisponiveis)) {
+                $horariosDisponiveis = $horario;
+            }
+        }
+
+        return $horariosDisponiveis;
+    }
+
+    protected function horariosDisponiveis(int $roomId): array
+    {
+        $horariosIndisponiveis = $this->findUnavaliableTimes($roomId);
+        $horariosDisponiveis = $this->findAvaliableTimes($horariosIndisponiveis);
+
+        return $horariosDisponiveis;
+    }
+
+    public function reserve(Request $request): void
+    {
+        # code...
+    }
     /**
      * Display a listing of the resource.
      */
