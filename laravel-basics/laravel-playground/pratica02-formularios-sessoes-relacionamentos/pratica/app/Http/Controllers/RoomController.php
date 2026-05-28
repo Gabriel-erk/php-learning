@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Room\RoomStoreRequest;
+use App\Http\Requests\Room\RoomUpdateRequest;
 use App\Models\Room;
-use Exception;
-use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
@@ -71,9 +70,15 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RoomUpdateRequest $request, Room $room)
     {
-        //
+        try {
+            $room->update($request->all());
+            return to_route('rooms.index')->with('message.status', "Quarto: '{$room->name}' atualizado com sucesso!");
+        } catch (\Throwable $th) {
+            $errorMessage = $th->getMessage();
+            return to_route('rooms.index')->with('message.status', "Não foi possível atualizar o quarto '{$room->name}', Erro: '{$errorMessage}'");
+        }
     }
 
     /**
@@ -87,7 +92,7 @@ class RoomController extends Controller
             return to_route('rooms.index')->with('message.status', "Quarto: '{$room->name}' deletado com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            
+
             return to_route('rooms.index')->with('message.status', "Não foi possível excluír o quarto: '{$errorMessage}'");
         }
     }

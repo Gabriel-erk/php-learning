@@ -8,7 +8,6 @@ use App\Models\Reserve;
 use App\Models\Room;
 use App\Models\User;
 use Error;
-use Illuminate\Http\Request;
 
 class ReserveController extends Controller
 {
@@ -162,15 +161,15 @@ class ReserveController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Room $room)
     {
         try {
-            Reserve::destroy($id);
+            $room->delete();
 
-            return to_route('reserve.index')->with('message.status', "Reserva com id:'{$id}' foi excluída com sucesso!");
+            return to_route('reserve.index')->with('message.status', "Reserva foi excluída com sucesso!");
         } catch (\Throwable $th) {
             $th->getMessage();
-            return to_route('reserves.index', "Não foi possível excluir a reservacom id: '{$id}'.");
+            return to_route('reserves.index', "Não foi possível excluir a reserva.");
         }
     }
 }

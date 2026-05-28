@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Room;
+namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoomUpdateRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,9 @@ class RoomUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['sometimes', 'max:20'],
-            'capacity' => ['sometimes', 'integer']
+            'name' => ['sometimes', 'min:3'],
+            'email' => ['sometimes', 'unique:users,email'],
+            'password' => ['sometimes', 'min:6']
         ];
     }
 }
