@@ -45,6 +45,15 @@
                 </div>
             </div>
         @endisset
+        <div>
+            <h1>{{ $title }} - {{ $page }}</h1>
+            @if ($back)
+                {{-- esse url previous volta para a última página acessada --}}
+                <a href="{{ url()->previous() }}">
+                    <i class="bi bi-arrow-left-circle"></i>
+                </a>
+            @endif
+        </div>
         {{ $slot }}
     </main>
 </body>

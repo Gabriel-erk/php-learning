@@ -1,4 +1,4 @@
-<x-layout title="Users" page="Index">
+<x-layout title="Users" page="Index" back="{{ false }}">
     <table class="table table-dark table-hover">
         <thead>
             <tr>
