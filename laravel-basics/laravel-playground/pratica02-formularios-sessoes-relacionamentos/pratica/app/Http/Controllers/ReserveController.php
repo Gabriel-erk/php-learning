@@ -70,13 +70,13 @@ class ReserveController extends Controller
                     'end_time' => $request->end_time,
                     'observation' => $request->observation
                 ]);
-                return to_route('reserves.index')->with('message.status', "Reserva realizada com sucesso!");
+                return to_route('reserves.index')->with('status', "Reserva realizada com sucesso!");
             }
 
             throw new Error("Horário '$request->start_time' indisponível para reservas.");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('message.status', "Não foi possível realizar a reserva '{$errorMessage}'");
+            return to_route('reserves.index')->with('status', "Não foi possível realizar a reserva '{$errorMessage}'");
         }
     }
     /**
@@ -86,10 +86,10 @@ class ReserveController extends Controller
     {
         try {
             $reserves = Reserve::all();
-            return view('reserves.index', compact('reserves'))->with('message.status');
+            return view('reserves.index', compact('reserves'))->with('status');
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('message.status', "Não foi possível recuperar as reservas '{$errorMessage}'");
+            return to_route('reserves.index')->with('status', "Não foi possível recuperar as reservas '{$errorMessage}'");
         }
     }
 
@@ -112,7 +112,7 @@ class ReserveController extends Controller
             return to_route('reserves.index')->with('mensagem.sucesso', "Reserva criada com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('message.status', "Não foi possível realizar a reserva '{$errorMessage}'");
+            return to_route('reserves.index')->with('status', "Não foi possível realizar a reserva '{$errorMessage}'");
         }
     }
 
@@ -126,7 +126,7 @@ class ReserveController extends Controller
             return view('reserves.show', compact('reserve'));
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('message.status', "Não foi possível recuperar a reserva '{$errorMessage}'");
+            return to_route('reserves.index')->with('status', "Não foi possível recuperar a reserva '{$errorMessage}'");
         }
     }
 
@@ -140,7 +140,7 @@ class ReserveController extends Controller
             return view('reserves.edit', compact('reserve'));
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('message.status', "Não foi possível recuperar a reserva '{$errorMessage}'");
+            return to_route('reserves.index')->with('status', "Não foi possível recuperar a reserva '{$errorMessage}'");
         }
     }
 
@@ -151,22 +151,22 @@ class ReserveController extends Controller
     {
         try {
             $reserve->update($request->all());
-            return to_route('reserves.index')->with('message.status', 'Reserva atualizada com sucesso!');
+            return to_route('reserves.index')->with('status', 'Reserva atualizada com sucesso!');
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('message.status', "Não foi possível atualizar a Reserva: '{$errorMessage}'");
+            return to_route('reserves.index')->with('status', "Não foi possível atualizar a Reserva: '{$errorMessage}'");
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Room $room)
+    public function destroy(Reserve $reserve)
     {
         try {
-            $room->delete();
+            $reserve->delete();
 
-            return to_route('reserve.index')->with('message.status', "Reserva foi excluída com sucesso!");
+            return to_route('reserve.index')->with('status', "Reserva foi excluída com sucesso!");
         } catch (\Throwable $th) {
             $th->getMessage();
             return to_route('reserves.index', "Não foi possível excluir a reserva.");

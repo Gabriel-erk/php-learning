@@ -16,11 +16,11 @@ class RoomController extends Controller
         try {
             $rooms = Room::all();
 
-            return view('rooms.index', compact('rooms'))->with('message.status');
+            return view('rooms.index', compact('rooms'))->with('status');
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
 
-            return view('rooms.index')->with('message.status', "Não foi possível recuperar as salas: '{$errorMessage}'");
+            return view('rooms.index')->with('status', "Não foi possível recuperar as salas: '{$errorMessage}'");
         }
     }
 
@@ -41,11 +41,11 @@ class RoomController extends Controller
             $room = Room::create()->fill($request->all());
             $room->save();
 
-            return to_route('rooms.index')->with('message.status', "Quarto: '{$room->name}' criado com sucesso!");
+            return to_route('rooms.index')->with('status', "Quarto: '{$room->name}' criado com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
 
-            return to_route('rooms.index')->with('message.status', "Não foi possível criar o quarto: '{$errorMessage}'");
+            return to_route('rooms.index')->with('status', "Não foi possível criar o quarto: '{$errorMessage}'");
         }
     }
 
@@ -74,10 +74,10 @@ class RoomController extends Controller
     {
         try {
             $room->update($request->all());
-            return to_route('rooms.index')->with('message.status', "Quarto: '{$room->name}' atualizado com sucesso!");
+            return to_route('rooms.index')->with('status', "Quarto: '{$room->name}' atualizado com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('rooms.index')->with('message.status', "Não foi possível atualizar o quarto '{$room->name}', Erro: '{$errorMessage}'");
+            return to_route('rooms.index')->with('status', "Não foi possível atualizar o quarto '{$room->name}', Erro: '{$errorMessage}'");
         }
     }
 
@@ -89,11 +89,11 @@ class RoomController extends Controller
         try {
             $room->delete();
 
-            return to_route('rooms.index')->with('message.status', "Quarto: '{$room->name}' deletado com sucesso!");
+            return to_route('rooms.index')->with('status', "Quarto: '{$room->name}' deletado com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
 
-            return to_route('rooms.index')->with('message.status', "Não foi possível excluír o quarto: '{$errorMessage}'");
+            return to_route('rooms.index')->with('status', "Não foi possível excluír o quarto: '{$errorMessage}'");
         }
     }
 }

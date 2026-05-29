@@ -15,10 +15,10 @@ class UserController extends Controller
     {
         try {
             $users = User::all();
-            return view('users.index', compact('users'))->with('message.status');
+            return view('users.index', compact('users'))->with('status');
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('users.index')->with('message.status', "Não foi possível recuperar os usuários '{$errorMessage}'");
+            return to_route('users.index')->with('status', "Não foi possível recuperar os usuários '{$errorMessage}'");
         }
     }
 
@@ -39,10 +39,10 @@ class UserController extends Controller
             $user = User::create()->fill($request->all());
             // tenho que salvar manualmente pois estou usando o método fill() na linha acima e por conta disso o métod não é salvo automaticamente
             $user->save();
-            return to_route('users.index')->with('message.status', "Usuário '{$user->name}' criado com sucesso!");
+            return to_route('users.index')->with('status', "Usuário '{$user->name}' criado com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('users.index')->with('message.status', "Não foi possível criar o usuário '{$errorMessage}'");
+            return to_route('users.index')->with('status', "Não foi possível criar o usuário '{$errorMessage}'");
         }
     }
 
@@ -69,10 +69,10 @@ class UserController extends Controller
     {
         try {
             $user->update($request->all());
-            return to_route('users.index')->with('message.status', "Usuário '{$user->name}' atualizado com sucesso!");
+            return to_route('users.index')->with('status', "Usuário '{$user->name}' atualizado com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('users.index')->with('message.status', "Não foi possível atualizar o usuário: '{$errorMessage}'.");
+            return to_route('users.index')->with('status', "Não foi possível atualizar o usuário: '{$errorMessage}'.");
         }
     }
 
@@ -83,10 +83,10 @@ class UserController extends Controller
     {
         try {
             $user->delete();
-            return to_route('users.index', "Usuário: '{$user->name}' deletado com sucesso!");
+            return to_route('users.index')->with('status', "Usuário: '{$user->name}' deletado com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('users.index')->with('message.status', "Não foi possível excluir o usuário: '{$user->name}', Erro: '{$errorMessage}'");
+            return to_route('users.index')->with('status', "Não foi possível excluir o usuário: '{$user->name}', Erro: '{$errorMessage}'");
         }
     }
 }
