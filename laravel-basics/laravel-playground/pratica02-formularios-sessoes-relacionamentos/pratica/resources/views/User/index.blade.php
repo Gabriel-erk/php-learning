@@ -1,4 +1,4 @@
-<x-layout title="Users">
+<x-layout title="Users" page="Index">
     <table class="table table-dark table-hover">
         <thead>
             <tr>
@@ -7,17 +7,24 @@
                 <th scope="col">E-mail</th>
                 <th scope="col">Actions</th>
             </tr>
+        </thead>
         <tbody>
             @foreach ($users as $user)
                 <tr>
                     <th scope="row">{{ $user->id }}</th>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    {{-- fazer botões de excluir e editar --}}
-                    <td>{{ $user->email }}</td>
+                    <td>
+                        <div class="d-flex">
+                            <a href="{{ route('users.show', $user->id) }}" class="btn btn-primary">Edit</a>
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                                @method('DELETE')
+                                <button class="btn btn-danger" type="submit">Del</button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
-        </thead>
     </table>
 </x-layout>

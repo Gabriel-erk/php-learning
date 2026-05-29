@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard - {{ $title }}</title>
+    <title>Dashboard - {{ $title }} ({{ $page }})</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
@@ -34,6 +35,16 @@
         </nav>
     </header>
     <main class="container">
+        @isset($status)
+            <div class="alert alert-primary d-flex align-items-center mb-2" role="alert">
+                <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
+                    <use xlink:href="#info-fill" />
+                </svg>
+                <div>
+                    An example alert with an icon
+                </div>
+            </div>
+        @endisset
         {{ $slot }}
     </main>
 </body>
