@@ -36,12 +36,12 @@
     </header>
     <main class="container">
         @isset($status)
-            <div class="alert alert-primary d-flex align-items-center mb-2" role="alert">
+            <div class="alert alert-primary d-flex align-items-center my-2" role="alert">
                 <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
                     <use xlink:href="#info-fill" />
                 </svg>
                 <div>
-                    An example alert with an icon
+                    {{ $status }}
                 </div>
             </div>
         @endisset
