@@ -86,10 +86,10 @@ class ReserveController extends Controller
     {
         try {
             $reserves = Reserve::all();
-            return view('reserves.index', compact('reserves'))->with('status');
+            return view('Reserve.index', compact('reserves'))->with('status');
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('status', "Não foi possível recuperar as reservas '{$errorMessage}'");
+            return view('Reserve.index')->with('status', "Não foi possível recuperar as reservas '{$errorMessage}'");
         }
     }
 

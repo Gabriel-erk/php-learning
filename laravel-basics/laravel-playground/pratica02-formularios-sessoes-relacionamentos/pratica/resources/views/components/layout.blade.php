@@ -45,7 +45,7 @@
                 </div>
             </div>
         @endisset
-        <div>
+        <div class="my-3">
             <h1>{{ $title }} - {{ $page }}</h1>
             @if ($back)
                 {{-- esse url previous volta para a última página acessada --}}

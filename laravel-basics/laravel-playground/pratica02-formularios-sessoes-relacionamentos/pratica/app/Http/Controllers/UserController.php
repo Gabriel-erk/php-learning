@@ -15,10 +15,11 @@ class UserController extends Controller
     {
         try {
             $users = User::all();
-            return view('users.index', compact('users'))->with('status');
+            $session = session('status');
+            return view('User.index', compact('users', 'session'));
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
-            return to_route('users.index')->with('status', "Não foi possível recuperar os usuários '{$errorMessage}'");
+            return view('User.index')->with('status', "Não foi possível recuperar os usuários '{$errorMessage}'");
         }
     }
 
