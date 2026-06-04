@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Override;
 
 class User extends Model
@@ -16,7 +16,7 @@ class User extends Model
     protected $with = ['reserves'];
     public function reserves()
     {
-        $this->hasMany(Reserve::class, 'user_id');
+        return $this->hasMany(Reserve::class, 'user_id');
     }
 
     #[Override]

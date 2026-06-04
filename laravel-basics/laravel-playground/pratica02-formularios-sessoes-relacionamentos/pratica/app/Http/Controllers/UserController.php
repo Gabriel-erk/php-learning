@@ -13,14 +13,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        try {
-            $users = User::all();
-            $session = session('status');
-            return view('User.index', compact('users', 'session'));
-        } catch (\Throwable $th) {
-            $errorMessage = $th->getMessage();
-            return view('User.index')->with('status', "Não foi possível recuperar os usuários '{$errorMessage}'");
-        }
+        $users = User::all();
+        $session = session('status');
+        return view('User.index', compact('users', 'session'));
     }
 
     /**
@@ -37,7 +32,7 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         try {
-            $user = User::create()->fill($request->all());
+            $user = User::create($request->all());
             // tenho que salvar manualmente pois estou usando o método fill() na linha acima e por conta disso o métod não é salvo automaticamente
             $user->save();
             return to_route('users.index')->with('status', "Usuário '{$user->name}' criado com sucesso!");

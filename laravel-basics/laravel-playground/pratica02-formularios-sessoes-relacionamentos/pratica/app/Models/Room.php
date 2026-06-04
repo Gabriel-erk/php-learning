@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Override;
 
 class Room extends Model
@@ -12,12 +12,9 @@ class Room extends Model
         'name',
         'capacity'
     ];
-    protected $with = [
-        'reserves'
-    ];
     public function reserves()
     {
-        $this->hasMany(Reserve::class, 'room_id'); // cada sala pode ter VÁRIAS reservas ligadas a ela
+        return $this->hasMany(Reserve::class, 'room_id'); // cada sala pode ter VÁRIAS reservas ligadas a ela
     }
 
     #[Override]
