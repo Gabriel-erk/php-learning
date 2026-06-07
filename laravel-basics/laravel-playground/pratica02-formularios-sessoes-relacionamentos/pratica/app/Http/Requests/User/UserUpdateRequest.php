@@ -24,7 +24,7 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'min:3'],
-            'email' => ['sometimes', 'unique:users,email'],
+            'email' => ['sometimes'],
             'password' => ['sometimes', 'min:6']
         ];
     }
