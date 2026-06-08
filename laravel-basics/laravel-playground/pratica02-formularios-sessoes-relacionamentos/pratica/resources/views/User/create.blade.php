@@ -1,4 +1,4 @@
-<x-layout title="Users" page="Create" back="{{ true }}">
+<x-layout title="Users" page="Create" back="{{ true }}" add="{{ false }}" route="">
     <form action="{{ route('users.store') }}" method="POST">
 
         <div class="mb-3">

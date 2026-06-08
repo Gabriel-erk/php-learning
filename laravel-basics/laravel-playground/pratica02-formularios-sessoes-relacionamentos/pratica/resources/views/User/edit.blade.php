@@ -1,4 +1,4 @@
-<x-layout title="Users" page="Edit" back="{{ true }}">
+<x-layout title="Users" page="Edit" back="{{ true }}" add="{{ false }}" route="">
 
     @if ($errors->any())
         <div class="alert alert-danger">

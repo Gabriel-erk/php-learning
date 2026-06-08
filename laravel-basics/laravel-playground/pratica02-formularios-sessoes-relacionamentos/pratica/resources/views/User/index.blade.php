@@ -1,4 +1,4 @@
-<x-layout title="Users" page="Index" back="{{ false }}">
+<x-layout title="Users" page="Index" back="{{ false }}" add="{{ true }}" route="users.create">
 
     <table class="table table-hover">
         <thead>

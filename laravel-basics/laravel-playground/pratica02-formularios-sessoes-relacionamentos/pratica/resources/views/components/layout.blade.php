@@ -35,6 +35,7 @@
         </nav>
     </header>
     <main class="container">
+
         @isset($status)
             <div class="alert alert-primary d-flex align-items-center my-2" role="alert">
                 <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
@@ -45,8 +46,15 @@
                 </div>
             </div>
         @endisset
+        
         <div class="my-3">
-            <h1>{{ $title }} - {{ $page }}</h1>
+
+            <div class="{{ $add == true ? 'd-flex justify-content-between align-items-center' : '' }}">
+                <h1>{{ $title }} - {{ $page }}</h1>
+                
+                <a class="{{ $add == true ? '' : 'd-none' }} btn btn-primary h-50" href="{{ $route != null ? route($route) : '#'}}">Add</a>
+            </div>
+
             @if ($back)
                 {{-- esse url previous volta para a última página acessada --}}
                 <a href="{{ url()->previous() }}">
