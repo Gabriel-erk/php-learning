@@ -46,21 +46,20 @@
                 </div>
             </div>
         @endisset
-        
+
         <div class="my-3">
 
-            <div class="{{ $add == true ? 'd-flex justify-content-between align-items-center' : '' }}">
+            <div class="{{ $add == true || $back == true ? 'd-flex justify-content-between align-items-center' : '' }}">
                 <h1>{{ $title }} - {{ $page }}</h1>
-                
-                <a class="{{ $add == true ? '' : 'd-none' }} btn btn-primary h-50" href="{{ $route != null ? route($route) : '#'}}">Add</a>
+
+                <a class="{{ $add == true ? '' : 'd-none' }} btn btn-primary h-50"
+                    href="{{ $route != null ? route($route) : '#' }}">Add</a>
+                    
+                {{-- esse url previous volta para a última página acessada --}}
+                <a class="{{ $back == true ? '' : 'd-none' }} btn btn-primary"
+                    href="{{ url()->previous() }}">Voltar</a>
             </div>
 
-            @if ($back)
-                {{-- esse url previous volta para a última página acessada --}}
-                <a href="{{ url()->previous() }}">
-                    <i class="bi bi-arrow-left-circle"></i>
-                </a>
-            @endif
         </div>
         {{ $slot }}
     </main>

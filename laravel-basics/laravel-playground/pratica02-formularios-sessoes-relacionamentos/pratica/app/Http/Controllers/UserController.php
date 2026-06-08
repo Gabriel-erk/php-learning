@@ -33,8 +33,6 @@ class UserController extends Controller
     {
         try {
             $user = User::create($request->all());
-            // tenho que salvar manualmente pois estou usando o método fill() na linha acima e por conta disso o métod não é salvo automaticamente
-            // $user->save();
             return to_route('users.index')->with('status', "Usuário '{$user->name}' criado com sucesso!");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
