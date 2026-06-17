@@ -36,16 +36,13 @@
     </header>
     <main class="container">
 
-        @isset($status)
-            <div class="alert alert-primary d-flex align-items-center my-2" role="alert">
-                <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
-                    <use xlink:href="#info-fill" />
-                </svg>
+        @if (session('status'))
+            <div class="alert alert-success mt-3">
                 <div>
-                    {{ $status }}
+                    {{ session('status') }}
                 </div>
             </div>
-        @endisset
+        @endif
 
         <div class="my-3">
 
@@ -54,7 +51,7 @@
 
                 <a class="{{ $add == true ? '' : 'd-none' }} btn btn-primary h-50"
                     href="{{ $route != null ? route($route) : '#' }}">Add</a>
-                    
+
                 {{-- esse url previous volta para a última página acessada --}}
                 <a class="{{ $back == true ? '' : 'd-none' }} btn btn-primary"
                     href="{{ url()->previous() }}">Voltar</a>

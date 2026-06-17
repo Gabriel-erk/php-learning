@@ -14,8 +14,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        $status = session('status');
-        return view('User.index', compact('users', 'status'));
+        session('status');
+        return view('User.index', compact('users'));
     }
 
     /**
