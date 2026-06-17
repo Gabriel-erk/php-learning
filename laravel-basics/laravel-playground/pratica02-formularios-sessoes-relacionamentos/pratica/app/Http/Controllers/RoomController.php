@@ -16,11 +16,11 @@ class RoomController extends Controller
         try {
             $rooms = Room::all();
 
-            return view('rooms.index', compact('rooms'))->with('status');
+            return view('Room.index', compact('rooms'))->with('status');
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
 
-            return view('rooms.index')->with('status', "Não foi possível recuperar as salas: '{$errorMessage}'");
+            return view('Room.index')->with('status', "Não foi possível recuperar as salas: '{$errorMessage}'");
         }
     }
 
@@ -29,7 +29,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('rooms.create');
+        return view('Room.create');
     }
 
     /**
@@ -39,7 +39,7 @@ class RoomController extends Controller
     {
         try {
             $room = Room::create()->fill($request->all());
-            $room->save();
+            // $room->save();
 
             return to_route('rooms.index')->with('status', "Quarto: '{$room->name}' criado com sucesso!");
         } catch (\Throwable $th) {
@@ -56,7 +56,7 @@ class RoomController extends Controller
     public function show(Room $room)
     {
         // devido ao Route Model Blinding, ele tentará encontar um registro na tabela Rooms com o valor passado pela rota até este método aqui (valor que estará presente em $room, porém $room será convertida para um objeto do tipo Room caso o valor passado pela rota até o método show realmente existir na tabela Rooms, pois por debaixo dos panos, essa linha de parâmetro: Room $room, pega o valor recebido pela rota jogando em $room (normalmente um id) e roda: Room::findOrFail(valorPassadoPelaRotaAtéOmétodoShowVulgoMetodoAtual), caso encontre, passa esse objeto do tipo room para nosso método show atual, se não, retorna um status 404 == não encontrado, logo, não precisamos ficar tratando com try - catch, pois usando Route Model Blinding, ele dificilmente leria o nosso catch em caso de erro pois ele só entra no método show SE ENCONTRAR o objeto que procuramos com base no valor (id) que recebemos por parâmetro pela rota do tipo get)
-        return view('rooms.show', compact('room'));
+        return view('Room.show', compact('room'));
     }
 
     /**
@@ -64,7 +64,7 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        return view('rooms.edit', compact('room'));
+        return view('Room.edit', compact('room'));
     }
 
     /**
