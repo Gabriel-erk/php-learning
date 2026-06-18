@@ -11,12 +11,12 @@
 
                 <h5 class="card-title mb-4">Informations</h5>
 
-                <div class="col-md-6">
+                <div>
                     <strong>Room:</strong>
                     <p>{{ $room->name }}</p>
                 </div>
 
-                <div class="col-md-6">
+                <div>
                     <strong>Capacity:</strong>
                     <p>{{ $room->capacity }}</p>
                 </div>
@@ -25,7 +25,7 @@
         </div>
 
         <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-primary mt-4">
-            Editar
+            Edit
         </a>
 
     </div>

@@ -11,21 +11,21 @@
 
                 <h5 class="card-title mb-4">Informations</h5>
 
-                <div class="col-md-6">
+                <div>
                     <strong>Name:</strong>
                     <p>{{ $user->name }}</p>
                 </div>
 
-                <div class="col-md-6">
+                <div>
                     <strong>Email:</strong>
-                    <p>{{ $user->capacity }}</p>
+                    <p>{{ $user->email }}</p>
                 </div>
 
             </div>
         </div>
 
         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary mt-4">
-            Editar
+            Edit
         </a>
 
     </div>

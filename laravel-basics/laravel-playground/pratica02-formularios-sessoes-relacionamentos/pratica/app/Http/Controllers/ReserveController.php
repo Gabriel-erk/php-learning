@@ -98,7 +98,7 @@ class ReserveController extends Controller
      */
     public function create()
     {
-        return view('reserves.create');
+        return view('Reserve.create');
     }
 
     /**
@@ -107,7 +107,7 @@ class ReserveController extends Controller
     public function store(ReserveStoreRequest $request)
     {
         try {
-            Reserve::create()->fill($request->all());
+            Reserve::create($request->all());
 
             return to_route('reserves.index')->with('mensagem.sucesso', "Reserva criada com sucesso!");
         } catch (\Throwable $th) {
@@ -119,11 +119,10 @@ class ReserveController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Reserve $reserve)
     {
         try {
-            $reserve = Reserve::findOrFail($id);
-            return view('reserves.show', compact('reserve'));
+            return view('Reserve.show', compact('reserve'));
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
             return to_route('reserves.index')->with('status', "Não foi possível recuperar a reserva '{$errorMessage}'");
@@ -133,11 +132,10 @@ class ReserveController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Reserve $reserve)
     {
         try {
-            $reserve = Reserve::findOrFail($id);
-            return view('reserves.edit', compact('reserve'));
+            return view('Reserve.edit', compact('reserve'));
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
             return to_route('reserves.index')->with('status', "Não foi possível recuperar a reserva '{$errorMessage}'");
