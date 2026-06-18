@@ -38,8 +38,7 @@ class RoomController extends Controller
     public function store(RoomStoreRequest $request)
     {
         try {
-            $room = Room::create()->fill($request->all());
-            // $room->save();
+            $room = Room::create($request->all());
 
             return to_route('rooms.index')->with('status', "Quarto: '{$room->name}' criado com sucesso!");
         } catch (\Throwable $th) {

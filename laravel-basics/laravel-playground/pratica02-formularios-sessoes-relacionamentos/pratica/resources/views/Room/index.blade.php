@@ -1,5 +1,4 @@
-<x-layout title="Rooms" page="Index" add="{{ true }}" route="rooms.create"
-    back="{{ false }}">
+<x-layout title="Rooms" page="Index" add="{{ true }}" route="rooms.create" back="{{ false }}">
     <table class="table table-hover">
         <thead>
             <tr>
@@ -18,6 +17,9 @@
                     <td>
                         <div class="d-flex gap-2">
                             <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-primary">Edit</a>
+
+                            <a href="{{ route('rooms.show', $room->id) }}" class="btn btn-primary">Show</a>
+
                             <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
                                 @method('DELETE')
                                 <button class="btn btn-danger" type="submit">Del</button>

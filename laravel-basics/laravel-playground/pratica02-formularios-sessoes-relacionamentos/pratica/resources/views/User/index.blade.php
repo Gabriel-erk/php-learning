@@ -18,6 +18,9 @@
                     <td>
                         <div class="d-flex gap-2">
                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Edit</a>
+                            
+                            <a href="{{ route('users.show', $user->id) }}" class="btn btn-primary">Show</a>
+
                             <form action="{{ route('users.destroy', $user->id) }}" method="POST">
                                 @method('DELETE')
                                 <button class="btn btn-danger" type="submit">Del</button>

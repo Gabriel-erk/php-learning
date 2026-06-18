@@ -23,6 +23,5 @@
         </div>
 
         <button class="btn btn-secondary" type="submit">Submit</button>
-
     </form>
 </x-layout>
