@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Reserve\ReserveStoreRequest;
-use App\Http\Requests\Reserve\ReserveUpdateRequest;
-use App\Models\Reserve;
-use App\Models\Room;
-use App\Models\User;
+use App\Http\Requests\Reserve\{ReserveStoreRequest, ReserveUpdateRequest};
+use App\Models\{Reserve, Room, User};
 use Error;
 
 class ReserveController extends Controller
@@ -119,10 +116,10 @@ class ReserveController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Reserve $reserve)
+    public function show(Reserve $reserf)
     {
         try {
-            return view('Reserve.show', compact('reserve'));
+            return view('Reserve.show', compact('reserf'));
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
             return to_route('reserves.index')->with('status', "Não foi possível recuperar a reserva '{$errorMessage}'");
@@ -132,10 +129,10 @@ class ReserveController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Reserve $reserve)
+    public function edit(Reserve $reserf)
     {
         try {
-            return view('Reserve.edit', compact('reserve'));
+            return view('Reserve.edit', compact('reserf'));
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
             return to_route('reserves.index')->with('status', "Não foi possível recuperar a reserva '{$errorMessage}'");
@@ -145,10 +142,10 @@ class ReserveController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ReserveUpdateRequest $request, Reserve $reserve)
+    public function update(ReserveUpdateRequest $request, Reserve $reserf)
     {
         try {
-            $reserve->update($request->all());
+            $reserf->update($request->all());
             return to_route('reserves.index')->with('status', 'Reserva atualizada com sucesso!');
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
@@ -159,10 +156,10 @@ class ReserveController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Reserve $reserve)
+    public function destroy(Reserve $reserf)
     {
         try {
-            $reserve->delete();
+            $reserf->delete();
 
             return to_route('reserve.index')->with('status', "Reserva foi excluída com sucesso!");
         } catch (\Throwable $th) {

@@ -1,0 +1,11 @@
+[90m= [39m[34;4mIlluminate\Support\Collection[39;24m {#8367
+    [34mall[39m: [
+      [32m"[39m[32mteste[39m[32m"[39m,
+      [32m"[39m[32mteste/create[39m[32m"[39m,
+      [32m"[39m[32mteste[39m[32m"[39m,
+      [32m"[39m[32mteste/{teste}[39m[32m"[39m,
+      [32m"[39m[32mteste/{teste}/edit[39m[32m"[39m,
+      [32m"[39m[32mteste/{teste}[39m[32m"[39m,
+      [32m"[39m[32mteste/{teste}[39m[32m"[39m,
+    ],
+  }
