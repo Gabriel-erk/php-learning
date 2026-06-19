@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <a href="{{ route('reserves.edit', $reserf->id) }}" class="btn btn-primary mt-4">
+        <a href="{{ route('reserves.edit', $reserf->id) }}" class="btn btn-primary my-4">
             Edit
         </a>
 

@@ -61,14 +61,7 @@ class ReserveController extends Controller
             $horariosDisponiveis = $this->horariosDisponiveis($room->id);
 
             if (in_array($request->start_time, $horariosDisponiveis)) {
-                Reserve::create([
-                    'user_id' => $user->id,
-                    'room_id' => $room->id,
-                    'reserve_date' => $request->reserve_date,
-                    'start_time' => $request->start_time,
-                    'end_time' => $request->end_time,
-                    'observation' => $request->observation
-                ]);
+                Reserve::create($request->all());
                 return to_route('reserves.index')->with('status', "Reserva realizada com sucesso!");
             }
 
@@ -105,15 +98,6 @@ class ReserveController extends Controller
      */
     public function store(ReserveStoreRequest $request)
     {
-        // try {
-        //     Reserve::create($request->all());
-
-        //     return to_route('reserves.index')->with('status', "Reserva criada com sucesso!");
-        // } catch (\Throwable $th) {
-        //     $errorMessage = $th->getMessage();
-        //     return to_route('reserves.index')->with('status', "Não foi possível realizar a reserva '{$errorMessage}'");
-        // }
-
         try {
             $horariosDisponiveis = $this->horariosDisponiveis($request->room_id);
             // quando preencho um campo de formulário do tipo date (html/blade) ele me envia num formato diferente do formato que meus horários disponíveis estão (H:i == hora e minuto), então para que eu possa comparar se meu horário passado pelo formulário está no meu formato dos horários disponíveis para reserva eu preciso converter o horário passado pelo formulário para o mesmo formato que os horários disponiveis estão, onde primeiro converto para um objeto do tipo carbon e depois formato a data nele presente para hora e minuto

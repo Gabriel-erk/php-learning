@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-primary mt-4">
+        <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-primary my-4">
             Edit
         </a>
 
