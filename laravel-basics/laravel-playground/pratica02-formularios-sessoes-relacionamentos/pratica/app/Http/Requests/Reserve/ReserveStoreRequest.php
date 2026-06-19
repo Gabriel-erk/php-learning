@@ -12,7 +12,7 @@ class ReserveStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,8 +26,8 @@ class ReserveStoreRequest extends FormRequest
             'user_id' => ['required', 'integer'],
             'room_id' => ['required', 'integer'],
             'reserve_date' => ['required', 'date'],
-            'start_time' => ['required', 'date', 'after:end_time'],
-            'end_time' => ['required', 'date', 'before:start_time'],
+            'start_time' => ['required', 'date', 'before:end_time'],
+            'end_time' => ['required', 'date', 'after:start_time'],
             'observation' => ['required', 'string']
         ];
     }

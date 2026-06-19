@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Reserve\{ReserveStoreRequest, ReserveUpdateRequest};
 use App\Models\{Reserve, Room, User};
+use Carbon\Carbon;
 use Error;
 
 class ReserveController extends Controller
@@ -14,9 +15,10 @@ class ReserveController extends Controller
         $reservasAtivas = Reserve::where('room_id', $roomId)->get();
 
         $horariosIndisponiveis = [];
+        
 
         foreach ($reservasAtivas as $reservaAtiva) {
-            $horariosIndisponiveis[] = $reservaAtiva->start_time->format('H:i');
+            $horariosIndisponiveis[] = Carbon::parse($reservaAtiva->start_time)->format('H:i'); // não é possível utilizar o método format em strings (nosso campo start_time estava sendo considerado uma string, logo, convertemos ele para um objeto carbon com o Carbon::parse(o que queremos converter para um objeto carbon) e depois pegamos esse resultado e ai aplicamos o format(H:i) para nos trazer, da data que estamos passando (que está em $reservaAtiva->start_time) apenas a hora (H) e os minutos (i))
         }
 
         return $horariosIndisponiveis;
@@ -38,7 +40,7 @@ class ReserveController extends Controller
 
         foreach ($horarios as $horario) {
             if (!in_array($horario, $horariosIndisponiveis)) {
-                $horariosDisponiveis = $horario;
+                $horariosDisponiveis[] = $horario;
             }
         }
 
@@ -103,10 +105,33 @@ class ReserveController extends Controller
      */
     public function store(ReserveStoreRequest $request)
     {
-        try {
-            Reserve::create($request->all());
+        // try {
+        //     Reserve::create($request->all());
 
-            return to_route('reserves.index')->with('mensagem.sucesso', "Reserva criada com sucesso!");
+        //     return to_route('reserves.index')->with('status', "Reserva criada com sucesso!");
+        // } catch (\Throwable $th) {
+        //     $errorMessage = $th->getMessage();
+        //     return to_route('reserves.index')->with('status', "Não foi possível realizar a reserva '{$errorMessage}'");
+        // }
+
+        try {
+            $horariosDisponiveis = $this->horariosDisponiveis($request->room_id);
+            // quando preencho um campo de formulário do tipo date (html/blade) ele me envia num formato diferente do formato que meus horários disponíveis estão (H:i == hora e minuto), então para que eu possa comparar se meu horário passado pelo formulário está no meu formato dos horários disponíveis para reserva eu preciso converter o horário passado pelo formulário para o mesmo formato que os horários disponiveis estão, onde primeiro converto para um objeto do tipo carbon e depois formato a data nele presente para hora e minuto
+            $horarioFormulario = Carbon::parse($request->start_time)->format('H:i');
+
+            if (in_array($horarioFormulario, $horariosDisponiveis)) {
+                Reserve::create([
+                    'user_id' => $request->user_id,
+                    'room_id' => $request->room_id,
+                    'reserve_date' => $request->reserve_date,
+                    'start_time' => $request->start_time,
+                    'end_time' => $request->end_time,
+                    'observation' => $request->observation
+                ]);
+                return to_route('reserves.index')->with('status', "Reserva realizada com sucesso!");
+            }
+
+            throw new Error("Horário '$request->start_time' indisponível para reservas.");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
             return to_route('reserves.index')->with('status', "Não foi possível realizar a reserva '{$errorMessage}'");
@@ -161,10 +186,10 @@ class ReserveController extends Controller
         try {
             $reserf->delete();
 
-            return to_route('reserve.index')->with('status', "Reserva foi excluída com sucesso!");
+            return to_route('reserves.index')->with('status', "Reserva foi excluída com sucesso!");
         } catch (\Throwable $th) {
-            $th->getMessage();
-            return to_route('reserves.index', "Não foi possível excluir a reserva.");
+            $errorMessage = $th->getMessage();
+            return to_route('reserves.index')->with('status', "Não foi possível excluir a reserva: '{$errorMessage}'");
         }
     }
 }
