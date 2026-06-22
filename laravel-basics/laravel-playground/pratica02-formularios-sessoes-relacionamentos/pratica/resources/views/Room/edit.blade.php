@@ -15,12 +15,12 @@
         @method('PUT')
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" name="name" value="{{ $room->name }}">
+            <input type="text" class="form-control" name="name" value="{{ old('name') ? old('name') : $room->name }}">
         </div>
 
         <div class="mb-3">
             <label for="capacity" class="form-label">Capacity</label>
-            <input type="number" class="form-control" name="capacity" value="{{ $room->capacity }}">
+            <input type="number" class="form-control" name="capacity" value="{{ old('capacity') ? old('capacity') : $room->capacity }}">
         </div>
 
         <button class="btn btn-secondary" type="submit">Submit</button>

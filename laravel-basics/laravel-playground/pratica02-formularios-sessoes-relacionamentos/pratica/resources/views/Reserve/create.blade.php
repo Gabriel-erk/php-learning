@@ -11,7 +11,8 @@
     @endif
 
     <form action="{{ route('reserves.store') }}" method="POST">
-
+        @csrf
+        
         <div class="mb-3">
             <label for="user_id" class="form-label">User ID</label>
             <input type="number" class="form-control" name="user_id" placeholder="Enter user ID"

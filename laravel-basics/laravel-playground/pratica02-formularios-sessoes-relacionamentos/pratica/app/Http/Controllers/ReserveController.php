@@ -55,22 +55,6 @@ class ReserveController extends Controller
         return $horariosDisponiveis;
     }
 
-    public function reserve(ReserveStoreRequest $request, User $user, Room $room)
-    {
-        try {
-            $horariosDisponiveis = $this->horariosDisponiveis($room->id);
-
-            if (in_array($request->start_time, $horariosDisponiveis)) {
-                Reserve::create($request->all());
-                return to_route('reserves.index')->with('status', "Reserva realizada com sucesso!");
-            }
-
-            throw new Error("Horário '$request->start_time' indisponível para reservas.");
-        } catch (\Throwable $th) {
-            $errorMessage = $th->getMessage();
-            return to_route('reserves.index')->with('status', "Não foi possível realizar a reserva '{$errorMessage}'");
-        }
-    }
     /**
      * Display a listing of the resource.
      */

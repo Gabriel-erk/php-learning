@@ -14,12 +14,12 @@
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" name="name" placeholder="Type the name of the room..">
+            <input type="text" class="form-control" name="name" placeholder="Type the name of the room.." value="{{ old('name') }}">
         </div>
 
         <div class="mb-3">
             <label for="capacity" class="form-label">Capacity</label>
-            <input type="number" class="form-control" name="capacity" placeholder="Type the capacity of the room.">
+            <input type="number" class="form-control" name="capacity" placeholder="Type the capacity of the room." value="{{ old('capacity') }}">
         </div>
 
         <button class="btn btn-secondary" type="submit">Submit</button>
