@@ -50,7 +50,7 @@
                 <h1>{{ $title }} - {{ $page }}</h1>
 
                 <a class="{{ $add == true ? '' : 'd-none' }} btn btn-primary h-50"
-                    href="{{ $route != null ? route($route) : '#' }}">Add</a>
+                    href="{{ $routeAdd != null ? route($routeAdd) : '#' }}">Add</a>
 
                 {{-- esse url previous volta para a última página acessada --}}
                 <a class="{{ $back == true ? '' : 'd-none' }} btn btn-primary"

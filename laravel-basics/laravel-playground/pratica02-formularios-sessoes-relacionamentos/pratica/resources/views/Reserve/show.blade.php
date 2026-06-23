@@ -1,4 +1,4 @@
-<x-layout title="Reserves" page="Show" back="{{ true }}" add="{{ false }}" route="">
+<x-layout title="Reserves" page="Show" back="{{ true }}" add="{{ false }}" routeAdd="">
     <div class="mt-5">
 
         <div class="mb-4">
