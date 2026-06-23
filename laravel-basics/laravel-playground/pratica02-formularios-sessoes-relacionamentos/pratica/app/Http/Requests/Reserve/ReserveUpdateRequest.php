@@ -26,8 +26,8 @@ class ReserveUpdateRequest extends FormRequest
             'user_id' => ['sometimes', 'integer'],
             'room_id' => ['sometimes', 'integer'],
             'reserve_date' => ['sometimes', 'date'],
-            'start_time' => ['sometimes', 'date', 'after:end_time'],
-            'end_time' => ['sometimes', 'date', 'before:start_time'],
+            'start_time' => ['sometimes', 'date', 'before:end_time'],
+            'end_time' => ['sometimes', 'date', 'after:start_time'],
             'observation' => ['sometimes', 'string']
         ];
     }
