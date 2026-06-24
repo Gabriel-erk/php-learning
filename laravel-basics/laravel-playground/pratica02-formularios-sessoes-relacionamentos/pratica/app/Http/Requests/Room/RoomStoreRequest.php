@@ -24,7 +24,7 @@ class RoomStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:20'],
-            'capacity' => ['required', 'integer']
+            'capacity' => ['required', 'integer', 'min:1'] // min:1 quer dizer que o valor minímo é 1
         ];
     }
 }
