@@ -15,7 +15,6 @@ class ReserveController extends Controller
         $reservasAtivas = Reserve::where('room_id', $roomId)->get();
 
         $horariosIndisponiveis = [];
-        
 
         foreach ($reservasAtivas as $reservaAtiva) {
             $horariosIndisponiveis[] = Carbon::parse($reservaAtiva->start_time)->format('H:i'); // não é possível utilizar o método format em strings (nosso campo start_time estava sendo considerado uma string, logo, convertemos ele para um objeto carbon com o Carbon::parse(o que queremos converter para um objeto carbon) e depois pegamos esse resultado e ai aplicamos o format(H:i) para nos trazer, da data que estamos passando (que está em $reservaAtiva->start_time) apenas a hora (H) e os minutos (i))
@@ -99,7 +98,8 @@ class ReserveController extends Controller
                 return to_route('reserves.index')->with('status', "Reserva realizada com sucesso!");
             }
 
-            throw new Error("Horário '$request->start_time' indisponível para reservas.");
+            // throw new Error("Horário '$request->start_time' indisponível para reservas.");
+            throw new Error("Horário '$horarioFormulario' indisponível para reservas.");
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
             return to_route('reserves.index')->with('status', "Não foi possível realizar a reserva '{$errorMessage}'");

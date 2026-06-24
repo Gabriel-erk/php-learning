@@ -25,7 +25,7 @@ class ReserveStoreRequest extends FormRequest
         return [
             'user_id' => ['required', 'integer'],
             'room_id' => ['required', 'integer'],
-            'reserve_date' => ['required', 'date'],
+            'reserve_date' => ['required', 'date', 'after_or_equal:today'], // after_or_equal:today == depois ou igual (after_or_equal) de hoje (today), ou seja, o campo reserve_date só permite receber valores (em formato de data, obviamente) em datas DEPOIS ou IGUAIS as de hoje
             'start_time' => ['required', 'date', 'before:end_time'],
             'end_time' => ['required', 'date', 'after:start_time'],
             'observation' => ['required', 'string']
