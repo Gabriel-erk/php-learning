@@ -60,7 +60,20 @@ class ReserveController extends Controller
     public function index()
     {
         try {
-            $reserves = Reserve::all();
+            $reservesAll = Reserve::all();
+            // pegando a data de hoje e formatando ela para o formato Y-m-d (ano-mês-dia) para que eu possa comparar com as datas das reservas que estão no mesmo formato
+            $today = Carbon::now()->format('Y-m-d');
+
+            // váriavel que vai guardar as reservas futuras (ou seja, reservas que ainda não aconteceram, ou seja, reservas que tem a data maior ou igual a data de hoje)
+            $reserves = [];
+
+            foreach ($reservesAll as $reserve) {
+                // formatando a data da reserva para o formato Y-m-d (ano-mês-dia) para que eu possa comparar com a data de hoje que também está nesse formato
+                if (Carbon::parse($reserve->reserve_date)->format('Y-m-d') >= $today) {
+                    $reserves[] = $reserve;
+                }
+            }
+
             return view('Reserve.index', compact('reserves'))->with('status');
         } catch (\Throwable $th) {
             $errorMessage = $th->getMessage();
