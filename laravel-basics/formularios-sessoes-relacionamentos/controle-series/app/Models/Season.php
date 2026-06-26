@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Season extends Model
 {
+    protected $fillable = [
+        'number',
+    ];
     // no ingles, a palavra: series == série, pois no inglês, por mais que 'series' pareća estar no plural, no inglês, a palavra 'series' é equivalente a série no português, ou seja, 'series' == série
     public function series()
     {

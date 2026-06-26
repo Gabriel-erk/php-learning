@@ -1,5 +1,37 @@
 <x-layout title="Cadastro Série">
-    {{-- series pois está dentro da pasta series (que está dentro de: components e o ".form" é pq o nome do componente é form), graças aos ":" antes do action (parâmetro que nosso componente form pede), podemos informar dentro das aspas do ":action" um código php/blade normalmente sem o uso de {{  }} que ele irá interpretar corretamente --}}
-    {{--  laravel nos entrega um método interessante devido a estarmos usando requisićoes, onde, o método 'old' guarde TODOS os dados na nossa ÚLTIMA requisićao, logo, caso tentemos fazer o submit, dê errado, ele nos retorna para essa view aqui (graćas ao validate em nosso controller no método store), e o método old entra em aćao, pois ele guarda TODAS as informaćoes da requisićao anterior que deu errado, onde um dos campos dela é: 'nome', ou seja, o antigo valor de $request->nome (traduzindo para termos de controller)    --}}
-    <x-series.form :action="route('series.store')" :nome="old('nome')" :update="false"/>
+    {{-- SE houver ALGUM ou QUALQUER erro/dado, ele entra no if e exibe todos os erros pra mim --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                {{-- $errors é UM OBJETO (MessageBag, que possui TODOS os erros de validaćão), ou seja, nao posso trata-lo como uma lista como eu estava fazendo antes ($error as $error), pois ele nao é uma lista para eu tratá-lo assim, logo, preciso pegar TODOS os erros em forma de lista, onde o método ->all() faz isso por nós, assim permitindo que eu a trate como uma lista finalmente  --}}
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <form action="{{ route('series.store') }}" method="post">
+        @csrf
+
+        <div class="row mb-3">
+
+            <div class="col-8">
+                <label for="nome" class="form-label">Nome:</label>
+                {{-- autofocus serve para: toda vez que atualizar a página, ter o FOCO no campo automaticamente (como se tivesse com um hover ligado nele) --}}
+                <input type="text" id="nome" autofocus name="nome" class="form-control" value="{{ old('nome') }}" />
+            </div>
+
+            <div class="col-2">
+            <label for="seasonsQuantity" class="form-label">Nmr Temporadas :</label>
+                <input type="text" id="seasonsQuantity" name="seasonsQuantity" class="form-control" value="{{ old('seasonsQuantity') }}" />
+            </div>
+
+            <div class="col-2">
+                <label for="episodesPerSeason" class="form-label">Eps / Temporada:</label>
+                <input type="text" id="episodesPerSeason" name="episodesPerSeason" class="form-control" value="{{ old('episodesPerSeason') }}" />
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-dark">Adicionar</button>
+    </form>
 </x-layout>

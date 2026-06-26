@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Series;
 use App\Http\Requests\SeriesFormRequest;
+use App\Models\Episode;
+use App\Models\Season;
 // classe "Request" é uma classe do Laravel que representa uma requisição HTTP feita pelo cliente, ela encapsula todas as informações relacionadas a essa requisição, como os dados enviados, os parâmetros da URL, os cabeçalhos, entre outros. Ela é usada para acessar e manipular os dados da requisição de forma fácil e organizada dentro dos controladores do Laravel.
 // classe já é importada automaticamente ao gerarmos um controller via linha de comando (terminal), pois o controller em si (como descrito no Notion) recebe uma requisição (Request) e retorna uma resposta (Response), então sempre que falamos de Http no geral, esse é o comportamento esperado de um controller (tanto que os controllers (ou controladores em portugues) no laravel ficam dentro da pasta Http, para ilustrar isso melhor)
 use Illuminate\Http\Request;
@@ -35,7 +37,7 @@ class SeriesController extends Controller
         // método fill faz a filtragem de tudo que pode receber dados em massa (que está no fillable da model que estamos manipulando agora) e permite o preenchimento de todos os campos, sem que nós tenhamos que ficar colocando linha por linha, atributo por atributo, ex: $series->nome = $request->nome, $series->descricao = $request->descricao e etc, com o fill ele já preenche TODOS os campos que estao para receber dados em massa, automaticamente e nosso request->all() passa o valor de todos os campos de formulário que ele possui
         $series->fill($request->all());
         $series->save();
-        
+
         return to_route('series.index')->with('mensagem.sucesso', "Série '{$series->nome}' atualizada com sucesso!");
     }
 
@@ -68,9 +70,23 @@ class SeriesController extends Controller
     // }
 
 
-    public function store(SeriesFormRequest $request) {
+    public function store(SeriesFormRequest $request)
+    {
         // não precisamos mais realizar o processo de validaćao em nosso código pois nossa classe SeriesFormRequest já realiza isso para nós por debaixo do panos seguindo todas as regras que colocamos
         $serie = Series::create($request->all());
+
+        for ($i = 0; $i < $request->seasonsQuantity; $i++) {
+            // usando método de relacionamento chamado seasons que minha série tem, que possui um método create associado a ela (permitindo que eu crie uma season passando as informaćões que ela precisa nos parâmetros deste método create), como eu estou chamando meu método create a partir do método de relacionamento (Series X Seasons) o laravel sabe que tenho um vínculo de (1:N) de Series com Seasons e ele sabe que a tabela seasons PRECISA preencheer o campo 'series_id' e já preenche automaticamente com o ID da série que está disparando o método de relacionamento atual          
+            $season = $serie->seasons()->create([
+                'number' => $i + 1
+            ]);
+
+            for ($j = 0; $j < $request->episodesPerSeason; $j++) {
+                $season->episodes()->create([
+                    'number' => $i + 1
+                ]);
+            }
+        }
 
         return to_route('series.index')->with('mensagem.sucesso', "Série '{$serie->nome}' criada com sucesso!");
     }
