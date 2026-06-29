@@ -1,0 +1,2 @@
+// para permitir melhor debug do seu próprio código (uma das várias barras de debug que estão disponíveis para se utilizar no ecossistema do laravel)
+composer require barryvdh/laravel-debugbar --dev

@@ -75,13 +75,13 @@ class SeriesController extends Controller
         // não precisamos mais realizar o processo de validaćao em nosso código pois nossa classe SeriesFormRequest já realiza isso para nós por debaixo do panos seguindo todas as regras que colocamos
         $serie = Series::create($request->all());
 
-        for ($i = 0; $i < $request->seasonsQuantity; $i++) {
+        for ($i = 0; $i <= $request->seasonsQuantity; $i++) {
             // usando método de relacionamento chamado seasons que minha série tem, que possui um método create associado a ela (permitindo que eu crie uma season passando as informaćões que ela precisa nos parâmetros deste método create), como eu estou chamando meu método create a partir do método de relacionamento (Series X Seasons) o laravel sabe que tenho um vínculo de (1:N) de Series com Seasons e ele sabe que a tabela seasons PRECISA preencheer o campo 'series_id' e já preenche automaticamente com o ID da série que está disparando o método de relacionamento atual          
             $season = $serie->seasons()->create([
                 'number' => $i + 1
             ]);
 
-            for ($j = 0; $j < $request->episodesPerSeason; $j++) {
+            for ($j = 0; $j <= $request->episodesPerSeason; $j++) {
                 $season->episodes()->create([
                     'number' => $i + 1
                 ]);
