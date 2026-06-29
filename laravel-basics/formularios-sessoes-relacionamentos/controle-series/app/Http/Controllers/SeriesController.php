@@ -70,23 +70,53 @@ class SeriesController extends Controller
     // }
 
 
+    // public function store(SeriesFormRequest $request)
+    // {
+    //     // não precisamos mais realizar o processo de validaćao em nosso código pois nossa classe SeriesFormRequest já realiza isso para nós por debaixo do panos seguindo todas as regras que colocamos
+    //     $serie = Series::create($request->all());
+
+    //     for ($i = 0; $i <= $request->seasonsQuantity; $i++) {
+    //         // usando método de relacionamento chamado seasons que minha série tem, que possui um método create associado a ela (permitindo que eu crie uma season passando as informaćões que ela precisa nos parâmetros deste método create), como eu estou chamando meu método create a partir do método de relacionamento (Series X Seasons) o laravel sabe que tenho um vínculo de (1:N) de Series com Seasons e ele sabe que a tabela seasons PRECISA preencheer o campo 'series_id' e já preenche automaticamente com o ID da série que está disparando o método de relacionamento atual          
+    //         $season = $serie->seasons()->create([
+    //             'number' => $i + 1
+    //         ]);
+
+    //         for ($j = 0; $j <= $request->episodesPerSeason; $j++) {
+    //             $season->episodes()->create([
+    //                 'number' => $i + 1
+    //             ]);
+    //         }
+    //     }
+
+    //     return to_route('series.index')->with('mensagem.sucesso', "Série '{$serie->nome}' criada com sucesso!");
+    // }
+
     public function store(SeriesFormRequest $request)
     {
         // não precisamos mais realizar o processo de validaćao em nosso código pois nossa classe SeriesFormRequest já realiza isso para nós por debaixo do panos seguindo todas as regras que colocamos
         $serie = Series::create($request->all());
+        $seasons = [];
 
         for ($i = 0; $i <= $request->seasonsQuantity; $i++) {
-            // usando método de relacionamento chamado seasons que minha série tem, que possui um método create associado a ela (permitindo que eu crie uma season passando as informaćões que ela precisa nos parâmetros deste método create), como eu estou chamando meu método create a partir do método de relacionamento (Series X Seasons) o laravel sabe que tenho um vínculo de (1:N) de Series com Seasons e ele sabe que a tabela seasons PRECISA preencheer o campo 'series_id' e já preenche automaticamente com o ID da série que está disparando o método de relacionamento atual          
-            $season = $serie->seasons()->create([
+            $seasons[] = [
+                'series_id' => $serie->id,
                 'number' => $i + 1
-            ]);
+            ];
+        }
+        Season::insert($seasons);
 
+        $episodes = [];
+        // nesse ponto minha série já possui séries cadastradas, logo o $serie->seasons, me retorna todas as seasons (temporadas) que minha $serie que chamou este campo possui vínculo na tabela seasons
+        foreach ($serie->seasons as $season) {
             for ($j = 0; $j <= $request->episodesPerSeason; $j++) {
-                $season->episodes()->create([
-                    'number' => $i + 1
-                ]);
+                $episodes[] = [
+                    'season_id' => $season->id,
+                    'number' => $j + 1
+                ];
             }
         }
+
+        Episode::insert($episodes);
 
         return to_route('series.index')->with('mensagem.sucesso', "Série '{$serie->nome}' criada com sucesso!");
     }
