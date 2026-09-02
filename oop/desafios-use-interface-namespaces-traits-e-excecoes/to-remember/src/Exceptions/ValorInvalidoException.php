@@ -1,10 +1,10 @@
 <?php 
 
-namespace Practic\Exceptions;
+namespace Practice\Exceptions;
 
 use Exception;
 
-class ValorInvalidoExcepiton extends Exception 
+class ValorInvalidoException extends Exception 
 {
     public function __construct(){
         return parent::__construct("Valor Inválido - Não foi possível realizar esta operação.");

@@ -1,17 +1,36 @@
 <?php
 
 namespace Practice\Conta;
-use Practice\Exceptions;
+
+use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
 
 class ContaCorrente extends Conta
 {
-    public const limiteChequeEspecial = 500;
-    public function __construct(int $numero, string $nome, float $saldo) {
+    private int $limiteChequeEspecial;
+    public function __construct(int $numero, string $nome, float $saldo)
+    {
+        $limiteChequeEspecial = 500;
         return parent::__construct($numero, $nome, $saldo);
     }
 
-   public function sacar(float $sacar): bool|ValorInvalidoExcepiton|SaldoInsuficienteException
-   {
-    # code...
-   }
+    public function sacar(float $valor): bool|ValorInvalidoException|SaldoInsuficienteException
+    {
+        $valorDisponivelSaque = $this->saldo + $this->limiteChequeEspecial;
+
+        if ($this->saldo < 0) {
+            throw new ValorInvalidoException();
+        }
+
+        if ($valor > $valorDisponivelSaque) {
+            throw new SaldoInsuficienteException();
+        }
+
+        if ($this->saldo >= $valor) {
+            $this->saldo -= $valor;
+        } elseif ($this->limiteChequeEspecial >= $valor) {
+            $this->limiteChequeEspecial -= $valor;
+        }
+
+        return true;
+    }
 }
