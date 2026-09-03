@@ -3,16 +3,25 @@
 namespace Practice\Conta;
 
 use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
+use Practice\Traits\Registravel;
 
 // é uma classe abstrata pois o saque de uma conta corrente e conta poupança são diferentes e eu quero que esta classe "conta" seja apenas um molde para que minhas classes "ContaCorrente" e "ContaPoupanca" possam usar e depois aplicar suas próprias diferenças (nisso já faremos uso de polimorfismo e e herança)
 abstract class Conta
 {
-    public function __construct(public readonly int $numero, public readonly string $nome, protected float $saldo) {}
+    use Registravel; // preciso dar um use no arquivo da trait (que se chama Registravel) para que eu tenha acesso aos métodos daquela trait dentro da minha classe
+    private array $operacoes;
+    private static int $id;
+    public function __construct(public readonly int $numero, public readonly string $nome, protected float $saldo) {
+        $this->id += 1;
+        $this->operacoes = [];
+    }
 
     public function depositar(float $valor): bool|ValorInvalidoException
     {
         if ($valor > 0) {
             $this->saldo += $valor;
+            $this->operacoes[] = $this->registrarOperacao($this->id, "Depósido de: $valor realizado com sucesso!");
+
             return true;
         } else {
             throw new ValorInvalidoException();
