@@ -9,7 +9,12 @@ use Practice\Traits\Registravel;
 abstract class Conta
 {
     use Registravel; // preciso dar um use no arquivo da trait (que se chama Registravel) para que eu tenha acesso aos métodos daquela trait dentro da minha classe
+
+    private static int $contadorId;
+    private int $id;
     public function __construct(public readonly int $numero, public readonly string $nome, protected float $saldo) {
+        $this->contadorId += 1;
+        $this->id += $this->contadorId;
     }
 
     public function depositar(float $valor): bool|ValorInvalidoException
