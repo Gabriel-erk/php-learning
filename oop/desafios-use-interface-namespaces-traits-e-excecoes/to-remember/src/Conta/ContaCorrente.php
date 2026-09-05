@@ -42,6 +42,7 @@ class ContaCorrente extends Conta implements Tributavel
             $this->limiteChequeEspecial -= $valorSaque;
         }
 
+        $this->registrarOperacao("Saque de: $valorSaque realizado com sucesso!");
         return true;
     }
 }

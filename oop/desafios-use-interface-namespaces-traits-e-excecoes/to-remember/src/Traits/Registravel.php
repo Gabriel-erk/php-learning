@@ -4,9 +4,12 @@ namespace Practice\Traits;
 
 trait Registravel {
     private array $operacoes = [];
-    public function registrarOperacao(int $idConta, string $mensagem): string {
-        
-        // $this->operacoes[] = [$idConta, $mensagem];
-        return "";
+    public function registrarOperacao( string $mensagem) {        
+        $this->operacoes[] = $mensagem;
+    }
+
+    public function historico(): array
+    {
+        return $this->operacoes;
     }
 }

@@ -24,13 +24,18 @@ class ContaPoupanca extends Conta
         }
 
         $this->saldo -= $valor;
+        $this->registrarOperacao("Saque de: $valor realizado com sucesso!");
         return true;
     }
 
     public function aplicarRendimento(): bool
     {
         if ($this->saldo > 0) {
-            $this->saldo += $this->saldo * self::taxaRendimento;
+            $rendimento = $this->saldo * self::taxaRendimento;
+
+            $this->saldo += $rendimento;
+            $this->registrarOperacao("Aplicação de rendimento de R\$ $rendimento");
+
             return true;
         }
 
