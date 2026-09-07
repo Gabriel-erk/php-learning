@@ -21,6 +21,14 @@ while (true) {
 
 
     if ($opcao == 1) {
+        echo "Informe o número da conta:" . PHP_EOL;
+        $numeroConta = (int) fgets(STDIN);
+        echo "Informe o seu nome:" . PHP_EOL;
+        $nomeConta = (int) fgets(STDIN);
+        echo "Informe o saldo inicial da conta:" . PHP_EOL;
+        $saldoConta = (int) fgets(STDIN);
+
+        echo "===== TIPO DA CONTA =====" . PHP_EOL;
         echo "Conta Corrente (1)" . PHP_EOL;
         echo "Conta Poupança (2)" . PHP_EOL;
 
@@ -28,11 +36,27 @@ while (true) {
         $tipoConta = (int) fgets(STDIN);
 
         if ($tipoConta == 1) {
+            $contas[] = new ContaCorrente($numeroConta, $nomeConta, $saldoConta);
+            echo "Conta corrente criada com sucesso!" . PHP_EOL;
         } elseif ($tipoConta == 2) {
-            # code...
+            $contas[] = new ContaPoupanca($numeroConta, $nomeConta, $saldoConta);
+            echo "Conta poupança criada com sucesso!" . PHP_EOL;
         } else {
-            echo "Tipo de conta inválido.";
+            echo "Tipo de conta inválido." . PHP_EOL;
         }
-        // $conta = new ContaCorrente();
+    } elseif($opcao == 2) {
+        echo "Informe o número da conta:" . PHP_EOL;
+        $numeroConta = (int) fgets(STDIN);
+
+        foreach ($contas as $conta) {
+            if ($conta->numero == $numeroConta) {
+                $contaProcurada = $conta;
+
+                echo "Informe o valor do depósito:" . PHP_EOL;
+                $valor = (float) fgets(STDIN);
+
+                $conta->depositar($valor);
+            }
+        }        
     }
 }
