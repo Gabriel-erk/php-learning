@@ -4,6 +4,18 @@ use Practice\Conta\{ContaCorrente, ContaPoupanca};
 
 $contas = [];
 
+function encontrarConta(array $contas, int $numeroConta)
+{
+    echo "Informe o número da conta:" . PHP_EOL;
+    $numeroConta = (int) fgets(STDIN);
+
+    foreach ($contas as $conta) {
+        if ($conta->numero == $numeroConta) {
+            return $conta;
+        }
+    }
+}
+
 while (true) {
     echo "===== BANCO =====";
 
@@ -44,19 +56,54 @@ while (true) {
         } else {
             echo "Tipo de conta inválido." . PHP_EOL;
         }
-    } elseif($opcao == 2) {
+    } elseif ($opcao == 2) {
+
         echo "Informe o número da conta:" . PHP_EOL;
         $numeroConta = (int) fgets(STDIN);
 
-        foreach ($contas as $conta) {
-            if ($conta->numero == $numeroConta) {
-                $contaProcurada = $conta;
+        $conta = encontrarConta($contas, $numeroConta);
 
-                echo "Informe o valor do depósito:" . PHP_EOL;
-                $valor = (float) fgets(STDIN);
+        echo "Informe o valor do depósito:" . PHP_EOL;
+        $valor = (float) fgets(STDIN);
+        // conferir no enunciado, mas acredito que por aqui teremos que usar as exceptions, não nas classes em si
+        $conta->depositar($valor);
+    } elseif ($opcao == 3) {
+        echo "Informe o número da conta:" . PHP_EOL;
+        $numeroConta = (int) fgets(STDIN);
 
-                $conta->depositar($valor);
-            }
-        }        
+        $conta = encontrarConta($contas, $numeroConta);
+
+        echo "Informe o valor do saque:" . PHP_EOL;
+        $valor = (float) fgets(STDIN);
+
+        $conta->sacar($valor);
+    } elseif ($opcao == 4) {
+        echo "Informe o número da conta:" . PHP_EOL;
+        $numeroConta = (int) fgets(STDIN);
+
+        $conta = encontrarConta($contas, $numeroConta);
+
+        echo "Valor disponível: " . $conta->consultarSaldo() . PHP_EOL;
+    } elseif ($opcao == 5) {
+        echo "Informe o número da conta poupança: " . PHP_EOL;
+        $numeroConta = (int) fgets(STDIN);
+
+        $conta = encontrarConta($contas, $numeroConta);
+        
+        if ($conta->aplicarRendimento()) {
+            echo "Rendimento aplicado com sucesso!" . PHP_EOL;
+        } else {
+            echo "Não foi possível aplicar o rendimento." . PHP_EOL;
+        }
+        
+    } elseif ($opcao == 6) {
+
+    } elseif ($opcao == 7) {
+        echo "Informe o número da conta corrente: " . PHP_EOL;
+        $numeroConta = (int) fgets(STDIN);
+
+        $conta = encontrarConta($contas, $numeroConta);
+
+        echo "O valor da taxa com base em seu saldo é: " . $conta->calculcarTaxa() . PHP_EOL;
     }
 }

@@ -21,7 +21,7 @@ class ContaCorrente extends Conta implements Tributavel
         return $this->saldo * 0.10;
     }
 
-    public function sacar(float $valor): bool|ValorInvalidoException|SaldoInsuficienteException
+    public function sacar(float $valor): bool
     {
         $valorDisponivelSaque = $this->saldo + $this->limiteChequeEspecial;
 
