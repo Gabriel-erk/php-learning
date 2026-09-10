@@ -29,7 +29,7 @@ abstract class Conta
         }
     }
 
-    public abstract function sacar(float $valor): bool|ValorInvalidoException|SaldoInsuficienteException;
+    public abstract function sacar(float $valor): bool;
 
     public function consultarSaldo()
     {

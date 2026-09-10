@@ -1,6 +1,7 @@
 <?php
 
 use Practice\Conta\{ContaCorrente, ContaPoupanca};
+use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
 
 $contas = [];
 
@@ -65,8 +66,14 @@ while (true) {
 
         echo "Informe o valor do depósito:" . PHP_EOL;
         $valor = (float) fgets(STDIN);
-        // conferir no enunciado, mas acredito que por aqui teremos que usar as exceptions, não nas classes em si
+
+        if ($valor < 0) {
+            throw new ValorInvalidoException();
+        }
+
         $conta->depositar($valor);
+
+        echo "Depósito de: $valor realizado com sucesso!";
     } elseif ($opcao == 3) {
         echo "Informe o número da conta:" . PHP_EOL;
         $numeroConta = (int) fgets(STDIN);
@@ -76,7 +83,15 @@ while (true) {
         echo "Informe o valor do saque:" . PHP_EOL;
         $valor = (float) fgets(STDIN);
 
+        if ($valor > $conta->consultarSaldo()) {
+            throw new SaldoInsuficienteException();
+        } elseif ($valor < 0) {
+            throw new ValorInvalidoException();
+        }
+
         $conta->sacar($valor);
+
+        echo "Saque de: $valor realizado com sucesso!";
     } elseif ($opcao == 4) {
         echo "Informe o número da conta:" . PHP_EOL;
         $numeroConta = (int) fgets(STDIN);
@@ -89,15 +104,13 @@ while (true) {
         $numeroConta = (int) fgets(STDIN);
 
         $conta = encontrarConta($contas, $numeroConta);
-        
+
         if ($conta->aplicarRendimento()) {
             echo "Rendimento aplicado com sucesso!" . PHP_EOL;
         } else {
             echo "Não foi possível aplicar o rendimento." . PHP_EOL;
         }
-        
     } elseif ($opcao == 6) {
-
     } elseif ($opcao == 7) {
         echo "Informe o número da conta corrente: " . PHP_EOL;
         $numeroConta = (int) fgets(STDIN);
@@ -105,5 +118,10 @@ while (true) {
         $conta = encontrarConta($contas, $numeroConta);
 
         echo "O valor da taxa com base em seu saldo é: " . $conta->calculcarTaxa() . PHP_EOL;
+    } elseif ($opcao == 0) {
+        echo "Obrigado por utiliza o sistema!" . PHP_EOL;
+        break;
+    } else {
+        echo "Opção inválida, tente novamente.";
     }
 }
