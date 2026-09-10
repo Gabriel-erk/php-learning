@@ -2,7 +2,6 @@
 
 namespace Practice\Conta;
 
-use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
 use Practice\Traits\Registravel;
 
 // é uma classe abstrata pois o saque de uma conta corrente e conta poupança são diferentes e eu quero que esta classe "conta" seja apenas um molde para que minhas classes "ContaCorrente" e "ContaPoupanca" possam usar e depois aplicar suas próprias diferenças (nisso já faremos uso de polimorfismo e e herança)
@@ -12,21 +11,20 @@ abstract class Conta
 
     private static int $contadorId;
     private int $id;
-    public function __construct(public readonly int $numero, public readonly string $nome, protected float $saldo) {
+    protected array $historico;
+    public function __construct(public readonly int $numero, public readonly string $nome, protected float $saldo)
+    {
         $this->contadorId += 1;
         $this->id += $this->contadorId;
+        $this->historico = [];
     }
 
-    public function depositar(float $valor): bool|ValorInvalidoException
+    public function depositar(float $valor): bool
     {
-        if ($valor > 0) {
-            $this->saldo += $valor;
-            $this->registrarOperacao("Depósito de: $valor realizado com sucesso!");
+        $this->saldo += $valor;
+        $this->historico[] = $this->registrarOperacao("Depósito de: ", $valor);
 
-            return true;
-        } else {
-            throw new ValorInvalidoException();
-        }
+        return true;
     }
 
     public abstract function sacar(float $valor): bool;
@@ -34,5 +32,10 @@ abstract class Conta
     public function consultarSaldo()
     {
         return $this->saldo;
+    }
+
+    public function historico(): array
+    {
+        return $this->historico;
     }
 }

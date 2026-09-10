@@ -2,11 +2,8 @@
 
 namespace Practice\Conta;
 
-use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
-
 class ContaPoupanca extends Conta
 {
-
     public const taxaRendimento = 0.1;
     public function __construct(int $numero, string $nome, float $saldo)
     {
@@ -16,21 +13,15 @@ class ContaPoupanca extends Conta
     public function sacar(float $valor): bool
     {
         $this->saldo -= $valor;
-        $this->registrarOperacao("Saque de: $valor realizado com sucesso!");
+        $this->historico[] = $this->registrarOperacao("Saque de: ", $valor);
         return true;
     }
 
-    public function aplicarRendimento(): bool
+    public function aplicarRendimento()
     {
-        if ($this->saldo > 0) {
-            $rendimento = $this->saldo * self::taxaRendimento;
+        $rendimento = $this->saldo * self::taxaRendimento;
 
-            $this->saldo += $rendimento;
-            $this->registrarOperacao("Aplicação de rendimento de R\$ $rendimento");
-
-            return true;
-        }
-
-        return false;
+        $this->saldo += $rendimento;
+        $this->historico[] = $this->registrarOperacao("Aplicação de rendimento de R\$: ", $rendimento);
     }
 }

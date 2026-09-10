@@ -2,8 +2,6 @@
 
 namespace Practice\Conta;
 
-use Override;
-use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
 use Practice\Contracts\Tributavel;
 
 class ContaCorrente extends Conta implements Tributavel
@@ -15,7 +13,7 @@ class ContaCorrente extends Conta implements Tributavel
         return parent::__construct($numero, $nome, $saldo);
     }
 
-    
+
     public function calculcarTaxa(): float
     {
         return $this->saldo * 0.10;
@@ -32,7 +30,7 @@ class ContaCorrente extends Conta implements Tributavel
             $this->limiteChequeEspecial -= $valorSaque;
         }
 
-        $this->registrarOperacao("Saque de: $valorSaque realizado com sucesso!");
+        $this->historico[] = $this->registrarOperacao("Saque de: ", $valorSaque);
         return true;
     }
 }

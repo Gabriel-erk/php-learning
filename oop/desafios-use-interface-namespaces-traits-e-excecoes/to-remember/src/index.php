@@ -105,12 +105,22 @@ while (true) {
 
         $conta = encontrarConta($contas, $numeroConta);
 
-        if ($conta->aplicarRendimento()) {
+        if ($conta->consultarSaldo() > 0) {
+            $conta->aplicarRendimento();
             echo "Rendimento aplicado com sucesso!" . PHP_EOL;
         } else {
-            echo "Não foi possível aplicar o rendimento." . PHP_EOL;
+            throw new SaldoInsuficienteException();
         }
     } elseif ($opcao == 6) {
+        echo "Informe o número da conta: " . PHP_EOL;
+        $numeroConta = (int) fgets(STDIN);
+
+        $conta = encontrarConta($contas, $numeroConta);
+
+        echo "=== HISTÓRICO DE OPERAÇÕES ===" . PHP_EOL;
+        foreach ($conta->historico as $operacao) {
+            echo $operacao . PHP_EOL;
+        }
     } elseif ($opcao == 7) {
         echo "Informe o número da conta corrente: " . PHP_EOL;
         $numeroConta = (int) fgets(STDIN);

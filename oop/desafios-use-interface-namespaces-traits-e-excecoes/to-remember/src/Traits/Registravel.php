@@ -1,15 +1,12 @@
-<?php 
+<?php
 
 namespace Practice\Traits;
 
-trait Registravel {
-    private array $operacoes = [];
-    public function registrarOperacao( string $mensagem) {        
-        $this->operacoes[] = $mensagem;
-    }
-
-    public function historico(): array
+trait Registravel
+{
+    public function registrarOperacao(string $mensagem, float $valor)
     {
-        return $this->operacoes;
+        // saque, depósito e aplicação de rendimento
+        return $mensagem . $valor;
     }
 }
