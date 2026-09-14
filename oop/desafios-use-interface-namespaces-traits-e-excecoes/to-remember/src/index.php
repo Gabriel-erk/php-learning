@@ -18,7 +18,7 @@ function encontrarConta(array $contas, int $numeroConta)
 }
 
 while (true) {
-    echo "===== BANCO =====";
+    echo "===== BANCO =====" . PHP_EOL;
 
     echo "1 - Criar conta" . PHP_EOL;
     echo "2 - Depositar" . PHP_EOL;
@@ -29,23 +29,23 @@ while (true) {
     echo "7 - Calcular taxas" . PHP_EOL;
     echo "0 - Sair" . PHP_EOL;
 
-    echo "Sua opção:";
+    echo "Sua opção: ";
     $opcao = (int) fgets(STDIN);
 
 
     if ($opcao == 1) {
-        echo "Informe o número da conta:" . PHP_EOL;
+        echo "Informe o número da conta: " . PHP_EOL;
         $numeroConta = (int) fgets(STDIN);
-        echo "Informe o seu nome:" . PHP_EOL;
+        echo "Informe o seu nome: " . PHP_EOL;
         $nomeConta = (int) fgets(STDIN);
-        echo "Informe o saldo inicial da conta:" . PHP_EOL;
+        echo "Informe o saldo inicial da conta: " . PHP_EOL;
         $saldoConta = (int) fgets(STDIN);
 
         echo "===== TIPO DA CONTA =====" . PHP_EOL;
         echo "Conta Corrente (1)" . PHP_EOL;
         echo "Conta Poupança (2)" . PHP_EOL;
 
-        echo "Sua opção:";
+        echo "Sua opção: ";
         $tipoConta = (int) fgets(STDIN);
 
         if ($tipoConta == 1) {
