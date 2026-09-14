@@ -1,7 +1,15 @@
 <?php
+require_once 'Contracts/Tributavel.php';
+require_once 'Traits/Registravel.php';
+require_once 'Conta/Conta.php';
+require_once 'Conta/ContaCorrente.php';
+require_once 'Conta/ContaPoupanca.php';
+require_once 'Exceptions/SaldoInsuficienteException.php';
+require_once 'Exceptions/ValorInvalidoException.php';
 
-use Practice\Conta\{ContaCorrente, ContaPoupanca};
+use Practice\Conta\{ContaCorrente,ContaPoupanca};
 use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
+use Practice\Traits\Registravel;
 
 $contas = [];
 
@@ -73,7 +81,7 @@ while (true) {
 
         $conta->depositar($valor);
 
-        echo "Depósito de: $valor realizado com sucesso!";
+        echo "Depósito de: $valor realizado com sucesso!" . PHP_EOL;
     } elseif ($opcao == 3) {
         echo "Informe o número da conta:" . PHP_EOL;
         $numeroConta = (int) fgets(STDIN);

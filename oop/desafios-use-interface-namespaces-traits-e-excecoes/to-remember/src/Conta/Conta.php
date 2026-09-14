@@ -9,13 +9,14 @@ abstract class Conta
 {
     use Registravel; // preciso dar um use no arquivo da trait (que se chama Registravel) para que eu tenha acesso aos métodos daquela trait dentro da minha classe
 
-    private static int $contadorId;
-    private int $id;
+    private static int $contadorId = 0;
+    private int $id = 0;
     protected array $historico;
     public function __construct(public readonly int $numero, public readonly string $nome, protected float $saldo)
     {
-        $this->contadorId += 1;
-        $this->id += $this->contadorId;
+        // forma correta de acessar uma propriedade estática (que pertence a classe e não a uma instância)
+        self::$contadorId += 1;
+        $this->id += self::$contadorId;
         $this->historico = [];
     }
 
