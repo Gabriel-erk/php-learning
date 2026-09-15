@@ -9,11 +9,10 @@ require_once 'Exceptions/ValorInvalidoException.php';
 
 use Practice\Conta\{ContaCorrente,ContaPoupanca};
 use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
-use Practice\Traits\Registravel;
 
 $contas = [];
 
-function encontrarConta(array $contas, int $numeroConta)
+function encontrarConta(array $contas)
 {
     echo "Informe o número da conta:" . PHP_EOL;
     $numeroConta = (int) fgets(STDIN);
@@ -32,9 +31,9 @@ while (true) {
     echo "2 - Depositar" . PHP_EOL;
     echo "3 - Sacar" . PHP_EOL;
     echo "4 - Consultar saldo" . PHP_EOL;
-    echo "5 - Aplicar rendimento" . PHP_EOL;
+    echo "5 - Aplicar rendimento (conta poupança)" . PHP_EOL;
     echo "6 - Ver histórico" . PHP_EOL;
-    echo "7 - Calcular taxas" . PHP_EOL;
+    echo "7 - Calcular taxas (conta corrente)" . PHP_EOL;
     echo "0 - Sair" . PHP_EOL;
 
     echo "Sua opção: ";
@@ -66,11 +65,7 @@ while (true) {
             echo "Tipo de conta inválido." . PHP_EOL;
         }
     } elseif ($opcao == 2) {
-
-        echo "Informe o número da conta:" . PHP_EOL;
-        $numeroConta = (int) fgets(STDIN);
-
-        $conta = encontrarConta($contas, $numeroConta);
+        $conta = encontrarConta($contas);
 
         echo "Informe o valor do depósito:" . PHP_EOL;
         $valor = (float) fgets(STDIN);
@@ -83,10 +78,7 @@ while (true) {
 
         echo "Depósito de: $valor realizado com sucesso!" . PHP_EOL;
     } elseif ($opcao == 3) {
-        echo "Informe o número da conta:" . PHP_EOL;
-        $numeroConta = (int) fgets(STDIN);
-
-        $conta = encontrarConta($contas, $numeroConta);
+        $conta = encontrarConta($contas);
 
         echo "Informe o valor do saque:" . PHP_EOL;
         $valor = (float) fgets(STDIN);
@@ -99,19 +91,13 @@ while (true) {
 
         $conta->sacar($valor);
 
-        echo "Saque de: $valor realizado com sucesso!";
+        echo "Saque de: $valor realizado com sucesso!" . PHP_EOL;
     } elseif ($opcao == 4) {
-        echo "Informe o número da conta:" . PHP_EOL;
-        $numeroConta = (int) fgets(STDIN);
-
-        $conta = encontrarConta($contas, $numeroConta);
+        $conta = encontrarConta($contas);
 
         echo "Valor disponível: " . $conta->consultarSaldo() . PHP_EOL;
     } elseif ($opcao == 5) {
-        echo "Informe o número da conta poupança: " . PHP_EOL;
-        $numeroConta = (int) fgets(STDIN);
-
-        $conta = encontrarConta($contas, $numeroConta);
+        $conta = encontrarConta($contas);
 
         if ($conta->consultarSaldo() > 0) {
             $conta->aplicarRendimento();
@@ -120,20 +106,14 @@ while (true) {
             throw new SaldoInsuficienteException();
         }
     } elseif ($opcao == 6) {
-        echo "Informe o número da conta: " . PHP_EOL;
-        $numeroConta = (int) fgets(STDIN);
-
-        $conta = encontrarConta($contas, $numeroConta);
+        $conta = encontrarConta($contas);
 
         echo "=== HISTÓRICO DE OPERAÇÕES ===" . PHP_EOL;
-        foreach ($conta->historico as $operacao) {
+        foreach ($conta->historico() as $operacao) {
             echo $operacao . PHP_EOL;
         }
     } elseif ($opcao == 7) {
-        echo "Informe o número da conta corrente: " . PHP_EOL;
-        $numeroConta = (int) fgets(STDIN);
-
-        $conta = encontrarConta($contas, $numeroConta);
+        $conta = encontrarConta($contas);
 
         echo "O valor da taxa com base em seu saldo é: " . $conta->calculcarTaxa() . PHP_EOL;
     } elseif ($opcao == 0) {

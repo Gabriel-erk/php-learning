@@ -16,6 +16,7 @@ class ContaCorrente extends Conta implements Tributavel
 
     public function calculcarTaxa(): float
     {
+        $this->historico[] = $this->registrarOperacao('Cálculo de taxa de: ', $this->saldo * 0.10);
         return $this->saldo * 0.10;
     }
 
