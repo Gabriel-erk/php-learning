@@ -24,15 +24,21 @@ class ContaCorrente extends Conta implements Tributavel
     {
         $taxa = $this->calculcarTaxa();
         $valorSaque = $valor + $taxa;
+        $valorDisponivel = $this->saldo + $this->limiteChequeEspecial;
 
-        if ($this->saldo >= $valorSaque) {
-            $this->historico[] = $this->registrarOperacao("Saque de: ", $valorSaque);
-            
-            $this->saldo -= $valorSaque;
-            return true;
-        } elseif ($this->limiteChequeEspecial >= $valorSaque) {
-            $this->historico[] = $this->registrarOperacao("Saque de: ", $valorSaque);
-            $this->limiteChequeEspecial -= $valorSaque;
+        if ($valorDisponivel > 0 && $valorDisponivel >= $valorSaque) {
+            while ($this->saldo > 0 && $valorSaque > 0) {
+                $this->saldo--;
+                $valorSaque--;
+            }
+
+            if ($valor > 0 && $this->limiteChequeEspecial > 0) {
+                while ($this->limiteChequeEspecial > 0 && $valorSaque > 0) {
+                    $this->limiteChequeEspecial--;
+                    $valorSaque--;
+                }
+            }
+            $this->historico[] = $this->registrarOperacao("Saque realizado de: ", $valorSaque);
             return true;
         }
 
