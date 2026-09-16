@@ -7,7 +7,7 @@ require_once 'Conta/ContaPoupanca.php';
 require_once 'Exceptions/SaldoInsuficienteException.php';
 require_once 'Exceptions/ValorInvalidoException.php';
 
-use Practice\Conta\{ContaCorrente,ContaPoupanca};
+use Practice\Conta\{ContaCorrente, ContaPoupanca};
 use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
 
 $contas = [];
@@ -83,15 +83,18 @@ while (true) {
         echo "Informe o valor do saque:" . PHP_EOL;
         $valor = (float) fgets(STDIN);
 
-        if ($valor > $conta->consultarSaldo()) {
+        if ($valor > $conta->consultarSaldo() + $conta->getLimiteChequeEspecial()) {
             throw new SaldoInsuficienteException();
         } elseif ($valor < 0) {
             throw new ValorInvalidoException();
         }
 
-        $conta->sacar($valor);
+        if ($conta->sacar($valor)) {
+            echo "Saque de: $valor realizado com sucesso!" . PHP_EOL;
+        } else {
+            echo "Tentativa de saque de: $valor fracassou." . PHP_EOL;
+        }
 
-        echo "Saque de: $valor realizado com sucesso!" . PHP_EOL;
     } elseif ($opcao == 4) {
         $conta = encontrarConta($contas);
 
