@@ -83,18 +83,13 @@ while (true) {
         echo "Informe o valor do saque:" . PHP_EOL;
         $valor = (float) fgets(STDIN);
 
-        if ($valor > $conta->consultarSaldo() + $conta->getLimiteChequeEspecial()) {
-            throw new SaldoInsuficienteException();
-        } elseif ($valor < 0) {
-            throw new ValorInvalidoException();
-        }
-
-        if ($conta->sacar($valor)) {
+        try {
+            $conta->sacar($valor);
             echo "Saque de: $valor realizado com sucesso!" . PHP_EOL;
-        } else {
+        } catch (SaldoInsuficienteException|ValorInvalidoException $th) {
             echo "Tentativa de saque de: $valor fracassou." . PHP_EOL;
+            echo "Razão: " . $th->getMessage() . PHP_EOL;
         }
-
     } elseif ($opcao == 4) {
         $conta = encontrarConta($contas);
 

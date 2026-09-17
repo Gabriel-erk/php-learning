@@ -2,6 +2,8 @@
 
 namespace Practice\Conta;
 
+use Practice\Exceptions\SaldoInsuficienteException;
+use Practice\Exceptions\ValorInvalidoException;
 use Practice\Traits\Registravel;
 
 // é uma classe abstrata pois o saque de uma conta corrente e conta poupança são diferentes e eu quero que esta classe "conta" seja apenas um molde para que minhas classes "ContaCorrente" e "ContaPoupanca" possam usar e depois aplicar suas próprias diferenças (nisso já faremos uso de polimorfismo e e herança)
@@ -28,7 +30,7 @@ abstract class Conta
         return true;
     }
 
-    public abstract function sacar(float $valor): bool;
+    public abstract function sacar(float $valor): bool|SaldoInsuficienteException|ValorInvalidoException;
 
     public function consultarSaldo()
     {

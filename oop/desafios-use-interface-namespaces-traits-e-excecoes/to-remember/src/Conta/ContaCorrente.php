@@ -3,6 +3,8 @@
 namespace Practice\Conta;
 
 use Practice\Contracts\Tributavel;
+use Practice\Exceptions\SaldoInsuficienteException;
+use Practice\Exceptions\ValorInvalidoException;
 
 class ContaCorrente extends Conta implements Tributavel
 {
@@ -20,11 +22,19 @@ class ContaCorrente extends Conta implements Tributavel
         return $this->saldo * 0.10;
     }
 
-    public function sacar(float $valor): bool
+    public function sacar(float $valor): bool|SaldoInsuficienteException|ValorInvalidoException
     {
         $taxa = $this->calculcarTaxa();
         $valorSaque = $valor + $taxa;
         $valorDisponivel = $this->saldo + $this->limiteChequeEspecial;
+
+        if ($valorSaque < 0) {
+            throw new SaldoInsuficienteException();
+        }
+
+        if ($valorSaque > $valorDisponivel) {
+            throw new ValorInvalidoException();
+        }
 
         if ($valorDisponivel > 0 && $valorDisponivel >= $valorSaque) {
             while ($this->saldo > 0 && $valorSaque > 0) {
