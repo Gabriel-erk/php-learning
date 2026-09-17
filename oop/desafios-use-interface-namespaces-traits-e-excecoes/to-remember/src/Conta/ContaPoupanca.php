@@ -2,6 +2,7 @@
 
 namespace Practice\Conta;
 
+use Practice\Enums\TipoConta;
 use Practice\Exceptions\SaldoInsuficienteException;
 use Practice\Exceptions\ValorInvalidoException;
 
@@ -10,7 +11,7 @@ class ContaPoupanca extends Conta
     public const taxaRendimento = 0.1;
     public function __construct(int $numero, string $nome, float $saldo)
     {
-        return parent::__construct($numero, $nome, $saldo);
+        return parent::__construct($numero, TipoConta::POUPANCA, $nome, $saldo);
     }
 
     public function sacar(float $valor): bool|SaldoInsuficienteException|ValorInvalidoException

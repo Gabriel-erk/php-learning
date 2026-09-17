@@ -5,6 +5,7 @@ namespace Practice\Conta;
 use Practice\Exceptions\SaldoInsuficienteException;
 use Practice\Exceptions\ValorInvalidoException;
 use Practice\Traits\Registravel;
+use Practice\Enums\TipoConta;
 
 // é uma classe abstrata pois o saque de uma conta corrente e conta poupança são diferentes e eu quero que esta classe "conta" seja apenas um molde para que minhas classes "ContaCorrente" e "ContaPoupanca" possam usar e depois aplicar suas próprias diferenças (nisso já faremos uso de polimorfismo e e herança)
 abstract class Conta
@@ -14,7 +15,7 @@ abstract class Conta
     private static int $contadorId = 0;
     private int $id = 0;
     protected array $historico;
-    public function __construct(public readonly int $numero, public readonly string $nome, protected float $saldo)
+    public function __construct(public readonly int $numero, public readonly TipoConta $tipo, public readonly string $nome, protected float $saldo)
     {
         // forma correta de acessar uma propriedade estática (que pertence a classe e não a uma instância)
         self::$contadorId += 1;
@@ -22,8 +23,14 @@ abstract class Conta
         $this->historico = [];
     }
 
-    public function depositar(float $valor): bool
+    public function depositar(float $valor): bool|ValorInvalidoException
     {
+        if ($valor < 0) {
+            $this->historico[] = $this->registrarOperacao("Tentativa fracassada de depósito de: ", $valor);
+
+            throw new ValorInvalidoException();
+        }
+
         $this->saldo += $valor;
         $this->historico[] = $this->registrarOperacao("Depósito de: ", $valor);
 

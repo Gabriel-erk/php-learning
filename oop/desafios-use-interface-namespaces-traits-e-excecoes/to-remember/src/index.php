@@ -8,6 +8,7 @@ require_once 'Exceptions/SaldoInsuficienteException.php';
 require_once 'Exceptions/ValorInvalidoException.php';
 
 use Practice\Conta\{ContaCorrente, ContaPoupanca};
+use Practice\Enums\TipoConta;
 use Practice\Exceptions\{SaldoInsuficienteException, ValorInvalidoException};
 
 $contas = [];
@@ -69,14 +70,13 @@ while (true) {
 
         echo "Informe o valor do depósito:" . PHP_EOL;
         $valor = (float) fgets(STDIN);
-
-        if ($valor < 0) {
-            throw new ValorInvalidoException();
+        try {
+            $conta->depositar($valor);
+            echo "Depósito de: $valor realizado com sucesso!" . PHP_EOL;
+        } catch (ValorInvalidoException $th) {
+            echo "Tentativa de depósito de: $valor fracassou." . PHP_EOL;
+            echo "Razão: " . $th->getMessage() . PHP_EOL;
         }
-
-        $conta->depositar($valor);
-
-        echo "Depósito de: $valor realizado com sucesso!" . PHP_EOL;
     } elseif ($opcao == 3) {
         $conta = encontrarConta($contas);
 
@@ -86,7 +86,7 @@ while (true) {
         try {
             $conta->sacar($valor);
             echo "Saque de: $valor realizado com sucesso!" . PHP_EOL;
-        } catch (SaldoInsuficienteException|ValorInvalidoException $th) {
+        } catch (SaldoInsuficienteException | ValorInvalidoException $th) {
             echo "Tentativa de saque de: $valor fracassou." . PHP_EOL;
             echo "Razão: " . $th->getMessage() . PHP_EOL;
         }
@@ -97,16 +97,20 @@ while (true) {
     } elseif ($opcao == 5) {
         $conta = encontrarConta($contas);
 
-        if ($conta->consultarSaldo() > 0) {
-            $conta->aplicarRendimento();
-            echo "Rendimento aplicado com sucesso!" . PHP_EOL;
+        if ($conta->tipoConta == TipoConta::POUPANCA) {
+            if ($conta->consultarSaldo() > 0) {
+                $conta->aplicarRendimento();
+                echo "Rendimento aplicado com sucesso!" . PHP_EOL;
+            } else {
+                echo "Saldo insuficiente para aplicar rendimento." . PHP_EOL;
+            }
         } else {
-            throw new SaldoInsuficienteException();
+            echo "Apenas contas poupança podem realizar este processo." . PHP_EOL;
         }
     } elseif ($opcao == 6) {
         $conta = encontrarConta($contas);
 
-        echo "=== HISTÓRICO DE OPERAÇÕES ===" . PHP_EOL;
+        echo "=== HISTÓRICO DE OPERAÇÕES ($conta->tipoConta->name) ===" . PHP_EOL;
         foreach ($conta->historico() as $operacao) {
             echo $operacao . PHP_EOL;
         }

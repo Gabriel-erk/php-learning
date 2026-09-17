@@ -5,6 +5,7 @@ namespace Practice\Conta;
 use Practice\Contracts\Tributavel;
 use Practice\Exceptions\SaldoInsuficienteException;
 use Practice\Exceptions\ValorInvalidoException;
+use Practice\Enums\TipoConta;
 
 class ContaCorrente extends Conta implements Tributavel
 {
@@ -12,7 +13,7 @@ class ContaCorrente extends Conta implements Tributavel
     public function __construct(int $numero, string $nome, float $saldo)
     {
         $this->limiteChequeEspecial = 500;
-        return parent::__construct($numero, $nome, $saldo);
+        return parent::__construct($numero, TipoConta::CORRENTE, $nome, $saldo);
     }
 
 
