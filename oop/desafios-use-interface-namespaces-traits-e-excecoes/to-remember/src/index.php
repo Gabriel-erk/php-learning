@@ -45,7 +45,7 @@ while (true) {
         echo "Informe o número da conta: " . PHP_EOL;
         $numeroConta = (int) fgets(STDIN);
         echo "Informe o seu nome: " . PHP_EOL;
-        $nomeConta = (int) fgets(STDIN);
+        $nomeConta = fgets(STDIN);
         echo "Informe o saldo inicial da conta: " . PHP_EOL;
         $saldoConta = (int) fgets(STDIN);
 
@@ -117,7 +117,11 @@ while (true) {
     } elseif ($opcao == 7) {
         $conta = encontrarConta($contas);
 
-        echo "O valor da taxa com base em seu saldo é: " . $conta->calculcarTaxa() . PHP_EOL;
+        if ($conta->tipoConta == TipoConta::CORRENTE) {
+            echo "O valor da taxa com base em seu saldo é: " . $conta->calculcarTaxa() . PHP_EOL;
+        } else {
+            echo "Apenas contas correntes podem realizar este processo." . PHP_EOL;
+        }
     } elseif ($opcao == 0) {
         echo "Obrigado por utiliza o sistema!" . PHP_EOL;
         break;
