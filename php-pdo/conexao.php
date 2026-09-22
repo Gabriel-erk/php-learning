@@ -9,7 +9,12 @@
 // PDO == PHP DATA OBJECTS (objetos de dado, em php), uma interface que permite acessar bancos de dados em php, cada sgbd (mysql, postgree, sqlite...) oferece uma forma específica de acessar aqueles bancos de dados, para isso, o pdo permite que usemos drives para conversarmos com cada sgbd
 // $pdo = new PDO('sqlite:banco.sqlite');
 // __DIR__ == diretório atual (pasta atual)
-$caminhoAbsolutoBanco = __DIR__ . '/banco.sqlite';
+$absoluteDatabasePath = __DIR__ . '/banco.sqlite';
 // utilizando caminho absoluto apenas para seguir as boas práticas descritas na documentação oficial do php sobre este processo
-$pdo = new PDO('sqlite:' . $caminhoAbsolutoBanco);
+$pdo = new PDO('sqlite:' . $absoluteDatabasePath);
 echo 'Conectei';
+
+// exec == executa um comando sql, aqui estamos criando nossa tabela students com suas propriedades e tipos (chave primária, inteiro, texto....), não fizemos o campo birth_date como o tipo 'date' pois o sqlite é simples e não possui esses tipos mais complexos (ele funciona como um 0 e 1, ou é texto, ou número)
+$pdo->exec('CREATE TABLE students (id INTEGER PRIMARY KEY, name TEXT, birth_date TEXT)');
+// echo 'tabela criada';
+// $pdo->exec('DROP TABLE students');
