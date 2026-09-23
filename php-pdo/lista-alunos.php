@@ -11,4 +11,8 @@ $pdo = new PDO('sqlite:' . $absoluteDatabasePath);
 $statement = $pdo->query('SELECT * FROM students');
 // por padrão o fetchAll tras os dados da seguinte maneira quando você os vê no terminal: ['nomeDaColunaNoBanco'] => (tipo) valorDaColuna e logo abaixo mostra da seguinte maneira: [indice]=>(tipo) valorDaColuna
 // logo, o que podemos entender é que ele permite que acessemos os valores de cada coluna através ou do índice, ou pelo nome da coluna (como conseguimos ver pelo var_dump), logo: $studentsList = $statement->fetchAll(); echo $studentsList[0][1] ou $studentsList[0]['id'] que ambos lhe trarão a mesma informação, ele apenas permite formas diferentes de acessar os valores nele presentes
-var_dump($statement->fetchAll());
+// var_dump($statement->fetchAll());
+// aqui estamos criando nossa lista de estudantes, diferente das explicações acima, este aqui possui um detalhe a mais, que é o PRIMEIRO parâmetro do método fetchAll, onde estamos passando uma constante da interface PDO chamada FETCH_ASSOC, que vai fazer com que, na hora de trazer os dados da operação '$statement->fetchAll(), trará os dados apenas em forma de array associativo, não com indíces também, apenas o nome da coluna => valor (precisamos espeficicar que queremos desse jeito pois, por padrão, ele nos trás ambas as formas de visualização: através do nome da coluna (id, name, birth_date...) e com indíces de array (0,1,2...))
+$studentList = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+var_dump($studentList);
