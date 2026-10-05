@@ -1,0 +1,31 @@
+<?php
+
+namespace Pratica03Pdo\Src\Domain\Model;
+
+class Student
+{
+    public function __construct(private ?int $id, private string $name, private \DateTimeImmutable $birthDate) {}
+
+
+    public function id(): ?int
+    {
+        return $this->id;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function birthDate(): \DateTimeImmutable
+    {
+        return $this->birthDate;
+    }
+
+    public function showStudent(): void
+    {
+        echo "Id: {$this->name()}" . PHP_EOL;
+        echo "Name: {$this->name()}" . PHP_EOL;
+        echo "Birth Date: {$this->birthDate()->format('Y-m-d')}" . PHP_EOL;
+    }
+}
