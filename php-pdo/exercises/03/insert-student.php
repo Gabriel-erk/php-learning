@@ -11,6 +11,11 @@ $sqlInsert = 'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date
 // uma linha sql pode ser preparada apenas uma única vez e utilizada várias outras vezes, como estamos fazendo no for abaixo
 $preparedStatement = $pdo->prepare($sqlInsert);
 
+// $preparedStatement->bindValue(':name', "Student test I love 69", PDO::PARAM_STR);
+// $preparedStatement->bindValue(':birth_date', '2016-11-28', PDO::PARAM_STR);
+// $preparedStatement->execute();
+// exit();
+
 for ($i = 0; $i < 10; $i++) {
     $preparedStatement->bindValue(':name', "Student {$i}", PDO::PARAM_STR);
     $preparedStatement->bindValue(':birth_date', '2006-11-28', PDO::PARAM_STR);

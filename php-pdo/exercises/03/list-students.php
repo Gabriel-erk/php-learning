@@ -18,12 +18,17 @@ foreach ($studentDataList as $studentData) {
     $studentList[] = StudentInstance::instance($studentData);
 }
 
+echo "\n";
 echo "=== TODOS OS ALUNOS ===" . PHP_EOL;
+echo "\n";
+
 foreach ($studentList as $student) {
     $student->showStudent();
 }
 
+echo "\n";
 echo "=== ALUNO COM ID 5 ===" . PHP_EOL;
+echo "\n";
 
 // preparando instrução SQL para evitar SQL injection, passando parâmetros e especificando seus tipos através do bindValue e por fim, executando esta linha sql para por fim, conseguir buscar as informações que restaram no meu objeto do tipo PDOStatement (preparedStatement)
 $preparedStatement = $pdo->prepare('SELECT * FROM students WHERE id = ?');
@@ -35,12 +40,14 @@ $studentData = $preparedStatement->fetch(PDO::FETCH_ASSOC);
 $student = StudentInstance::instance($studentData);
 $student->showStudent();
 
-echo "=== LISTAGEM DE ALUNOS COM WHILE ===" . PHP_EOL;
+echo "\n";
+echo "=== LISTAGEM DE ALUNOS COM WHILE + SITUAÇÃO DOS ALUNOS ===" . PHP_EOL;
+echo "\n";
 
 $preparedStatement = $pdo->prepare('SELECT * FROM students');
 $preparedStatement->execute();
 
 while ($studentData = $preparedStatement->fetch(PDO::FETCH_ASSOC)) {
     $student = StudentInstance::instance($studentData);
-    $student->showStudent();
+    $student->showStudent(true);
 }

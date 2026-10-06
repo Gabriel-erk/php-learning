@@ -29,11 +29,15 @@ class Student
             ->y;
     }
 
-    public function showStudent(): void
+    public function showStudent(bool $situation = false): void
     {
         echo "Id: {$this->name()}" . PHP_EOL;
         echo "Name: {$this->name()}" . PHP_EOL;
         echo "Birth Date: {$this->birthDate()->format('Y-m-d')}" . PHP_EOL;
+        if ($situation) {
+            $majority = $this->age() >= 18 ? "Maior de idade" : "Menor de idade";
+            echo "Situation: {$this->age()} anos - $majority" . PHP_EOL;
+        }
         echo "===================================" . PHP_EOL;
     }
 }
