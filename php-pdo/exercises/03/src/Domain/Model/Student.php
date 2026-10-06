@@ -22,10 +22,18 @@ class Student
         return $this->birthDate;
     }
 
+    public function age(): int
+    {
+        return $this->birthDate
+            ->diff(new \DateTimeImmutable())
+            ->y;
+    }
+
     public function showStudent(): void
     {
         echo "Id: {$this->name()}" . PHP_EOL;
         echo "Name: {$this->name()}" . PHP_EOL;
         echo "Birth Date: {$this->birthDate()->format('Y-m-d')}" . PHP_EOL;
+        echo "===================================" . PHP_EOL;
     }
 }
