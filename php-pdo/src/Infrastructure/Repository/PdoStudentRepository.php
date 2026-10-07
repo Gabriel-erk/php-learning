@@ -19,7 +19,20 @@ class PdoStudentRepository implements StudentRepository
     }
     public function allStudents(): array
     {
-        return [];
+        $preparedStatement = $this->connection->prepare('SELECT * FROM students');
+        $preparedStatement->execute();
+
+        $studentDataList = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        $studentList = [];
+
+        foreach ($studentDataList as $studentData) {
+            $studentList[] = new Student(
+                $studentData['id'],
+                $studentData['name'],
+                new \DateTimeImmutable($studentData['birth_date'])
+            );
+        }
+        return $studentList;
     }
 
     public function studentsBirhAt(\DateTimeImmutable $birthDate): array
@@ -27,11 +40,23 @@ class PdoStudentRepository implements StudentRepository
         return [];
     }
 
-    public function save(Student $student): bool {
-        return true;
+    public function save(Student $student): bool
+    {
+        $sqlInsert = "INSERT INTO students (name, birth_date) VALUES (:name,:birth_date)";
+
+        $preparedStatement = $this->connection->prepare($sqlInsert);
+        $preparedStatement->bindValue(':name', $student->name());
+        $preparedStatement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
+
+        return $preparedStatement->execute();
     }
 
-    public function remove(Student $student): bool {
-        return true;
+    public function remove(Student $student): bool
+    {
+        $sqlInsert = "DELETE FROM students WHERE id = ?";
+
+        $preparedStatement = $this->connection->prepare($sqlInsert);
+        $preparedStatement->bindValue(1, $student->id());
+        return $preparedStatement->execute();
     }
 }
