@@ -37,7 +37,22 @@ class PdoStudentRepository implements StudentRepository
 
     public function studentsBirhAt(\DateTimeImmutable $birthDate): array
     {
-        return [];
+        // PRIMEIRO JEITO DE FAZER ISSO
+        // $preparedStatement = $this->connection->prepare('SELECT * FROM students WHERE birth_date = ?'); 
+        // $preparedStatement->bindValue(1, $birthDate->format('Y-m-d'));
+        // $preparedStatement->execute();
+        // após os passos acima, recuperar os dados do banco com fetchAll ou fetch + while e converte-los para objetos do tipo Student para ai sim retornar o array completo
+
+        // SEGUNDO JEITO DE FAZER ISSO
+        $studentsList = $this->allStudents();
+        $studentsBirthAt = [];
+        foreach ($studentsList as $student) {
+            if ($student->birthDate = $birthDate) {
+                $studentsBirthAt[] = $student;
+            }
+        }
+
+        return $studentsBirthAt;
     }
 
     public function save(Student $student): bool
