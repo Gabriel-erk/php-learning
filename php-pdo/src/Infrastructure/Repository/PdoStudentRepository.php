@@ -57,21 +57,45 @@ class PdoStudentRepository implements StudentRepository
 
     public function save(Student $student): bool
     {
-        $sqlInsert = "INSERT INTO students (name, birth_date) VALUES (:name,:birth_date)";
+        // verifica se o aluno já 'existe' (nesse caso aqui, faldno do banco de dados, um aluno que esse sistema considera existente, é um aluno presente no banco de dados, pois não é possível, devido as nossas regras de neǵocio (onde definimos na criação da nossa tabela students, que o campo ID de cada aluno, é uma chave primária (ou seja, não pode ser nulla) e possui o atributo de auto incremento, então próximo registro que entrar na tabela, vai ter o campo ID, como um número inteiro maior que o registro que entrou antes dele) ter registro naquela tabela, com id vazio, logo, aqui verificamos se o ID do estudante passado como parâmetro para este método aqui (save) tem o id EXATAMENTE igual a null, pois se tiver, ele não estive na tabela students, logo, devemos inseri-lo (e, consequentemente, ele terá seu id definido dentreo deste método)
+        if ($student->id() === null) {
+            return $this->insert($student);
+        }
 
-        $preparedStatement = $this->connection->prepare($sqlInsert);
-        $preparedStatement->bindValue(':name', $student->name());
-        $preparedStatement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
+        // caso o id do objeto do tipo student passado para este método aqui (save()) não for nullo, iremos disparar o método update e atualizar as informações do objeto do tipo student E no banco de dados (menos o ID, obviamente, que é o identificador daquela entidade)
+        return $this->update($student);
+    }
 
-        return $preparedStatement->execute();
+    private function insert(Student $student): bool
+    {
+        // mesma coisa de: $sqlInsert
+        $insertQuery = "INSERT INTO students (name, birth_date) VALUES (:name,:birth_date)";
+        // mesma coisa de: $preparedStatement
+        $stmt = $this->connection->prepare($insertQuery);
+
+        // ao invés de chamarmos o método bindValue() ou bindParam() como vinhamos fazendo antes, dentro do método execute abaixo, podemos passar de parâmetro para ele um array associativo, onde cada indice (como abaixo: ':name') representa o parâmetro NOMEADO da string/instrução SQL que nosso objeto do tipo PDOStatement tem preparada dentro de si, graças ao método prepare da linha acima e depois de => é o valor daquele parâmetro nomeado, talvez a regra mude CASO a forma de representar um parâmetro que usarmos na string SQL for ? ao invés de :nomeDoSeuParâmetroAqui, porém, usando parâmetros NOMEADOS, é dessa forma que expliquei
+        $success = $stmt->execute([
+            ':name' => $student->name(),
+            ':birth_date' => $student->birthDate()->format('Y-m-d')
+        ]);
+
+        $student->defineId($this->connection->lastInsertId());
+
+        return $success;
+    }
+
+    private function update(Student $student): bool
+    {
+        return true;
     }
 
     public function remove(Student $student): bool
     {
         $sqlInsert = "DELETE FROM students WHERE id = ?";
 
+        // como boas práticas, a váriavel abaixo pode ser chamada de "$stmt" == $statement ao invés de preparedStatement, como eu fiz
         $preparedStatement = $this->connection->prepare($sqlInsert);
-        $preparedStatement->bindValue(1, $student->id());
+        $preparedStatement->bindValue(1, $student->id(), PDO::PARAM_INT);
         return $preparedStatement->execute();
     }
 }

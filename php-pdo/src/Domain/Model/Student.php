@@ -17,6 +17,17 @@ class Student
         $this->birthDate = $birthDate;
     }
 
+    // como a propriedade ID pode ser null (se observamos sua definição em nosso construtor), foi adicionado este método que nos permite definir um ID para o nosso objeto do tipo aluno (apenas uma vez)
+    // onde, como regra de negócio do método, quando chamado, verifica se o valor do campo ID do objeto student que chamou este método retornará false, se retornar false para o método !is_null, entrará no if (por causa do !) e jogará uma exeção dizendo que aquele objeto do tipo student já possui um ID definido, caso contrário, passará o valor recebido como parâmetro na assinatura do método abaixo para a propriedade Id do objeto do tipo Student que chamou o método defineID
+    public function defineId(int $id): void
+    {
+        if (!is_null($this->id)) {
+            throw new \DomainException('Você só pode definir o ID uma vez');
+        }
+
+        $this->id = $id;
+    }
+
     // getter da propriedad ID
     public function id(): ?int
     {
@@ -27,6 +38,11 @@ class Student
     public function name(): string
     {
         return $this->name;
+    }
+
+    public function changeName(string $newName): void
+    {
+        $this->name = $newName;
     }
 
     // getter da propriedade BirthDate
