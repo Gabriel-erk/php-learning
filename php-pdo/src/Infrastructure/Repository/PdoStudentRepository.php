@@ -19,10 +19,34 @@ class PdoStudentRepository implements StudentRepository
     }
     public function allStudents(): array
     {
-        $preparedStatement = $this->connection->prepare('SELECT * FROM students');
-        $preparedStatement->execute();
+        // $stmt == $preparedStatement
+        // $stmt = $this->connection->prepare('SELECT * FROM students');
+        // $stmt->execute();
+        $sqlQuery = 'SELECT * FROM students';
+        // não é necessesário fazer um preparedStatement/preparar a query aqui pois não temos nenhum parâmetro, logo, se não temos parâmetro, não tem como haver um SQL injection, pois o usuário não consegue inserir absolutamente nada via terminal, logo, não é possível que nenhum SQL malicioso seja inserido no nosso sistema (já que ele não permite ninguém inserir nada)
+        $stmt = $this->connection->query($sqlQuery);
 
-        $studentDataList = $preparedStatement->fetchAll(PDO::FETCH_ASSOC);
+        return $this->hydrateStudentList($stmt);
+    }
+
+    public function studentsBirhAt(\DateTimeImmutable $birthDate): array
+    {
+        $sqlQuery = 'SELECT * FROM students WHERE birth_date = ?';
+        $stmt = $this->connection->prepare($sqlQuery);
+        $stmt->bindValue(1, $birthDate->format('Y-m-d'));
+        $stmt->execute();
+
+        return $this->hydrateStudentList($stmt);
+    }
+
+    // traduzindo nome do método: hidratar lista de estudantes, objetivo desta prática: trazer os dados de uma camada (no nosso exemplo, do banco de dados) para outra (também no nosso exemplo: para o mundo dos objetos ou melhor: POO, para nossas classes e etc) esse é o conceito de HIDRATAR, trazer dados de uma camada para a outra
+    // no método abaixo estamos trazendo todas as informações obtidas na EXECUÇÃO da query SQL dentro do nosso objeto $stmt (do tipo PDOStatement) em forma de array associativo, percorrendo essa lista com um foreach, instanciando objetos do tipo student com as informações que tiramos do banco, passando isso para uma lista de estudantes e, por fim, devolvendo essa lista com objetos do tipo Student (onde cada um tem as informações de uma única linha do banco de dados da nossa tabela students)
+    // parâmetro: objeto do tipo PDOStatement JÁ executado
+    private function hydrateStudentList(\PDOStatement $stmt): array
+    {
+        // $stmt == objeto do tipo PDOStatement, podendo ele ser um preparedStatement, ou apenas um PDOStatement gerado a partir do método query de um objeto do tipo PDO e etc
+        // observação: só podemos usar o método fetchAll/fetch de um preparedStatement se ele JÁ foi executado, caso contrário não funcionará, caso cheguemos a receber de parâmetro deste método um objeto PDOStatement/preparedStatement e ele NÃO foi executado, dará erro, PORÉM, caso não seja um preparedStatement, apenas o retorno de uma linha como: $stmt = $this->connection->query($sqlQuery), dará certo, pois o retorno do método query é um objeto do tipo PDOStatement JÁ executado
+        $studentDataList = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $studentList = [];
 
         foreach ($studentDataList as $studentData) {
@@ -33,26 +57,6 @@ class PdoStudentRepository implements StudentRepository
             );
         }
         return $studentList;
-    }
-
-    public function studentsBirhAt(\DateTimeImmutable $birthDate): array
-    {
-        // PRIMEIRO JEITO DE FAZER ISSO
-        // $preparedStatement = $this->connection->prepare('SELECT * FROM students WHERE birth_date = ?'); 
-        // $preparedStatement->bindValue(1, $birthDate->format('Y-m-d'));
-        // $preparedStatement->execute();
-        // após os passos acima, recuperar os dados do banco com fetchAll ou fetch + while e converte-los para objetos do tipo Student para ai sim retornar o array completo
-
-        // SEGUNDO JEITO DE FAZER ISSO
-        $studentsList = $this->allStudents();
-        $studentsBirthAt = [];
-        foreach ($studentsList as $student) {
-            if ($student->birthDate = $birthDate) {
-                $studentsBirthAt[] = $student;
-            }
-        }
-
-        return $studentsBirthAt;
     }
 
     public function save(Student $student): bool
@@ -79,14 +83,30 @@ class PdoStudentRepository implements StudentRepository
             ':birth_date' => $student->birthDate()->format('Y-m-d')
         ]);
 
-        $student->defineId($this->connection->lastInsertId());
+        // forma que seria feito, caso na instrução SQL não tivesse parâmetros nomeados (no caso, seria ? no lugar dos parâmetros nomeados da instrução SQL que temos agora como :name e :birth_date), passariamos apenas um array númerico normal (sem chaves nomeadas de array associativo como :name, :birth_date etc)
+        // $success = $stmt->execute([
+        //     $student->name(),
+        //     $student->birthDate()->format('Y-m-d')
+        // ]);
+
+        if ($success) {
+            // se o valor da váriavel $success for igual a true, entra neste método aqui e dispara o método defineId do objeto do tipo Student que este método possui acesso (pois recebeu como parâmetro na chamada do mesmo) e como valor, passamos o ID definido pelo banco sqlite quando fizemos o insert deste estudante nas linhas acima com o $stmt->execute()
+            // como sabemos que o último estudante a ser inserido na tabela students foi oq nós ACABAMOS de inserir, chamamos o método da nossa propriedade $connection (do tipo PDO) que possui um método chamado lastInsertId() que nos retorna exatamente o ID do último estudante inserido no banco (o que acabamos de inserir, com as informações do estudante que este método que estamos agora, recebeu de parâmetro, e com a definição automática do banco, trazemos aquele valor para cá)
+            $student->defineId($this->connection->lastInsertId());
+        }
 
         return $success;
     }
 
     private function update(Student $student): bool
     {
-        return true;
+        $updateQuery = 'UPDATE students SET name = :name, birth_date = :birth_date WHERE id = :id;';
+        $stmt = $this->connection->prepare($updateQuery);
+        $stmt->bindValue(':name', $student->name(), PDO::PARAM_STR);
+        $stmt->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'), PDO::PARAM_STR);
+        $stmt->bindValue(':id', $student->id(), PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 
     public function remove(Student $student): bool
