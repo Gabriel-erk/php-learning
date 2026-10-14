@@ -4,18 +4,21 @@ namespace Alura\Pdo\Infrastructure\Repository;
 
 use Alura\Pdo\Domain\Repository\StudentRepository;
 use Alura\Pdo\Domain\Model\Student;
-use Alura\Pdo\Infrastructure\Persistence\ConnectionCreator;
 use PDO;
 
 // isso é uma implementação de repositório (o repositório que estamos implementando é o StudentRepository, onde aqui, sim, iremos explicitar os detalhes mais necessários para quem está envolvido diretamente nas partes 'detalhadas' importantes para quem esta participando do desenvolvimento, por isso, também, viemos para esta pasta aqui dentro de infraestrutura, como também é um repositório, também foi criada a subpasta Repository aqui, detalharemos neste arquivo coisas como a conexão com o banco, que, não é necessária/importante estar presente em definicṍes de regras de negócio, lá é APENAS as regras de negócio, nada extraordinariamente implementado por lá)
+// esta classe possui uma DEPENDÊNCIA com o PDO (ela PRECISA dele para funcionar, tanto que está no nome da classe KKKK 'PDOStudentRepository'), esta classe é dependente do PDO, ela precisa de uma instância do PDO para funcionar (assim como uma classe de repositório que implementa a interface 'StudentRepository' também, como por exemplo: ApiStudentRepository, que é DEPENDENTE de uma API para funcionar)
 class PdoStudentRepository implements StudentRepository
 {
     // propriedade privada do tipo PDO chamada connection, ela será responsavel por nossa conexão com nosso banco de dados sqlite (é um objeto do tipo PDO)
     private PDO $connection;
-    public function __construct()
+    // recebendo por parâmetro uma conexão com QUALQUER banco de dados (seja sqlite, mysql...) e atribuindo ela como valor para nossa propriedade privada do tipo PDO chamada de $connection também, assim permitindo que, em cenários de teste e outras possíveis expansões futuras do projeto, fiquemos presos a apenas UM único banco como estavamos antes, agora o projeto fica mais flexível
+    // recebendo essa conexão de qualquer tipo de banco de dados, deixamos as coisas mais flexíveis e não precisamos alterar a classe em nada, independente da conexão que tivermos aqui (sqlite, mysql) tudo continuará funcionando normalmente
+    // esta classe em que estamos possui uma DEPENDÊNCIA com o PDO, ela precisa de uma instância do PDO para funcionar e, abaixo, ao invés de CRIARMOS esta dependência dentro da minha classe, estamos pedindo para que alguém nos passe essa dependência através da linha abaixo, onde recebemos por PARÂMETRO do nosso construtor um objeto do tipo PDO (que é oq dependemos para funcionar, estamos recebendo nossa dependência de fora, não a estamos criando aqui) para DEPOIS atribuirmos para nossa propriedade privada $connection do tipo PDO para manipularmos ao nosso bel-prazer, o nome desse conceito de, receber algo que sua classe DEPENDE para funcionar é chamado de: 'Injeção de dependência' (conceito simples que nos abre muitas portas e nos permite ter um código muito mais flexível)
+    public function __construct(PDO $connection)
     {
         // inicializando nossa propriedade com o modificador de acesso como private com o retorno do método estatico da classe ConnectionCreator == objeto do tipo PDO, que recebe como parâmetro, em sua instância, informações necessárias para se conectar com algum banco de dados(sendo o primeiro parâmetro, o driver e outras informações necessárias para acessar o SEU banco daquele driver, onde, no nosso caso, é apenas a localização daquele arquivo)
-        $this->connection = ConnectionCreator::createConnection();
+        $this->connection = $connection;
     }
     public function allStudents(): array
     {
