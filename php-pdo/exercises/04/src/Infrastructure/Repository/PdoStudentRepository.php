@@ -2,7 +2,9 @@
 
 namespace Pratica04Pdo\Src\Infrastructure\Repository;
 
+use Pratica04Pdo\Src\Domain\Model\Student;
 use Pratica04Pdo\Src\Domain\Repository\StudentRepository;
+use Pratica04Pdo\Src\Infrastructure\Persistence\StudentCreator;
 use PDO;
 
 class PdoStudentRepository implements StudentRepository
@@ -11,5 +13,77 @@ class PdoStudentRepository implements StudentRepository
     public function __construct(PDO $connection)
     {
         $this->connection = $connection;
+    }
+
+    private function hydrateStudentList(\PDOStatement $stmt): array
+    {
+        $studentDataList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $studentList = [];
+
+        foreach ($studentDataList as $studentData) {
+            $studentList[] = StudentCreator::CreateStudent($studentData);
+        }
+        return $studentList;
+    }
+
+    public function allStudents(): array
+    {
+        $selectQuery = 'SELECT * FROM students';
+        $stmt = $this->connection->query($selectQuery);
+
+        return $this->hydrateStudentList($stmt);
+    }
+
+    public function studentsBirthAt(\DateTimeImmutable $birthDate): array
+    {
+        $query = 'SELECT * FROM students WHERE birth_date = ?';
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute([
+            $birthDate->format('Y-m-d')
+        ]);
+        return $this->hydrateStudentList($stmt);
+    }
+
+    public function save(Student $student): bool
+    {
+
+        if ($this->insert($student)) {
+            if ($student->id() == null) {
+                $student->defineId($this->connection->lastInsertId());
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private function insert(Student $student): bool
+    {
+        $insertQuery = 'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date)';
+        $stmt = $this->connection->prepare($insertQuery);
+        $stmt->bindValue(':name', $student->name());
+        $stmt->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
+
+        return $stmt->execute();
+    }
+
+    public function findById(int $id): Student|null
+    {
+        $selectQuery = 'SELECT * FROM students WHERE id = ?';
+        $stmt = $this->connection->prepare($selectQuery);
+
+        if ($stmt->execute([$id])) {
+            $studentData = $stmt->fetch(PDO::FETCH_ASSOC);
+            return StudentCreator::CreateStudent($studentData);
+        }
+
+        return null;
+    }
+
+    public function remove(Student $student): bool
+    {
+        $removeQuery = 'DELETE FROM students WHERE id = ?';
+        $stmt = $this->connection->prepare($removeQuery);
+        return $stmt->execute([$student->id()]);
     }
 }
