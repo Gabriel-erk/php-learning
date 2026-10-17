@@ -1,4 +1,5 @@
 <?php
+
 namespace Pratica04Pdo\Src\Domain\Model;
 
 class Student
@@ -27,5 +28,12 @@ class Student
     public function birthDate(): \DateTimeImmutable
     {
         return $this->birthDate;
+    }
+
+    public function age(): int
+    {
+        return $this->birthDate
+            ->diff(new \DateTimeImmutable())
+            ->y;
     }
 }

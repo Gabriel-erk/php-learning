@@ -2,6 +2,8 @@
 
 namespace Pratica04Pdo\Src\Infrastructure\Repository;
 
+require_once 'src/Infrastructure/Persistence/StudentCreator.php';
+
 use Pratica04Pdo\Src\Domain\Model\Student;
 use Pratica04Pdo\Src\Domain\Repository\StudentRepository;
 use Pratica04Pdo\Src\Infrastructure\Persistence\StudentCreator;
@@ -46,9 +48,8 @@ class PdoStudentRepository implements StudentRepository
 
     public function save(Student $student): bool
     {
-
         if ($this->insert($student)) {
-            if ($student->id() == null) {
+            if ($student->id() === null) {
                 $student->defineId($this->connection->lastInsertId());
             }
             return true;
@@ -78,6 +79,17 @@ class PdoStudentRepository implements StudentRepository
         }
 
         return null;
+    }
+
+    public function showStudent(Student $student): void
+    {
+        echo "Id: {$student->id()}" . PHP_EOL;
+        echo "Name: {$student->name()}" . PHP_EOL;
+        echo "Birth Date: {$student->birthDate()->format('Y-m-d')}" . PHP_EOL;
+        echo "Age: {$student->age()}" . PHP_EOL;
+        echo "Majority: " . ($student->age() >= 18 ? 'Of legal age' : 'Minor') . PHP_EOL;
+
+        echo PHP_EOL;
     }
 
     public function remove(Student $student): bool
