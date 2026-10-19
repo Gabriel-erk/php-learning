@@ -55,7 +55,7 @@ class PdoStudentRepository implements StudentRepository
             return true;
         }
 
-        return false;
+        return $this->update($student);
     }
 
     private function insert(Student $student): bool
@@ -90,6 +90,24 @@ class PdoStudentRepository implements StudentRepository
         echo "Majority: " . ($student->age() >= 18 ? 'Of legal age' : 'Minor') . PHP_EOL;
 
         echo PHP_EOL;
+    }
+
+    public function studentList(array $students ): void
+    {
+        foreach ($students as $student) {
+            $this->showStudent($student);
+        }
+    }
+
+    private function update(Student $student): bool
+    {
+        $updateSql = 'UPDATE students SET name = :name, birth_date = :birth_date WHERE id = :id';
+        $stmt = $this->connection->prepare($updateSql);
+        return $stmt->execute([
+            ':name' => $student->name(),
+            ':birth_date' => $student->birthDate()->format('Y-m-d'),
+            ':id' => $student->id()
+        ]);
     }
 
     public function remove(Student $student): bool

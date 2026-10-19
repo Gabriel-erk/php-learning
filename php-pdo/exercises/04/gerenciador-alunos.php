@@ -18,7 +18,7 @@ echo "=== CADASTRANDO ALUNOS ===" . PHP_EOL;
 for ($i = 0; $i < 10; $i++) {
     $student = new Student(
         null,
-        "Student $i",
+        "Student " . $i + 1,
         new \DateTimeImmutable('1999-10-15')
     );
     if ($pdoStudentRepository->save($student)) {
@@ -27,13 +27,26 @@ for ($i = 0; $i < 10; $i++) {
 }
 
 echo PHP_EOL . "=== LISTAGEM DE ALUNOS ===" . PHP_EOL;
+
 $students = $pdoStudentRepository->allStudents();
-foreach ($students as $student) {
-    $pdoStudentRepository->showStudent($student);
-}
+$pdoStudentRepository->studentList($students);
 
 echo PHP_EOL . "=== LISTAGEM DE ALUNOS POR DATA DE NASCIMENTO ===" . PHP_EOL;
 $studentsBirthAt = $pdoStudentRepository->studentsBirthAt(new \DateTimeImmutable('1999-10-15'));
-foreach ($studentsBirthAt as $studentBirthAt) {
-    $pdoStudentRepository->showStudent($studentBirthAt);
+$pdoStudentRepository->studentList($studentsBirthAt);
+
+echo PHP_EOL . "=== ATUALIZAÇÃO DE ALUNO ===" . PHP_EOL;
+$studentToChange = $pdoStudentRepository->findById(1);
+$studentToChange->changeName('Robert');
+$pdoStudentRepository->save($studentToChange);
+$pdoStudentRepository->studentList($students);
+
+echo PHP_EOL . "=== REMOVENDO UM ALUNO ===" . PHP_EOL;
+$studentToRemove = $pdoStudentRepository->findById(2);
+if ($studentToRemove != null && $pdoStudentRepository->remove($studentToRemove) == true) {
+    echo "Aluno removido com sucesso." . PHP_EOL;
+} else {
+    echo "Não foi possível remover o aluno." . PHP_EOL;
 }
+$students = $pdoStudentRepository->allStudents();
+$pdoStudentRepository->studentList($students);

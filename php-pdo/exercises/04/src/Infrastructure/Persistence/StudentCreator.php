@@ -2,6 +2,7 @@
 
 namespace Pratica04Pdo\Src\Infrastructure\Persistence;
 
+use PDOStatement;
 use Pratica04Pdo\Src\Domain\Model\Student;
 
 trait StudentCreator

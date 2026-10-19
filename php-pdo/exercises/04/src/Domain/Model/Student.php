@@ -25,6 +25,11 @@ class Student
         return $this->name;
     }
 
+    public function changeName(string $name): void
+    {
+        $this->name = $name;
+    }
+
     public function birthDate(): \DateTimeImmutable
     {
         return $this->birthDate;
