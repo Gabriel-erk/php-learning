@@ -15,7 +15,7 @@ $pdoStudentRepository = new PdoStudentRepository($pdoConnection);
 
 echo "=== CADASTRANDO ALUNOS ===" . PHP_EOL;
 
-for ($i = 0; $i < 10; $i++) {
+for ($i = 1; $i < 10; $i++) {
     $student = new Student(
         null,
         "Student " . $i + 1,
@@ -43,10 +43,31 @@ $pdoStudentRepository->studentList($students);
 
 echo PHP_EOL . "=== REMOVENDO UM ALUNO ===" . PHP_EOL;
 $studentToRemove = $pdoStudentRepository->findById(2);
-if ($studentToRemove != null && $pdoStudentRepository->remove($studentToRemove) == true) {
+if ($studentToRemove != null && $pdoStudentRepository->remove($studentToRemove)) {
     echo "Aluno removido com sucesso." . PHP_EOL;
 } else {
     echo "Não foi possível remover o aluno." . PHP_EOL;
 }
 $students = $pdoStudentRepository->allStudents();
 $pdoStudentRepository->studentList($students);
+
+echo PHP_EOL . "=== RELATÓRIO DE ALUNOS ===" . PHP_EOL;
+$studentList = $pdoStudentRepository->allStudents();
+$studentCount = 0;
+$ofLegalAgeStudenCount = 0;
+$minorStudentCount = 0;
+foreach ($studentList as $student) {
+    $pdoStudentRepository->showStudent($student);
+    if ($student->age() >= 18) {
+        $ofLegalAgeStudenCount++;
+    } else {
+        $minorStudentCount++;
+    }
+    $studentCount++;
+}
+
+echo PHP_EOL . "=== RESUMO ===" . PHP_EOL;
+
+echo "Total de alunos: $studentCount" . PHP_EOL;
+echo "Maiores de idade: $ofLegalAgeStudenCount" . PHP_EOL;
+echo "Menores de idade: $minorStudentCount" . PHP_EOL;

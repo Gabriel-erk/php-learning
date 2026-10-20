@@ -75,6 +75,9 @@ class PdoStudentRepository implements StudentRepository
 
         if ($stmt->execute([$id])) {
             $studentData = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($studentData == false) {
+                return null;
+            }
             return StudentCreator::CreateStudent($studentData);
         }
 
