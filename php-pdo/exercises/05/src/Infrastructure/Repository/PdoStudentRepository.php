@@ -17,7 +17,7 @@ class PdoStudentRepository implements StudentRepository
         $this->pdoConnection = $pdoConnection;
     }
 
-    private function hydrateStudents(PDOStatement $stmt): array
+    private function hydrateStudents(PDOStatement $stmt): ?array
     {
         $studentsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $students = [];
@@ -51,7 +51,7 @@ class PdoStudentRepository implements StudentRepository
         return null;
     }
 
-    public function studentsBirthAt(\DateTimeImmutable $birthDate): array
+    public function studentsBirthAt(\DateTimeImmutable $birthDate): ?array
     {
         $sql = 'SELECT * FROM students WHERE birth_date = ?';
         $stmt = $this->pdoConnection->prepare($sql);

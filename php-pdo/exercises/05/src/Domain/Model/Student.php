@@ -10,7 +10,7 @@ class Student
     {
         if (is_null($this->id)) {
             $this->id = $id;
-            return true;            
+            return true;
         }
         return false;
     }
@@ -38,5 +38,12 @@ class Student
     public function changeBirthDate(\DateTimeImmutable $birthDate): void
     {
         $this->birthDate = $birthDate;
+    }
+
+    public function age(): int
+    {
+        return $this->birthDate
+            ->diff(new \DateTimeImmutable())
+            ->y;
     }
 }

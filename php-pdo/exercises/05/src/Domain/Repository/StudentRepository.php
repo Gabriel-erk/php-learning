@@ -8,7 +8,7 @@ interface StudentRepository
 {
     public function allStudents(): array;
     public function findById(int $id): ?Student;
-    public function studentsBirthAt(\DateTimeImmutable $birthDate): array;
+    public function studentsBirthAt(\DateTimeImmutable $birthDate): ?array;
     public function save(Student $student): bool;
     public function delete(Student $student): bool;
 }

@@ -3,6 +3,7 @@
 namespace Pratica05Pdo\Infrastructure\Persistence;
 
 use Pratica05Pdo\Domain\Model\Student;
+use DateTimeImmutable;
 
 trait StudentCreator
 {
@@ -11,7 +12,7 @@ trait StudentCreator
         return new Student(
             $studentData['id'],
             $studentData['name'],
-            $studentData['birth_date']
+            new DateTimeImmutable($studentData['birth_date'])
         );
     }
 }
