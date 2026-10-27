@@ -77,21 +77,26 @@ $studentsCounter = count($students);
 $ofLegalAgeStudentsCount = 0;
 $minorStudentsCount = 0;
 $studentsWithAgeMoreThanTwentyFive = 0;
-$studentsAverage = 0;
+$studentsAgeAverage = 0;
 foreach ($students as $student) {
     echo "ID: {$student->id()} | {$student->name()} | {$student->age()} | " . ($student->age() >= 18 ? "Maior de idade" : "Menor de idade") . PHP_EOL;
     // finalizar atribuição disso com if ternário
-    $ofLegalAgeStudentsCount;
-    $minorStudentsCount;
-    $studentsWithAgeMoreThanTwentyFive;
+    $ofLegalAgeStudentsCount += $student->age() >= 18 ? 1 : 0;
+    $minorStudentsCount += $student->age() < 18 ? 1 : 0;
+    $studentsWithAgeMoreThanTwentyFive += $student->age() >= 25 ? 1 : 0;
+    $studentsAgeAverage += $student->age();
+}
+if ($studentsCounter > 0) {
+    $studentsAgeAverage = $studentsAgeAverage / $studentsCounter;
+} else {
+    $studentsAgeAverage = -1;
 }
 separator();
 
 echo '=============== ESTATÍSTICAS ===============';
 double_separator();
 echo "Total de alunos: $studentsCounter" . PHP_EOL;
-echo "Maiores de idade: $studentsCounter" . PHP_EOL;
-echo "Menores de idade: $studentsCounter" . PHP_EOL;
-echo "Idade média: $studentsCounter" . PHP_EOL;
-echo "Alunos com 25 anos ou mais: $studentsCounter" . PHP_EOL;
-
+echo "Maiores de idade: $ofLegalAgeStudentsCount" . PHP_EOL;
+echo "Menores de idade: $minorStudentsCount" . PHP_EOL;
+echo "Idade média: $studentsAgeAverage" . PHP_EOL;
+echo "Alunos com 25 anos ou mais: $studentsWithAgeMoreThanTwentyFive" . PHP_EOL;

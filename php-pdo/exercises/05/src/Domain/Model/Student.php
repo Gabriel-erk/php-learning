@@ -1,18 +1,19 @@
 <?php
 
 namespace Pratica05Pdo\Domain\Model;
+use DomainException;
 
 class Student
 {
     public function __construct(private ?int $id, private string $name, private \DateTimeImmutable $birthDate) {}
 
-    public function defineId(int $id): bool
+    public function defineId(int $id): bool|DomainException
     {
         if (is_null($this->id)) {
             $this->id = $id;
             return true;
         }
-        return false;
+        throw new DomainException('Objeto já possui id definido.');
     }
 
     public function id(): ?int
