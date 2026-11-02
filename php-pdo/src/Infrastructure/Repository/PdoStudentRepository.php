@@ -79,7 +79,9 @@ class PdoStudentRepository implements StudentRepository
         $insertQuery = "INSERT INTO students (name, birth_date) VALUES (:name,:birth_date)";
         // mesma coisa de: $preparedStatement
         $stmt = $this->connection->prepare($insertQuery);
-
+        if ($stmt === false) {
+            throw new \RuntimeException('Erro na query do banco');
+        }
         // ao invés de chamarmos o método bindValue() ou bindParam() como vinhamos fazendo antes, dentro do método execute abaixo, podemos passar de parâmetro para ele um array associativo, onde cada indice (como abaixo: ':name') representa o parâmetro NOMEADO da string/instrução SQL que nosso objeto do tipo PDOStatement tem preparada dentro de si, graças ao método prepare da linha acima e depois de => é o valor daquele parâmetro nomeado, talvez a regra mude CASO a forma de representar um parâmetro que usarmos na string SQL for ? ao invés de :nomeDoSeuParâmetroAqui, porém, usando parâmetros NOMEADOS, é dessa forma que expliquei
         $success = $stmt->execute([
             ':name' => $student->name(),
