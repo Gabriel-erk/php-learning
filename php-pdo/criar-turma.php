@@ -29,5 +29,8 @@ $anotherStudent = new Student(
     new DateTimeImmutable('1986-06-02')
 );
 $pdoStudentRepository->save($anotherStudent);
-
+// para dizer que finalizei TODAS as intruções da minha transação e quero mandar para o banco de dados de verdade (caso todas as instruções sejam executadas corretamente)
+// assim como o commit do git, onde SALVAMOS as nossas alterações em determinado repositório, aqui nos SALVAMOS nossas alterações no banco de dados
+// no momento que chegar nesta linha aqui ($connection->commit()) que nossas alterações (as linhas acima onde INTERAGIMOS com o banco de dados, ou seja, as linhas que tentamos salvar um aluno no banco) serão executadas
+// caso eu pare a execução do programa antes dele ler esta linha ou se eu não colocar esta linha declarando o commit, nossa transação NÃO será executada e os alunos acima que tentamos colocar no banco, não serão inseridos (pelo simples fato de termos começado uma transação e não termos mandado executar isso, caso NÃO tivessemos iniciado a transação e tentassemos salvar no banco de dados, provavelmente teriamos uma resposta se daria certo ou não, porém como INICIAMOS a transação, PRECISAMOS desta linha de comando que MANDA executar nosso código)
 $connection->commit();
