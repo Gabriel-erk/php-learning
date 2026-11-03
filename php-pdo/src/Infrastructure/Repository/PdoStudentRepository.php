@@ -80,7 +80,8 @@ class PdoStudentRepository implements StudentRepository
         // mesma coisa de: $preparedStatement
         $stmt = $this->connection->prepare($insertQuery);
         if ($stmt === false) {
-            throw new \RuntimeException('Erro na query do banco');
+            // método de um objeto do tipo PDO chamado errorInfo que nos retorna um array com posiçoes 0, 1 e 2 com informações sobre o ÚLTIMO erro que aconteceu no banco de dados (que nosso objeto abaico $connection possui vínculo direto), o índice 2 que estamos usando abaixo possui uma mensagem especificando o erro que aconteceu (baseado no driver que estamos conectados, no nosso caso sqlite, mas o driver do MySQL, PostgreeSQL poderiam possuir a mesma mensagem, porém em formatos diferentes) e estamos passando essa mensagem em específico para o CONSTRUTOR da nossa exceção 
+            throw new \RuntimeException($this->connection->errorInfo()[2]);
         }
         // ao invés de chamarmos o método bindValue() ou bindParam() como vinhamos fazendo antes, dentro do método execute abaixo, podemos passar de parâmetro para ele um array associativo, onde cada indice (como abaixo: ':name') representa o parâmetro NOMEADO da string/instrução SQL que nosso objeto do tipo PDOStatement tem preparada dentro de si, graças ao método prepare da linha acima e depois de => é o valor daquele parâmetro nomeado, talvez a regra mude CASO a forma de representar um parâmetro que usarmos na string SQL for ? ao invés de :nomeDoSeuParâmetroAqui, porém, usando parâmetros NOMEADOS, é dessa forma que expliquei
         $success = $stmt->execute([
