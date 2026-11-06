@@ -3,7 +3,7 @@
 // arquivo com único intuito de realizar uma conexão com o banco de dados em sqlite
 
 // nos conectando ao nosso arquivo de banco de dados (criado por nós e deixado de forma vazia, sem nada escrito nele de forma manual)
-// criando nova instância de um PDO, classe que usamos para fazer conexão com o banco de dados
+// criando instância de um PDO, classe que usamos para fazer conexão com o banco de dados
 // a instância permite 3 parâmetros, onde o primeiro é a string de conexão, que informa qual banco de dados estamos usando, através de seu driver (aqui, o sqlite)
 // logo após os : como estamos no sqlite, apenas informamos o caminho do nosso banco (que está em um arquivo, logo, passaremos o caminho do arquivo), mas caso fosse um mysql, informarios o número da porta, host...informações necessárias para conectarmos nossa aplicação com o banco
 // PDO == PHP DATA OBJECTS (objetos de dado, em php), uma interface que permite acessar bancos de dados em php, cada sgbd (mysql, postgree, sqlite...) oferece uma forma específica de acessar aqueles bancos de dados, para isso, o pdo permite que usemos drives para conversarmos com cada sgbd
@@ -14,7 +14,7 @@ $absoluteDatabasePath = __DIR__ . '/banco.sqlite';
 $pdo = new PDO('sqlite:' . $absoluteDatabasePath);
 echo 'Conectei';
 
-// exec == executa um comando sql, aqui estamos criando nossa tabela students com suas propriedades e tipos (chave primária, inteiro, texto....), não fizemos o campo birth_date como o tipo 'date' pois o sqlite é simples e não possui esses tipos mais complexos (ele funciona como um 0 e 1, ou é texto, ou número)
+// exec == executa um comando sql, aqui estamos criando nossa tabela students com as suas propriedades e tipos (chave primária, inteiro, texto....), não fizemos o campo birth_date como o tipo 'date' pois o sqlite é simples e não possui esses tipos mais complexos (ele funciona como um 0 e 1, ou é texto, ou número)
 $pdo->exec('CREATE TABLE students (id INTEGER PRIMARY KEY, name TEXT, birth_date TEXT)');
 // echo 'tabela criada';
 // $pdo->exec('DROP TABLE students');

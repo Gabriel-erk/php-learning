@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PHPUnit">
+    <option name="directories">
+      <list>
+        <option value="$PROJECT_DIR$/laravel-basics/laravel-playground/pratica02-formularios-sessoes-relacionamentos/pratica/tests" />
+        <option value="$PROJECT_DIR$/laravel-basics/formularios-sessoes-relacionamentos/controle-series/tests" />
+        <option value="$PROJECT_DIR$/laravel-basics/criando-aplicacao-mvc/exercios-criando-aplicacao-mvc/crud-series/tests" />
+        <option value="$PROJECT_DIR$/laravel-basics/criando-aplicacao-mvc/controle-series/tests" />
+        <option value="$PROJECT_DIR$/laravel-basics/laravel-playground/pratica01-formularios-sessoes-relacionamentos/pratica/tests" />
+      </list>
+    </option>
+  </component>
+</project>
