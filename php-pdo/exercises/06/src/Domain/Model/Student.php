@@ -1,12 +1,13 @@
 <?php
 
 namespace Pratica06Pdo\Domain\Model;
+use Exception;
 
 class Student
 {
-    private int $id;
-
-    public function __construct(private string $name, private \DateTimeImmutable $birthDate){}
+    public function __construct(private ?int $id, private string $name, private \DateTimeImmutable $birthDate)
+    {
+    }
 
     /**
      * @return string
@@ -35,11 +36,13 @@ class Student
     /**
      * @param int $id
      */
-    public function setId(int $id): void
+    public function setId(int $id): bool
     {
         if (is_null($this->getId())) {
             $this->id = $id;
+            return true;
         }
+        throw new Exception('Estudante já possui ID definido.');
     }
 
     /**
