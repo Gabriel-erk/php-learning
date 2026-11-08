@@ -37,6 +37,8 @@
       <excludeFolder url="file://$MODULE_DIR$/composer/php-composer-dependencias-autoload-e-publicacao/buscador-cursos-alura/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/composer/php-composer-dependencias-autoload-e-publicacao/buscador-cursos-alura/vendor/symfony/polyfill-mbstring" />
       <excludeFolder url="file://$MODULE_DIR$/php-pdo/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel-basics/criando-aplicacao-mvc/controle-series/storage/app" />
+      <excludeFolder url="file://$MODULE_DIR$/laravel-basics/criando-aplicacao-mvc/controle-series/storage/framework" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
