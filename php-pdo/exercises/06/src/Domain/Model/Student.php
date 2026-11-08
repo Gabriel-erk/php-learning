@@ -6,9 +6,7 @@ class Student
 {
     private int $id;
 
-    public function __construct(private string $name, private \DateTimeImmutable $birthDate)
-    {
-    }
+    public function __construct(private string $name, private \DateTimeImmutable $birthDate){}
 
     /**
      * @return string
