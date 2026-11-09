@@ -8,6 +8,6 @@ class ConnectionCreator
 {
     public static function CreateConnection(): PDO
     {
-        return new PDO('sqlite:' . __DIR__ . '../../../../database.sqlite');
+        return new PDO('sqlite:' . __DIR__ . '../../../database.sqlite');
     }
 }

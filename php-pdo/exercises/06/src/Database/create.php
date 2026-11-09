@@ -18,4 +18,4 @@ FOREIGN KEY(order_id) REFERENCES orders(id),
 FOREIGN KEY(product_id) REFERENCES products(id)
 )');
 
-var_dump($pdo->commit());
+$pdo->commit();
