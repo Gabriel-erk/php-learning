@@ -9,9 +9,9 @@ class ProductCreator
     public static function CreateMultipleProducts(array $productsData): array
     {
         $products = [];
-        foreach ($productsData as $product) {
+        foreach ($productsData as $productData) {
             // como este método estático chamao createProduct pertence a nossa classe atual, apenas usamos o self para acessa-lo
-            $products[] = self::CreateProduct($product);
+            $products[] = self::CreateProduct($productData);
         }
         return $products;
     }

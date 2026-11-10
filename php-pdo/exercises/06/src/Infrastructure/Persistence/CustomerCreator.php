@@ -9,9 +9,9 @@ class CustomerCreator
     public static function CreateMultipleCustomers(array $customersData): array
     {
         $customers = [];
-        foreach ($customersData as $customer) {
+        foreach ($customersData as $customerData) {
             // como este método estático chamando createCustomer pertence a nossa classe atual, apenas usamos o self para acessa-lo
-            $customers[] = self::CreateCustomer($customer);
+            $customers[] = self::CreateCustomer($customerData);
         }
         return $customers;
     }
