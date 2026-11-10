@@ -2,9 +2,13 @@
 
 namespace Pratica06Pdo\Domain\Model;
 
+use Exception;
+
 class Product
 {
-    public function __construct(private ?int $id, private string $name, private float $price, private int $stock){}
+    public function __construct(private ?int $id, private string $name, private float $price, private int $stock)
+    {
+    }
 
     /**
      * @return int|null
@@ -40,10 +44,15 @@ class Product
 
     /**
      * @param int|null $id
+     * @throws Exception
      */
     public function setId(?int $id): void
     {
-        $this->id = $id;
+        if ($this->getId() == null) {
+            $this->id = $id;
+        } else {
+            throw new Exception('ID do produto já foi definido.');
+        }
     }
 
     /**
@@ -68,5 +77,11 @@ class Product
     public function setStock(int $stock): void
     {
         $this->stock = $stock;
+    }
+
+    public function show(): void
+    {
+        echo "Name: {$this->getName()} - Price: {$this->getPrice()}" . PHP_EOL;
+        echo "Stock: {$this->getStock()}" . PHP_EOL;
     }
 }
