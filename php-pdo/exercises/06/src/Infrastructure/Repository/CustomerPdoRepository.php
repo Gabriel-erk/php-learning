@@ -39,6 +39,9 @@ class CustomerPdoRepository implements CustomerRepository
     /**
      * @throws Exception
      */
+    /**
+     * TRATAR EXCEÇÃO QUE PODE SER GERADA AQUI NO ARQUIVO PRINCIPAL
+     */
     public function insert(Customer $customer): bool
     {
         if ($customer->getId() !== null) {
@@ -53,5 +56,10 @@ class CustomerPdoRepository implements CustomerRepository
         } else {
             throw new Exception('Produto já está inserido no banco de dados.');
         }
+    }
+
+    private function save(Customer $customer): bool
+    {
+        return false
     }
 }

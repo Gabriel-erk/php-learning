@@ -44,6 +44,9 @@ class ProductPdoRepository implements ProductRepository
     /**
      * @throws Exception
      */
+    /**
+     * TRATAR EXCEÇÃO QUE PODE SER GERADA AQUI NO ARQUIVO PRINCIPAL
+     */
     public function insert(Product $product): bool
     {
         if ($product->getId() !== null) {
@@ -53,11 +56,16 @@ class ProductPdoRepository implements ProductRepository
             $this->pdo->beginTransaction();
             $stmt->bindValue(':name', $product->getName());
             $stmt->bindValue(':price', $product->getPrice());
-            $stmt->bindValue(':stock', $product->getStock());
+            $stmt->bindValue(':stock', $product->getStock(), PDO::PARAM_INT);
             $stmt->execute();
             return $this->pdo->commit();
         } else {
             throw new Exception('Produto já está inserido no banco de dados.');
         }
+    }
+
+    private function save(Product $product): bool
+    {
+        return false
     }
 }

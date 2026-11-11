@@ -37,14 +37,19 @@ class OrderPdoRepository implements OrderRepository
         return OrderCreator::HydrateOrders($ordersData);
     }
 
+    /**
+     * TRATAR EXCEÇÃO QUE PODE SER GERADA AQUI NO ARQUIVO PRINCIPAL
+     */
     public function insert(Order $order): bool
     {
-        // TODO: Implement insert() method.
+        if ($this->save($order)) {
+            $order->setId($this->pdo->lastInsertId());
+            return true;
+        }
+        return false;
+
     }
 
-    /**
-     * @throws Exception
-     */
     private function save(Order $order): bool
     {
         if ($order->getId() !== null) {
@@ -52,13 +57,13 @@ class OrderPdoRepository implements OrderRepository
             $stmt = $this->pdo->prepare($sql);
 
             $this->pdo->beginTransaction();
-            $stmt->bindValue(':customerId', $order->getCustomerId());
+            $stmt->bindValue(':customerId', $order->getCustomerId(), PDO::PARAM_INT);
             $stmt->bindValue(':total', $order->getTotal());
             $stmt->bindValue(':createdAt', $order->getCreatedAt()->format('Y-m-d'));
             $stmt->execute();
             return $this->pdo->commit();
         } else {
-            throw new Exception('Pedido já está inserido no banco de dados.');
+            return false;
         }
     }
 
