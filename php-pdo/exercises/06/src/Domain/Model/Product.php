@@ -3,6 +3,7 @@
 namespace Pratica06Pdo\Domain\Model;
 
 use Exception;
+use InvalidArgumentException;
 
 class Product
 {
@@ -77,6 +78,19 @@ class Product
     public function setStock(int $stock): void
     {
         $this->stock = $stock;
+    }
+
+    /**
+     * @param int $value
+     * @throws InvalidArgumentException
+     */
+    public function reduceStock(int $value): void
+    {
+        if ($this->getStock() > $value && $this->stock -= $value >=0) {
+            $this->stock -= $value;
+        } else {
+            throw new InvalidArgumentException('Stoque insuficiente para esta operação.');
+        }
     }
 
     public function show(): void
