@@ -13,7 +13,7 @@ $customers = [];
 //se $stmt tiver qualquer valor diferente de false, irá entrar no corpo do if
 if ($stmt) {
     $customersData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $customers = CustomerCreator::CreateMultipleCustomers($customersData);
+    $customers = CustomerCreator::HydrateCustomers($customersData);
     foreach ($customers as $customer) {
         $customer->show();
     }

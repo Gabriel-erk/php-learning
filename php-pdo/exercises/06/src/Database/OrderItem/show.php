@@ -13,7 +13,7 @@ $orderItems = [];
 //se $stmt tiver qualquer valor diferente de false, irá entrar no corpo do if
 if ($stmt) {
     $orderItemsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $orderItems = OrderItemCreator::CreateMultipleOrderItems($orderItemsData);
+    $orderItems = OrderItemCreator::HydrateOrderItems($orderItemsData);
     foreach ($orderItems as $orderItem) {
         $orderItem->show();
     }

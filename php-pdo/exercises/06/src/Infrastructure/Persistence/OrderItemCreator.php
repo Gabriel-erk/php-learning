@@ -6,16 +6,16 @@ use Pratica06Pdo\Domain\Model\OrderItem;
 
 class OrderItemCreator
 {
-    public static function CreateMultipleOrderItems(array $orderItemsData): array
+    public static function HydrateOrderItems(array $orderItemsData): array
     {
         $orderItems = [];
         foreach ($orderItemsData as $orderItemData) {
-            $orderItems[] = self::CreateOrderItem($orderItemData);
+            $orderItems[] = self::HydrateOrderItem($orderItemData);
         }
         return $orderItems;
     }
 
-    public static function CreateOrderItem(array $orderItemData): OrderItem
+    public static function HydrateOrderItem(array $orderItemData): OrderItem
     {
         return new OrderItem(
             $orderItemData['id'],

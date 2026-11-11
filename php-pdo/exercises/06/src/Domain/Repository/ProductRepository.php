@@ -10,5 +10,7 @@ interface ProductRepository
 
     public function listAll(): array;
 
+    public function insert(Product $product): bool;
+
     public function updateStock(Product $product): bool;
 }

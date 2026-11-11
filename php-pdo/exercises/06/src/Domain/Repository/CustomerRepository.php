@@ -9,4 +9,6 @@ interface CustomerRepository
     public function findById(int $id): Customer;
 
     public function listAll(): array;
+
+    public function insert(Customer $customer): bool;
 }

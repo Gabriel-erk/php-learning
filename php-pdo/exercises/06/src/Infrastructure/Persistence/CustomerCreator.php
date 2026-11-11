@@ -6,17 +6,17 @@ use Pratica06Pdo\Domain\Model\Customer;
 
 class CustomerCreator
 {
-    public static function CreateMultipleCustomers(array $customersData): array
+    public static function HydrateCustomers(array $customersData): array
     {
         $customers = [];
         foreach ($customersData as $customerData) {
             // como este método estático chamando createCustomer pertence a nossa classe atual, apenas usamos o self para acessa-lo
-            $customers[] = self::CreateCustomer($customerData);
+            $customers[] = self::HydrateCustomer($customerData);
         }
         return $customers;
     }
 
-    public static function CreateCustomer(array $customerData): Customer
+    public static function HydrateCustomer(array $customerData): Customer
     {
         return new Customer(
             $customerData['id'],

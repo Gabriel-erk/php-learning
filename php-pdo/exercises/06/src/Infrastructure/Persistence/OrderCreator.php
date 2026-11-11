@@ -5,16 +5,16 @@ use Pratica06Pdo\Domain\Model\Order;
 
 class OrderCreator
 {
-    public static function CreateMultipleOrders(array $ordersData): array
+    public static function HydrateOrders(array $ordersData): array
     {
         $orders = [];
         foreach ($ordersData as $orderData) {
-            $orders[] = self::CreateOrder($orderData);
+            $orders[] = self::HydrateOrder($orderData);
         }
         return $orders;
     }
 
-    public static function CreateOrder(array $orderData): Order
+    public static function HydrateOrder(array $orderData): Order
     {
         return new Order(
             $orderData['id'],
