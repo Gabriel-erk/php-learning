@@ -6,7 +6,7 @@ use Pratica06Pdo\Domain\Model\Product;
 
 interface ProductRepository
 {
-    public function findById(int $id): Product;
+    public function findById(int $id): Product|bool;
 
     public function listAll(): array;
 

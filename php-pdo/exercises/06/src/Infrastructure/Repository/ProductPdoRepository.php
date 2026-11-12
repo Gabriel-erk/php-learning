@@ -17,7 +17,7 @@ class ProductPdoRepository implements ProductRepository
         $this->pdo = ConnectionCreator::CreateConnection();
     }
 
-    public function findById(int $id): Product
+    public function findById(int $id): Product|bool
     {
         $sql = 'SELECT * FROM products WHERE id = ?';
         $stmt = $this->pdo->prepare($sql);
@@ -25,7 +25,11 @@ class ProductPdoRepository implements ProductRepository
         $stmt->bindValue(1, $id);
 
         $productData = $stmt->fetch(PDO::FETCH_ASSOC);
-        return ProductCreator::CreateProduct($productData);
+        if ($productData !== false) {
+            return ProductCreator::CreateProduct($productData);
+        }
+
+        return false;
     }
 
     public function listAll(): array

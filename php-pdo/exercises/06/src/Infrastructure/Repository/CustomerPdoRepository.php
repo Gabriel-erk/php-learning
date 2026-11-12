@@ -17,7 +17,7 @@ class CustomerPdoRepository implements CustomerRepository
         $this->pdo = ConnectionCreator::CreateConnection();
     }
 
-    public function findById(int $id): Customer
+    public function findById(int $id): Customer|bool
     {
         $sql = 'SELECT * FROM customers WHERE id = ?';
         $stmt = $this->pdo->prepare($sql);
@@ -25,7 +25,12 @@ class CustomerPdoRepository implements CustomerRepository
         $stmt->bindValue(1, $id);
 
         $customerData = $stmt->fetch(PDO::FETCH_ASSOC);
-        return CustomerCreator::HydrateCustomer($customerData);
+        // se a variável abaixo tiver o valor ESTRITAMENTE DIFERENTE (diferente em valor e tipo), entrará no corpo do if e poderá retornar um objeto do tipo Customer
+        if ($customerData !== false) {
+            return CustomerCreator::HydrateCustomer($customerData);
+        }
+
+        return false;
     }
 
     public function listAll(): array

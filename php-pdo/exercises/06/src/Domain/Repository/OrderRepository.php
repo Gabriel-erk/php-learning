@@ -7,7 +7,7 @@ use Pratica06Pdo\Domain\Model\OrderItem;
 
 interface OrderRepository
 {
-    public function findById(int $id): Order;
+    public function findById(int $id): Order|bool;
 
     public function listAll(): array;
 

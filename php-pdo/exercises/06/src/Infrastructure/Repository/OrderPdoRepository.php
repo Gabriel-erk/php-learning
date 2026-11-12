@@ -18,7 +18,7 @@ class OrderPdoRepository implements OrderRepository
         $this->pdo = ConnectionCreator::CreateConnection();
     }
 
-    public function findById(int $id): Order
+    public function findById(int $id): Order|bool
     {
         $sql = 'SELECT * FROM orders WHERE id = ?';
         $stmt = $this->pdo->prepare($sql);
@@ -26,7 +26,11 @@ class OrderPdoRepository implements OrderRepository
         $stmt->bindValue(1, $id);
 
         $orderData = $stmt->fetch(PDO::FETCH_ASSOC);
-        return OrderCreator::HydrateOrder($orderData);
+        if ($orderData !== false) {
+            return OrderCreator::HydrateOrder($orderData);
+        }
+
+        return false;
     }
 
     public function listAll(): array

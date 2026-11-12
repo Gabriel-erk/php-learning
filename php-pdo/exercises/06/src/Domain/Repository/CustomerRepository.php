@@ -6,7 +6,7 @@ use Pratica06Pdo\Domain\Model\Customer;
 
 interface CustomerRepository
 {
-    public function findById(int $id): Customer;
+    public function findById(int $id): Customer|bool;
 
     public function listAll(): array;
 
