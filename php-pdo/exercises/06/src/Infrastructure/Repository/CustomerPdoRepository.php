@@ -2,11 +2,12 @@
 
 namespace Pratica06Pdo\Infrastructure\Repository;
 
-use Exception;
 use Pratica06Pdo\Domain\Model\Customer;
 use Pratica06Pdo\Domain\Repository\CustomerRepository;
 use Pratica06Pdo\Infrastructure\Persistence\ConnectionCreator;
 use Pratica06Pdo\Infrastructure\Persistence\CustomerCreator;
+use PDOException;
+use Exception;
 use PDO;
 
 class CustomerPdoRepository implements CustomerRepository
@@ -37,12 +38,18 @@ class CustomerPdoRepository implements CustomerRepository
     }
 
     /**
-     * @throws Exception
-     */
-    /**
-     * TRATAR EXCEÇÃO QUE PODE SER GERADA AQUI NO ARQUIVO PRINCIPAL
+     * @throws PDOException|Exception
      */
     public function insert(Customer $customer): bool
+    {
+        if ($this->save($customer)) {
+            $customer->setId($this->pdo->lastInsertId());
+            return true;
+        }
+        return false;
+    }
+
+    private function save(Customer $customer): bool
     {
         if ($customer->getId() !== null) {
             $sql = 'INSERT INTO customers (name, email) VALUES(:name, :email);';
@@ -54,12 +61,7 @@ class CustomerPdoRepository implements CustomerRepository
             $stmt->execute();
             return $this->pdo->commit();
         } else {
-            throw new Exception('Produto já está inserido no banco de dados.');
+            return false;
         }
-    }
-
-    private function save(Customer $customer): bool
-    {
-        return false
     }
 }

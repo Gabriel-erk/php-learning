@@ -2,11 +2,12 @@
 
 namespace Pratica06Pdo\Infrastructure\Repository;
 
+use Exception;
 use Pratica06Pdo\Domain\Model\Product;
 use Pratica06Pdo\Domain\Repository\ProductRepository;
 use Pratica06Pdo\Infrastructure\Persistence\ConnectionCreator;
 use Pratica06Pdo\Infrastructure\Persistence\ProductCreator;
-use Exception;
+use PDOException;
 use PDO;
 
 class ProductPdoRepository implements ProductRepository
@@ -36,20 +37,45 @@ class ProductPdoRepository implements ProductRepository
         return ProductCreator::CreateMultipleProducts($productsData);
     }
 
+    /**
+     * @throws PDOException|Exception
+     */
     public function updateStock(Product $product): bool
     {
-        // TODO: Implement updateStock() method.
+        if (is_null($product->getId())) {
+            $this->insert($product);
+            return false;
+        } else {
+            $sql = 'UPDATE products SET name = :name, price = :price, stock = :stock WHERE id = :id';
+            $stmt = $this->pdo->prepare($sql);
+
+            $this->pdo->beginTransaction();
+
+            $stmt->bindValue(':name', $product->getName());
+            $stmt->bindValue(':price', $product->getPrice());
+            $stmt->bindValue(':stock', $product->getStock());
+            $stmt->bindValue(':id', $product->getId());
+
+            return $this->pdo->commit();
+        }
     }
 
     /**
-     * @throws Exception
-     */
-    /**
-     * TRATAR EXCEÇÃO QUE PODE SER GERADA AQUI NO ARQUIVO PRINCIPAL
+     * @throws PDOException|Exception
      */
     public function insert(Product $product): bool
     {
-        if ($product->getId() !== null) {
+        if ($this->save($product)) {
+            $product->setId($this->pdo->lastInsertId());
+            return true;
+        }
+        return false;
+    }
+
+
+    private function save(Product $product): bool
+    {
+        if (is_null($product->getId())) {
             $sql = 'INSERT INTO products (name, price, stock) VALUES(:name, :price, :stock);';
             $stmt = $this->pdo->prepare($sql);
 
@@ -60,12 +86,7 @@ class ProductPdoRepository implements ProductRepository
             $stmt->execute();
             return $this->pdo->commit();
         } else {
-            throw new Exception('Produto já está inserido no banco de dados.');
+            return false;
         }
-    }
-
-    private function save(Product $product): bool
-    {
-        return false
     }
 }

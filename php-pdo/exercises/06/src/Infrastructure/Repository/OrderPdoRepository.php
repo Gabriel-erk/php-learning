@@ -8,6 +8,7 @@ use Pratica06Pdo\Domain\Repository\OrderRepository;
 use Pratica06Pdo\Infrastructure\Persistence\ConnectionCreator;
 use Pratica06Pdo\Infrastructure\Persistence\OrderCreator;
 use Exception;
+use PDOException;
 use PDO;
 
 class OrderPdoRepository implements OrderRepository
@@ -38,7 +39,7 @@ class OrderPdoRepository implements OrderRepository
     }
 
     /**
-     * TRATAR EXCEÇÃO QUE PODE SER GERADA AQUI NO ARQUIVO PRINCIPAL
+     * @throws PDOException|Exception
      */
     public function insert(Order $order): bool
     {
@@ -47,7 +48,6 @@ class OrderPdoRepository implements OrderRepository
             return true;
         }
         return false;
-
     }
 
     private function save(Order $order): bool
@@ -67,8 +67,35 @@ class OrderPdoRepository implements OrderRepository
         }
     }
 
+    /**
+     * @throws PDOException|Exception
+     */
     public function insertItem(OrderItem $orderItem): bool
     {
-        // TODO: Implement insertItem() method.
+        if ($this->saveItem($orderItem)) {
+            $orderItem->setId($this->pdo->lastInsertId());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private function saveItem(OrderItem $orderItem): bool
+    {
+        if (is_null($orderItem->getId())) {
+            $sql = 'INSERT INTO order_items (order_id, product_id, quantity, unit_price) VALUES (:orderId, :productId, :quantity, :unitPrice)';
+            $stmt = $this->pdo->prepare($sql);
+
+            $this->pdo->beginTransaction();
+
+            $stmt->bindValue(':orderId', $orderItem->getOrderId(), PDO::PARAM_INT);
+            $stmt->bindValue(':productId', $orderItem->getProductId(), PDO::PARAM_INT);
+            $stmt->bindValue(':quantity', $orderItem->getQuantity(), PDO::PARAM_INT);
+            $stmt->bindValue(':unitPrice', $orderItem->getUnitPrice());
+
+            return $this->pdo->commit();
+        } else {
+            return false;
+        }
     }
 }
