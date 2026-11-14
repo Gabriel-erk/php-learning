@@ -4,8 +4,7 @@ namespace Pratica06Pdo\Infrastructure\Repository;
 
 use Pratica06Pdo\Domain\Model\Customer;
 use Pratica06Pdo\Domain\Repository\CustomerRepository;
-use Pratica06Pdo\Infrastructure\Persistence\ConnectionCreator;
-use Pratica06Pdo\Infrastructure\Persistence\CustomerCreator;
+use Pratica06Pdo\Infrastructure\Persistence\{ConnectionCreator, CustomerCreator};
 use PDOException;
 use Exception;
 use PDO;
@@ -22,15 +21,15 @@ class CustomerPdoRepository implements CustomerRepository
         $sql = 'SELECT * FROM customers WHERE id = ?';
         $stmt = $this->pdo->prepare($sql);
 
-        $stmt->bindValue(1, $id);
+        $stmt->bindValue(1, $id, PDO::PARAM_INT);
 
         $customerData = $stmt->fetch(PDO::FETCH_ASSOC);
         // se a variável abaixo tiver o valor ESTRITAMENTE DIFERENTE (diferente em valor e tipo), entrará no corpo do if e poderá retornar um objeto do tipo Customer
-        if ($customerData !== false) {
+        if ($customerData) {
             return CustomerCreator::HydrateCustomer($customerData);
         }
 
-        return false;
+        return $customerData;
     }
 
     public function listAll(): array

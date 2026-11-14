@@ -95,6 +95,7 @@ class Product
 
     public function show(): void
     {
+        echo "ID: {$this->getId()}" . PHP_EOL;
         echo "Name: {$this->getName()} - Price: {$this->getPrice()}" . PHP_EOL;
         echo "Stock: {$this->getStock()}" . PHP_EOL;
     }

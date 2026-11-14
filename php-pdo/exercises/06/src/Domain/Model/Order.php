@@ -2,7 +2,7 @@
 
 namespace Pratica06Pdo\Domain\Model;
 
-use {Exception, DateTimeImmutable};
+use Exception, DateTimeImmutable;
 
 class Order
 {

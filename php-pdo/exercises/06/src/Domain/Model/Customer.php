@@ -66,6 +66,7 @@ class Customer
 
     public function show(): void
     {
+        echo "ID: {$this->getId()}" . PHP_EOL;
         echo "Name: {$this->getName()} - Email: {$this->getEmail()}" . PHP_EOL;
     }
 }
