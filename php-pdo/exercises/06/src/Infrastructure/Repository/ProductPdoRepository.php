@@ -23,6 +23,7 @@ class ProductPdoRepository implements ProductRepository
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindValue(1, $id);
+        $stmt->execute();
 
         $productData = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($productData !== false) {

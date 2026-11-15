@@ -35,11 +35,11 @@ $orderPdoRepository = new OrderPdoRepository($pdo);
 $productPdoRepository = new ProductPdoRepository($pdo);
 
 while (true) {
-    $customerId = (int)readline('Informe seu ID:');
+    $customerId = (int)readline('Informe seu ID: ');
     $customer = $customerPdoRepository->findById($customerId);
 
     if (!$customer) {
-        echo "Cliente inexistente." . PHP_EOL;
+        echo "Cliente inexistente. {$customerId}" . PHP_EOL;
         return false;
     }
 
@@ -53,17 +53,16 @@ while (true) {
         foreach ($products as $product) {
             $product->show();
         }
-        $option = (int)readline('Deseja comprar?');
+        $option = readline('Deseja comprar? ');
 
         if ($option == 's') {
-            echo "Informe os ID's dos produtos desejados (digite '00' para parar de adicionar ao carrinho):";
-            $order = new Order(null, $customer->getId(), 0, new DateTimeImmutable('2026-11-15')); // abrindo pedido, pois irei e irei alterar o seu valor total em tempo de execução
+            echo "Informe os ID's dos produtos desejados (digite '00' para parar de adicionar ao carrinho):" . PHP_EOL;
             $orderTotal = 0; // váriavel responsável por armazenar o total do pedido que PODE ser realizado aqui (terei de percorrer todos os items de pedido uma hora ou outra, logo, nesse momento, farei o cálculo do total do pedido, pois ele me disponibiliza as informações necessárias para tal
             $orderItems = [];
             $productId = 999;
 
             while ($productId != 00) {
-                $productId = (int)readline('Informe o ID do produto:');
+                $productId = (int)readline('Informe o ID do produto: ');
 
                 if ($productId == 00) {
                     break;
@@ -73,18 +72,19 @@ while (true) {
                     if (!$product) {
                         echo 'Produto não encontrado.' . PHP_EOL;
                     } else {
-                        $quantity = (int)readline('Informe a quantidade desejada do produto:');
+                        $quantity = (int)readline('Informe a quantidade desejada do produto: ');
 
                         if ($quantity > $product->getStock()) {
                             echo 'Quantidade inválida!' . PHP_EOL;
                         } else {
-                            $orderItems[] = new OrderItem(null, $order->getId(), $product->getId(), $quantity, $product->getPrice()); // criando item de pedido
+                            $orderItems[] = new OrderItem(null, 00, $product->getId(), $quantity, $product->getPrice()); // criando item de pedido
                             // $product->setStock($product->getStock() - $quantity); // após criar um objeto guardando as especificações do produto, a sua quantidade será reduzida a fim de se adequar a regra de negócio
                             $orderTotal += $product->getPrice() * $quantity; // essa expressão calcula o total do pedido atual e soma na váriavel que irá acumular o total do pedido inteiro
                         }
                     }
                 }
             }
+            $order = new Order(null, $customer->getId(), 0, new DateTimeImmutable('2026-11-15')); // abrindo pedido
             $order->setTotal($orderTotal); // passando para o atributo $total do nosso objeto que representa o pedido, o RESULTADO da SOMA de todos os itens que entrarão nele
 
             $pdo->beginTransaction(); // Outra observação é que, de que adianta aplicar isso apenas aos itens dos pedidos? De que adianta inserir um registro na tabela pedidos, se os seus itens não forem inseridos também? (logo, só quero inserir um registro na tabela pedidos se todos os itens também forem inseridos, por isso, começo a minha transação aqui
@@ -98,20 +98,25 @@ while (true) {
 
             $order = $orderPdoRepository->findById($pdo->lastInsertId()); // recuperando o pedido que acabamos de mandar entrar no banco (pegando o último ID inserido no banco)
 
-            foreach ($orderItems as $orderItem) {
-                try {
-                    $orderPdoRepository->insertItem($orderItem);
+            if (!$order) {
+                echo 'Pedido não encontrado!' . PHP_EOL;
+            } else {
+                foreach ($orderItems as $orderItem) {
+                    try {
+                        $orderItem->setOrderId($order->getId());
+                        $orderPdoRepository->insertItem($orderItem);
 
-                    $productId = $orderItem->getProductId();
-                    $product = $productPdoRepository->findById($productId);
-                    $product->setStock($product->getStock() - $orderItem->getQuantity());
-                    // já estou dentro de um try-catch, que coincidentemente, o catch da linha abaixo pega exatamente o mesmo tipo de exceção
-                    $productPdoRepository->updateStock($product);
+                        $productId = $orderItem->getProductId();
+                        $product = $productPdoRepository->findById($productId);
+                        $product->setStock($product->getStock() - $orderItem->getQuantity());
+                        // já estou dentro de um try-catch, que coincidentemente, o catch da linha abaixo pega exatamente o mesmo tipo de exceção
+                        $productPdoRepository->updateStock($product);
 
-                    $pdo->commit();
-                } catch (Exception|PDOException $e) {
-                    echo $e->getMessage() . PHP_EOL;
-                    $pdo->rollBack();
+                        $pdo->commit();
+                    } catch (Exception|PDOException $e) {
+                        echo $e->getMessage() . PHP_EOL;
+                        $pdo->rollBack();
+                    }
                 }
             }
         }

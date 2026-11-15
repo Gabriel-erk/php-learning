@@ -24,6 +24,7 @@ class OrderPdoRepository implements OrderRepository
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindValue(1, $id);
+        $stmt->execute();
 
         $orderData = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($orderData !== false) {

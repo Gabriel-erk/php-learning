@@ -22,6 +22,7 @@ class CustomerPdoRepository implements CustomerRepository
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindValue(1, $id, PDO::PARAM_INT);
+        $stmt->execute();
 
         $customerData = $stmt->fetch(PDO::FETCH_ASSOC);
         // se a variável abaixo tiver o valor ESTRITAMENTE DIFERENTE (diferente em valor e tipo), entrará no corpo do if e poderá retornar um objeto do tipo Customer
