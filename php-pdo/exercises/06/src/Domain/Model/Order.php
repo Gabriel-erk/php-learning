@@ -6,7 +6,7 @@ use Exception, DateTimeImmutable;
 
 class Order
 {
-    public function __construct(private ?int $id, private int $customer_id, private float $total, private DateTimeImmutable $createdAt)
+    public function __construct(private ?int $id, private int $customerId, private float $total, private DateTimeImmutable $createdAt)
     {
     }
 
@@ -23,7 +23,7 @@ class Order
      */
     public function getCustomerId(): int
     {
-        return $this->customer_id;
+        return $this->customerId;
     }
 
     /**
@@ -56,11 +56,11 @@ class Order
     }
 
     /**
-     * @param int $customer_id
+     * @param int $customerId
      */
-    public function setCustomerId(int $customer_id): void
+    public function setCustomerId(int $customerId): void
     {
-        $this->customer_id = $customer_id;
+        $this->customerId = $customerId;
     }
 
     /**

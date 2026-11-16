@@ -60,11 +60,10 @@ class CustomerPdoRepository implements CustomerRepository
             $sql = 'INSERT INTO customers (name, email) VALUES(:name, :email);';
             $stmt = $this->pdo->prepare($sql);
 
-            $this->pdo->beginTransaction();
             $stmt->bindValue(':name', $customer->getName());
             $stmt->bindValue(':email', $customer->getEmail());
-            $stmt->execute();
-            return $this->pdo->commit();
+
+            return $stmt->execute();
         } else {
             return false;
         }

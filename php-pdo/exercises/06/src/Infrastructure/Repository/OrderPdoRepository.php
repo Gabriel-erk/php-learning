@@ -57,16 +57,15 @@ class OrderPdoRepository implements OrderRepository
 
     private function save(Order $order): bool
     {
-        if ($order->getId() !== null) {
+        if (is_null($order->getId())) {
             $sql = 'INSERT INTO orders (customer_id, total, created_at) VALUES(:customerId, :total, :createdAt);';
             $stmt = $this->pdo->prepare($sql);
 
-            $this->pdo->beginTransaction();
             $stmt->bindValue(':customerId', $order->getCustomerId(), PDO::PARAM_INT);
             $stmt->bindValue(':total', $order->getTotal());
             $stmt->bindValue(':createdAt', $order->getCreatedAt()->format('Y-m-d'));
-            $stmt->execute();
-            return $this->pdo->commit();
+
+            return $stmt->execute();
         } else {
             return false;
         }
@@ -91,14 +90,12 @@ class OrderPdoRepository implements OrderRepository
             $sql = 'INSERT INTO order_items (order_id, product_id, quantity, unit_price) VALUES (:orderId, :productId, :quantity, :unitPrice)';
             $stmt = $this->pdo->prepare($sql);
 
-            $this->pdo->beginTransaction();
-
             $stmt->bindValue(':orderId', $orderItem->getOrderId(), PDO::PARAM_INT);
             $stmt->bindValue(':productId', $orderItem->getProductId(), PDO::PARAM_INT);
             $stmt->bindValue(':quantity', $orderItem->getQuantity(), PDO::PARAM_INT);
             $stmt->bindValue(':unitPrice', $orderItem->getUnitPrice());
 
-            return $this->pdo->commit();
+            return $stmt->execute();
         } else {
             return false;
         }

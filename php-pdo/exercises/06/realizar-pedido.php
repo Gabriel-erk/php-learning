@@ -96,7 +96,12 @@ while (true) {
                 echo $e->getMessage();
             }
 
-            $order = $orderPdoRepository->findById($pdo->lastInsertId()); // recuperando o pedido que acabamos de mandar entrar no banco (pegando o último ID inserido no banco)
+            echo 'Retorno do último id do banco:' . PHP_EOL;
+            var_dump($pdo->lastInsertId());
+
+            $order = $orderPdoRepository->findById((int) $pdo->lastInsertId()); // recuperando o pedido que acabamos de mandar entrar no banco (pegando o último ID inserido no banco)
+            echo 'Retorno da váriavel order:' . PHP_EOL;
+            var_dump($order);
 
             if (!$order) {
                 echo 'Pedido não encontrado!' . PHP_EOL;

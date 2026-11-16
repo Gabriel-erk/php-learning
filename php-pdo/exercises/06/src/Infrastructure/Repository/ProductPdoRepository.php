@@ -84,12 +84,11 @@ class ProductPdoRepository implements ProductRepository
             $sql = 'INSERT INTO products (name, price, stock) VALUES(:name, :price, :stock);';
             $stmt = $this->pdo->prepare($sql);
 
-            $this->pdo->beginTransaction();
             $stmt->bindValue(':name', $product->getName());
             $stmt->bindValue(':price', $product->getPrice());
             $stmt->bindValue(':stock', $product->getStock(), PDO::PARAM_INT);
-            $stmt->execute();
-            return $this->pdo->commit();
+
+            return $stmt->execute();
         } else {
             return false;
         }
