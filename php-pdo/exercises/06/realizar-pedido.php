@@ -1,8 +1,5 @@
 <?php
 
-// problemas principais:
-// redução de estoque ao efetuar uma compra
-
 use Pratica06Pdo\Infrastructure\Persistence\ConnectionCreator;
 use Pratica06Pdo\Domain\Model\{Customer, Product, Order, OrderItem};
 use Pratica06Pdo\Domain\Repository\{ProductRepository, OrderRepository, CustomerRepository};
@@ -28,6 +25,8 @@ function menu(): void
 {
     echo "===== MENU =====" . PHP_EOL;
     echo "1 - Catálogo de produtos" . PHP_EOL;
+    echo "2 - Cancelar pedido" . PHP_EOL;
+    echo "3 - Relatório de pedidos" . PHP_EOL;
     echo "0 - Sair" . PHP_EOL;
 }
 
@@ -70,19 +69,25 @@ while (true) {
                 if ($productId == 00) {
                     break;
                 } else {
-                    $product = $productPdoRepository->findById($productId);
+                    $searchedProduct = false;
+                    foreach ($products as $product) {
+                        if ($product->getId() == $productId) {
+                            $searchedProduct = $product;
+                        }
+                    }
 
-                    if (!$product) {
+                    if (!$searchedProduct) {
                         echo 'Produto não encontrado.' . PHP_EOL;
                     } else {
                         $quantity = (int)readline('Informe a quantidade desejada do produto: ');
 
-                        if ($quantity > $product->getStock()) {
+                        if ($quantity > $searchedProduct->getStock()) {
                             echo 'Quantidade inválida!' . PHP_EOL;
                         } else {
-                            $orderItems[] = new OrderItem(null, 00, $product->getId(), $quantity, $product->getPrice()); // criando item de pedido
+                            $orderItems[] = new OrderItem(null, 00, $searchedProduct->getId(), $quantity, $searchedProduct->getPrice()); // criando item de pedido
+                            $searchedProduct->setStock($searchedProduct->getStock() - $quantity);
                             // $product->setStock($product->getStock() - $quantity); // após criar um objeto guardando as especificações do produto, a sua quantidade será reduzida a fim de se adequar a regra de negócio
-                            $orderTotal += $product->getPrice() * $quantity; // essa expressão calcula o total do pedido atual e soma na váriavel que irá acumular o total do pedido inteiro
+                            $orderTotal += $searchedProduct->getPrice() * $quantity; // essa expressão calcula o total do pedido atual e soma na váriavel que irá acumular o total do pedido inteiro
                         }
                     }
                 }
@@ -112,10 +117,15 @@ while (true) {
                             $orderItem->setOrderId($order->getId());
                             $orderPdoRepository->insertItem($orderItem);
 
-                            $product = $productPdoRepository->findById($orderItem->getProductId());
-                            $product->setStock($product->getStock() - $orderItem->getQuantity());
+                            $searchedProduct = false;
+                            foreach ($products as $product) {
+                                if ($product->getId() == $orderItem->getProductId()) {
+                                    $searchedProduct = $product;
+                                }
+                            }
+
                             // já estou dentro de um try-catch, que coincidentemente, o catch da linha abaixo pega exatamente o mesmo tipo de exceção
-                            $productPdoRepository->updateStock($product);
+                            $productPdoRepository->updateStock($searchedProduct);
                         }
 
                         $pdo->commit();
