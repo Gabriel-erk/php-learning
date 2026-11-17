@@ -1,5 +1,8 @@
 <?php
 
+// problemas principais:
+// redução de estoque ao efetuar uma compra
+
 use Pratica06Pdo\Infrastructure\Persistence\ConnectionCreator;
 use Pratica06Pdo\Domain\Model\{Customer, Product, Order, OrderItem};
 use Pratica06Pdo\Domain\Repository\{ProductRepository, OrderRepository, CustomerRepository};
@@ -39,7 +42,7 @@ while (true) {
     $customer = $customerPdoRepository->findById($customerId);
 
     if (!$customer) {
-        echo "Cliente inexistente. {$customerId}" . PHP_EOL;
+        echo "Cliente inexistente." . PHP_EOL;
         return false;
     }
 
@@ -84,44 +87,45 @@ while (true) {
                     }
                 }
             }
-            $order = new Order(null, $customer->getId(), 0, new DateTimeImmutable('2026-11-15')); // abrindo pedido
-            $order->setTotal($orderTotal); // passando para o atributo $total do nosso objeto que representa o pedido, o RESULTADO da SOMA de todos os itens que entrarão nele
 
-            $pdo->beginTransaction(); // Outra observação é que, de que adianta aplicar isso apenas aos itens dos pedidos? De que adianta inserir um registro na tabela pedidos, se os seus itens não forem inseridos também? (logo, só quero inserir um registro na tabela pedidos se todos os itens também forem inseridos, por isso, começo a minha transação aqui
-            // iniciando transação, pois quero que insira QUALQUER item de pedido apenas se TODOS os outros forem inseridos também
+            $option = readline('Deseja finalizar a compra? ');
 
-            try {
-                $orderPdoRepository->insert($order); // com os atributos preenchidos, dizemos para nosso repositório inserir o objeto no banco de dados
-            } catch (PDOException|Exception $e) {
-                echo $e->getMessage();
-            }
+            if ($option == 's') {
+                $order = new Order(null, $customer->getId(), 0, new DateTimeImmutable('2026-11-15')); // abrindo pedido
+                $order->setTotal($orderTotal); // passando para o atributo $total do nosso objeto que representa o pedido, o RESULTADO da SOMA de todos os itens que entrarão nele
 
-            echo 'Retorno do último id do banco:' . PHP_EOL;
-            var_dump($pdo->lastInsertId());
+                $pdo->beginTransaction(); // Outra observação é que, de que adianta aplicar isso apenas aos itens dos pedidos? De que adianta inserir um registro na tabela pedidos, se os seus itens não forem inseridos também? (logo, só quero inserir um registro na tabela pedidos se todos os itens também forem inseridos, por isso, começo a minha transação aqui
+                // iniciando transação, pois quero que insira QUALQUER item de pedido apenas se TODOS os outros forem inseridos também
 
-            $order = $orderPdoRepository->findById((int) $pdo->lastInsertId()); // recuperando o pedido que acabamos de mandar entrar no banco (pegando o último ID inserido no banco)
-            echo 'Retorno da váriavel order:' . PHP_EOL;
-            var_dump($order);
+                try {
+                    $orderPdoRepository->insert($order); // com os atributos preenchidos, dizemos para nosso repositório inserir o objeto no banco de dados
+                } catch (PDOException|Exception $e) {
+                    echo $e->getMessage();
+                }
 
-            if (!$order) {
-                echo 'Pedido não encontrado!' . PHP_EOL;
-            } else {
-                foreach ($orderItems as $orderItem) {
+                if (!$order) {
+                    echo 'Pedido não encontrado!' . PHP_EOL;
+                } else {
                     try {
-                        $orderItem->setOrderId($order->getId());
-                        $orderPdoRepository->insertItem($orderItem);
+                        foreach ($orderItems as $orderItem) {
 
-                        $productId = $orderItem->getProductId();
-                        $product = $productPdoRepository->findById($productId);
-                        $product->setStock($product->getStock() - $orderItem->getQuantity());
-                        // já estou dentro de um try-catch, que coincidentemente, o catch da linha abaixo pega exatamente o mesmo tipo de exceção
-                        $productPdoRepository->updateStock($product);
+                            $orderItem->setOrderId($order->getId());
+                            $orderPdoRepository->insertItem($orderItem);
+
+                            $product = $productPdoRepository->findById($orderItem->getProductId());
+                            $product->setStock($product->getStock() - $orderItem->getQuantity());
+                            // já estou dentro de um try-catch, que coincidentemente, o catch da linha abaixo pega exatamente o mesmo tipo de exceção
+                            $productPdoRepository->updateStock($product);
+                        }
 
                         $pdo->commit();
+
+                        echo "Compra no valor de: {$order->getTotal()} realizada com sucesso!" . PHP_EOL;
                     } catch (Exception|PDOException $e) {
                         echo $e->getMessage() . PHP_EOL;
                         $pdo->rollBack();
                     }
+
                 }
             }
         }

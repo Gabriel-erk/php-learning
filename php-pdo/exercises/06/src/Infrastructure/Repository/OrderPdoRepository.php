@@ -2,6 +2,7 @@
 
 namespace Pratica06Pdo\Infrastructure\Repository;
 
+use DateMalformedStringException;
 use Pratica06Pdo\Domain\Model\Order;
 use Pratica06Pdo\Domain\Model\OrderItem;
 use Pratica06Pdo\Domain\Repository\OrderRepository;
@@ -18,6 +19,9 @@ class OrderPdoRepository implements OrderRepository
         $this->pdo = ConnectionCreator::CreateConnection();
     }
 
+    /**
+     * @throws DateMalformedStringException
+     */
     public function findById(int $id): Order|bool
     {
         $sql = 'SELECT * FROM orders WHERE id = ?';
@@ -34,6 +38,9 @@ class OrderPdoRepository implements OrderRepository
         return false;
     }
 
+    /**
+     * @throws DateMalformedStringException
+     */
     public function listAll(): array
     {
         $sql = 'SELECT * FROM orders';

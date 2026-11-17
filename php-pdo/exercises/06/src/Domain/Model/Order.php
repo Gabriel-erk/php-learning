@@ -81,6 +81,7 @@ class Order
 
     public function show(): void
     {
+        echo "ID: {$this->getId()} - Total: {$this->getTotal()}" . PHP_EOL;
         echo "Customer ID: {$this->getCustomerId()} - Total: {$this->getTotal()}" . PHP_EOL;
         echo "Created At: {$this->getCreatedAt()->format('Y-m-d')}" . PHP_EOL;
     }

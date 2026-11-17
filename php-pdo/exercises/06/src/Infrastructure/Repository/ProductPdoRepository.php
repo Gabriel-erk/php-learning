@@ -51,17 +51,13 @@ class ProductPdoRepository implements ProductRepository
             $this->insert($product);
             return false;
         } else {
-            $sql = 'UPDATE products SET name = :name, price = :price, stock = :stock WHERE id = :id';
+            $sql = 'UPDATE products SET stock = :stock WHERE id = :id';
             $stmt = $this->pdo->prepare($sql);
 
-            $this->pdo->beginTransaction();
-
-            $stmt->bindValue(':name', $product->getName());
-            $stmt->bindValue(':price', $product->getPrice());
             $stmt->bindValue(':stock', $product->getStock());
             $stmt->bindValue(':id', $product->getId());
 
-            return $this->pdo->commit();
+            return $stmt->execute();
         }
     }
 

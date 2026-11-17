@@ -1,10 +1,14 @@
 <?php
 
 namespace Pratica06Pdo\Infrastructure\Persistence;
+use DateMalformedStringException;
 use Pratica06Pdo\Domain\Model\Order;
 
 class OrderCreator
 {
+    /**
+     * @throws DateMalformedStringException
+     */
     public static function HydrateOrders(array $ordersData): array
     {
         $orders = [];
@@ -14,13 +18,16 @@ class OrderCreator
         return $orders;
     }
 
+    /**
+     * @throws DateMalformedStringException
+     */
     public static function HydrateOrder(array $orderData): Order
     {
         return new Order(
             $orderData['id'],
             $orderData['customer_id'],
             $orderData['total'],
-            $orderData['created_at']
+            new \DateTimeImmutable($orderData['created_at'])
         );
     }
 }

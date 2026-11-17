@@ -13,9 +13,15 @@ $orders = [];
 //se $stmt tiver qualquer valor diferente de false, irá entrar no corpo do if
 if ($stmt) {
     $ordersData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $orders = OrderCreator::HydrateOrders($ordersData);
-    foreach ($orders as $order) {
-        $order->show();
+    try {
+        $orders = OrderCreator::HydrateOrders($ordersData);
+        echo '===== PEDIDOS =====' . PHP_EOL;
+        foreach ($orders as $order) {
+            $order->show();
+            echo PHP_EOL;
+        }
+    } catch (DateMalformedStringException $e) {
+
     }
 } else {
     echo "Não foi possível trazer os pedidos." . PHP_EOL;
