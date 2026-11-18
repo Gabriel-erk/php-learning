@@ -100,6 +100,22 @@ class OrderPdoRepository implements OrderRepository
     }
 
     /**
+     * @throws DateMalformedStringException
+     */
+    public function financialReport()
+    {
+        $orders = $this->listAll();
+        $ordersQuantity = count($orders);
+        $total = array_sum(
+            array_map(fn($order) => $order->getTotal(), $orders)
+        ); // entender este trecho aqui depois
+        $average = $total / $ordersQuantity; // valor médio dos produtos
+        $soldUnities = array_sum(
+            array_map(fn($order) => $order->getQuantity(), $orders)
+        );
+    }
+
+    /**
      * @throws PDOException|Exception
      */
     public function insertItem(OrderItem $orderItem): bool

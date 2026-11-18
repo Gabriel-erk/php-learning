@@ -159,6 +159,8 @@ while (true) {
         } catch (DateMalformedStringException $e) {
             echo $e->getMessage() . PHP_EOL;
         }
+    } else if ($option == 3) {
+
     } else {
         echo 'Opção inválida!' . PHP_EOL;
     }
