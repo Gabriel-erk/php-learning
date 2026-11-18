@@ -14,7 +14,7 @@ FOREIGN KEY (customer_id) REFERENCES customers(id)
 )');
 $pdo->exec('CREATE TABLE IF NOT EXISTS order_items 
 (id INTEGER PRIMARY KEY AUTOINCREMENT, order_id INT, product_id INT, quantity INT, unit_price REAL,
-FOREIGN KEY(order_id) REFERENCES orders(id),
+FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE,
 FOREIGN KEY(product_id) REFERENCES products(id)
 )');
 

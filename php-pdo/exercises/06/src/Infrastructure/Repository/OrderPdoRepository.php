@@ -6,7 +6,7 @@ use DateMalformedStringException;
 use Pratica06Pdo\Domain\Model\Order;
 use Pratica06Pdo\Domain\Model\OrderItem;
 use Pratica06Pdo\Domain\Repository\OrderRepository;
-use Pratica06Pdo\Infrastructure\Persistence\{ConnectionCreator,OrderCreator,OrderItemCreator};
+use Pratica06Pdo\Infrastructure\Persistence\{ConnectionCreator, OrderCreator, OrderItemCreator};
 use Exception;
 use PDOException;
 use PDO;
@@ -75,6 +75,28 @@ class OrderPdoRepository implements OrderRepository
         } else {
             return false;
         }
+    }
+
+    public function update(Order $order): bool
+    {
+        $sql = 'UPDATE orders SET customerId = :customerId, total = :total, created_at = :createdAt WHERE id = :id';
+
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            ':customerId' => $order->getCustomerId(),
+            ':total' => $order->getTotal(),
+            ':createdAt' => $order->getCreatedAt(),
+            ':id' => $order->getId()
+        ]);
+    }
+
+    public function delete(Order $order): bool
+    {
+        $sql = 'DELETE FROM orders WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            ':id' => $order->getId()
+        ]);
     }
 
     /**

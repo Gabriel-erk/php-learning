@@ -142,15 +142,19 @@ while (true) {
     } else if ($option == 0) {
         return false;
     } else if ($option == 2) {
-        $orderId = (int)readline('Informe o ID do pedido:');
+        $orderId = (int)readline('Informe o ID do pedido: ');
 
         try {
             $order = $orderPdoRepository->findById($orderId);
             if (!$order) {
                 echo 'Não foi possível encontrar o pedido.' . PHP_EOL;
-            } else {
-                $orderItems = [];
+                continue;
+            }
 
+            if ($orderPdoRepository->delete($order)) {
+                echo 'Pedido excluído com sucesso!' . PHP_EOL;
+            } else {
+                echo 'Não foi possível excluir o pedido.' . PHP_EOL;
             }
         } catch (DateMalformedStringException $e) {
             echo $e->getMessage() . PHP_EOL;
