@@ -141,6 +141,20 @@ while (true) {
         }
     } else if ($option == 0) {
         return false;
+    } else if ($option == 2) {
+        $orderId = (int)readline('Informe o ID do pedido:');
+
+        try {
+            $order = $orderPdoRepository->findById($orderId);
+            if (!$order) {
+                echo 'Não foi possível encontrar o pedido.' . PHP_EOL;
+            } else {
+                $orderItems = [];
+
+            }
+        } catch (DateMalformedStringException $e) {
+            echo $e->getMessage() . PHP_EOL;
+        }
     } else {
         echo 'Opção inválida!' . PHP_EOL;
     }

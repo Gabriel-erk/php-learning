@@ -14,4 +14,6 @@ interface OrderRepository
     public function insert(Order $order): bool;
 
     public function insertItem(OrderItem $orderItem): bool;
+
+    public function orderItems(Order $order): array;
 }

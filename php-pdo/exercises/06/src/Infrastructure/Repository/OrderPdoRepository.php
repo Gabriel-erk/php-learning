@@ -6,8 +6,7 @@ use DateMalformedStringException;
 use Pratica06Pdo\Domain\Model\Order;
 use Pratica06Pdo\Domain\Model\OrderItem;
 use Pratica06Pdo\Domain\Repository\OrderRepository;
-use Pratica06Pdo\Infrastructure\Persistence\ConnectionCreator;
-use Pratica06Pdo\Infrastructure\Persistence\OrderCreator;
+use Pratica06Pdo\Infrastructure\Persistence\{ConnectionCreator,OrderCreator,OrderItemCreator};
 use Exception;
 use PDOException;
 use PDO;
@@ -106,5 +105,26 @@ class OrderPdoRepository implements OrderRepository
         } else {
             return false;
         }
+    }
+
+    private function listAllItems(): array
+    {
+        $sql = 'SELECT * FROM order_items';
+        $stmt = $this->pdo->query($sql);
+        $orderItemsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return OrderItemCreator::HydrateOrderItems($orderItemsData);
+    }
+
+    public function orderItems(Order $order): array
+    {
+        $allOrderItems = $this->listAllItems();
+        $orderItems = [];
+        foreach ($allOrderItems as $orderItem) {
+            if ($orderItem->getOrderId() == $order->getId()) {
+                $orderItems = $orderItem;
+            }
+        }
+        return $orderItems;
     }
 }
