@@ -25,7 +25,7 @@ class ProductPdoRepository implements ProductRepository
         $stmt->bindValue(1, $id);
         $stmt->execute();
 
-        $productData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $productData = $stmt->fetch();
         if ($productData !== false) {
             return ProductCreator::CreateProduct($productData);
         }
@@ -37,7 +37,7 @@ class ProductPdoRepository implements ProductRepository
     {
         $sql = 'SELECT * FROM products';
         $stmt = $this->pdo->query($sql);
-        $productsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $productsData = $stmt->fetchAll();
 
         return ProductCreator::CreateMultipleProducts($productsData);
     }

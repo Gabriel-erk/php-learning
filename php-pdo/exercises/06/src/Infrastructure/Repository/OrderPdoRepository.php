@@ -29,7 +29,7 @@ class OrderPdoRepository implements OrderRepository
         $stmt->bindValue(1, $id);
         $stmt->execute();
 
-        $orderData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $orderData = $stmt->fetch();
         if ($orderData !== false) {
             return OrderCreator::HydrateOrder($orderData);
         }
@@ -44,7 +44,7 @@ class OrderPdoRepository implements OrderRepository
     {
         $sql = 'SELECT * FROM orders';
         $stmt = $this->pdo->query($sql);
-        $ordersData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $ordersData = $stmt->fetchAll();
 
         return OrderCreator::HydrateOrders($ordersData);
     }
@@ -160,7 +160,7 @@ class OrderPdoRepository implements OrderRepository
     {
         $sql = 'SELECT * FROM order_items';
         $stmt = $this->pdo->query($sql);
-        $orderItemsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $orderItemsData = $stmt->fetchAll();
 
         return OrderItemCreator::HydrateOrderItems($orderItemsData);
     }

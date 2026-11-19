@@ -14,7 +14,20 @@ $absoluteDatabasePath = __DIR__ . '/banco.sqlite';
 $pdo = new PDO('sqlite:' . $absoluteDatabasePath);
 echo 'Conectei';
 
-// exec == executa um comando sql, aqui estamos criando nossa tabela students com as suas propriedades e tipos (chave primária, inteiro, texto....), não fizemos o campo birth_date como o tipo 'date' pois o sqlite é simples e não possui esses tipos mais complexos (ele funciona como um 0 e 1, ou é texto, ou número)
-$pdo->exec('CREATE TABLE students (id INTEGER PRIMARY KEY, name TEXT, birth_date TEXT)');
-// echo 'tabela criada';
-// $pdo->exec('DROP TABLE students');
+$createTableSql = '
+    CREATE TABLE IF NOT EXISTS students (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        birth_date TEXT  
+    );
+
+    CREATE TABLE IF NOT EXISTS phones (
+      id INTEGER PRIMARY KEY,
+      area_code TEXT,
+      number TEXT,
+      student_id INTEGER,
+      FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE 
+    );
+';
+
+$pdo->exec($createTableSql);

@@ -24,7 +24,7 @@ class CustomerPdoRepository implements CustomerRepository
         $stmt->bindValue(1, $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        $customerData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $customerData = $stmt->fetch();
         // se a variável abaixo tiver o valor ESTRITAMENTE DIFERENTE (diferente em valor e tipo), entrará no corpo do if e poderá retornar um objeto do tipo Customer
         if ($customerData) {
             return CustomerCreator::HydrateCustomer($customerData);
@@ -37,7 +37,7 @@ class CustomerPdoRepository implements CustomerRepository
     {
         $sql = 'SELECT * FROM customers';
         $stmt = $this->pdo->query($sql);
-        $customersData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $customersData = $stmt->fetchAll();
 
         return CustomerCreator::HydrateCustomers($customersData);
     }
