@@ -4,13 +4,14 @@ namespace Alura\Pdo\Infrastructure\Repository;
 
 use Alura\Pdo\Domain\Repository\StudentRepository;
 use Alura\Pdo\Domain\Model\Student;
+use DateMalformedStringException;
 use PDO;
 
 // isso é uma implementação de repositório (o repositório que estamos implementando é o StudentRepository, onde aqui, sim, iremos explicitar os detalhes mais necessários para quem está envolvido diretamente nas partes 'detalhadas' importantes para quem esta participando do desenvolvimento, por isso, também, viemos para esta pasta aqui dentro de infraestrutura, como também é um repositório, também foi criada a subpasta Repository aqui, detalharemos neste arquivo coisas como a conexão com o banco, que, não é necessária/importante estar presente em definicṍes de regras de negócio, lá é APENAS as regras de negócio, nada extraordinariamente implementado por lá)
 // esta classe possui uma DEPENDÊNCIA com o PDO (ela PRECISA dele para funcionar, tanto que está no nome da classe KKKK 'PDOStudentRepository'), esta classe é dependente do PDO, ela precisa de uma instância do PDO para funcionar (assim como uma classe de repositório que implementa a interface 'StudentRepository' também, como por exemplo: ApiStudentRepository, que é DEPENDENTE de uma API para funcionar)
 class PdoStudentRepository implements StudentRepository
 {
-    // propriedade privada do tipo PDO chamada connection, ela será responsavel por nossa conexão com nosso banco de dados sqlite (é um objeto do tipo PDO)
+    // propriedade privada do tipo PDO chamada connection, ela será responsavel por nossa conexão com o banco de dados sqlite (é um objeto do tipo PDO)
     private PDO $connection;
     // recebendo por parâmetro uma conexão com QUALQUER banco de dados (seja sqlite, mysql...) e atribuindo ela como valor para nossa propriedade privada do tipo PDO chamada de $connection também, assim permitindo que, em cenários de teste e outras possíveis expansões futuras do projeto, fiquemos presos a apenas UM único banco como estavamos antes, agora o projeto fica mais flexível
     // recebendo essa conexão de qualquer tipo de banco de dados, deixamos as coisas mais flexíveis e não precisamos alterar a classe em nada, independente da conexão que tivermos aqui (sqlite, mysql) tudo continuará funcionando normalmente
@@ -20,6 +21,10 @@ class PdoStudentRepository implements StudentRepository
         // inicializando nossa propriedade com o modificador de acesso como private com o retorno do método estatico da classe ConnectionCreator == objeto do tipo PDO, que recebe como parâmetro, em sua instância, informações necessárias para se conectar com algum banco de dados(sendo o primeiro parâmetro, o driver e outras informações necessárias para acessar o SEU banco daquele driver, onde, no nosso caso, é apenas a localização daquele arquivo)
         $this->connection = $connection;
     }
+
+    /**
+     * @throws DateMalformedStringException
+     */
     public function allStudents(): array
     {
         // $stmt == $preparedStatement
@@ -32,6 +37,9 @@ class PdoStudentRepository implements StudentRepository
         return $this->hydrateStudentList($stmt);
     }
 
+    /**
+     * @throws DateMalformedStringException
+     */
     public function studentsBirhAt(\DateTimeImmutable $birthDate): array
     {
         $sqlQuery = 'SELECT * FROM students WHERE birth_date = ?';
@@ -45,11 +53,14 @@ class PdoStudentRepository implements StudentRepository
     // traduzindo nome do método: hidratar lista de estudantes, objetivo desta prática: trazer os dados de uma camada (no nosso exemplo, do banco de dados) para outra (também no nosso exemplo: para o mundo dos objetos ou melhor: POO, para nossas classes e etc) esse é o conceito de HIDRATAR, trazer dados de uma camada para a outra
     // no método abaixo estamos trazendo todas as informações obtidas na EXECUÇÃO da query SQL dentro do nosso objeto $stmt (do tipo PDOStatement) em forma de array associativo, percorrendo essa lista com um foreach, instanciando objetos do tipo student com as informações que tiramos do banco, passando isso para uma lista de estudantes e, por fim, devolvendo essa lista com objetos do tipo Student (onde cada um tem as informações de uma única linha do banco de dados da nossa tabela students)
     // parâmetro: objeto do tipo PDOStatement JÁ executado
+    /**
+     * @throws DateMalformedStringException
+     */
     private function hydrateStudentList(\PDOStatement $stmt): array
     {
         // $stmt == objeto do tipo PDOStatement, podendo ele ser um preparedStatement, ou apenas um PDOStatement gerado a partir do método query de um objeto do tipo PDO e etc
         // observação: só podemos usar o método fetchAll/fetch de um preparedStatement se ele JÁ foi executado, caso contrário não funcionará, caso cheguemos a receber de parâmetro deste método um objeto PDOStatement/preparedStatement e ele NÃO foi executado, dará erro, PORÉM, caso não seja um preparedStatement, apenas o retorno de uma linha como: $stmt = $this->connection->query($sqlQuery), dará certo, pois o retorno do método query é um objeto do tipo PDOStatement JÁ executado
-        $studentDataList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $studentDataList = $stmt->fetchAll();
         $studentList = [];
 
         foreach ($studentDataList as $studentData) {

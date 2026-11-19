@@ -8,7 +8,7 @@ use PDO;
 
 // isso é uma implementação de repositório (o repositório que estamos implementando é o StudentRepository, onde aqui, sim, iremos explicitar os detalhes mais necessários para quem está envolvido diretamente nas partes 'detalhadas' importantes para quem esta participando do desenvolvimento, por isso, também, viemos para esta pasta aqui dentro de infraestrutura, como também é um repositório, também foi criada a subpasta Repository aqui, detalharemos neste arquivo coisas como a conexão com o banco, que, não é necessária/importante estar presente em definicṍes de regras de negócio, lá é APENAS as regras de negócio, nada extraordinariamente implementado por lá)
 // esta classe possui uma DEPENDÊNCIA com o PDO (ela PRECISA dele para funcionar, tanto que está no nome da classe KKKK 'PDOStudentRepository'), esta classe é dependente do PDO, ela precisa de uma instância do PDO para funcionar (assim como uma classe de repositório que implementa a interface 'StudentRepository' também, como por exemplo: ApiStudentRepository, que é DEPENDENTE de uma API para funcionar)
-class PdoStudentRepository implements StudentRepository
+class PdoStudentRepositoryErrorInfo implements StudentRepository
 {
     // propriedade privada do tipo PDO chamada connection, ela será responsavel por nossa conexão com nosso banco de dados sqlite (é um objeto do tipo PDO)
     private PDO $connection;
