@@ -7,8 +7,12 @@ class Student
     private ?int $id; // para identificarmos o numero de registro do nosso estudante  - ? aqui significa que o valor do nosso id pode ser nullo, e int que pode ser inteiro, logo  ?int' quer dizer que o valor da propriedade $id pode ser nullo ou inteiro
     private string $name;
     // \ aqui significa que estou chamando a interface do namespace global do php e evita que eu tenha de importar a interface\classe no começo do programa (ex: use DateTimeInterface)
-    // DateTimeInterface é uma interface do php que recebe objetos do tipo data\hora que suas classes implementam ela (DateTimeInterface)
+    // DateTimeInterface é uma interface do php que recebe objetos do tipo data\hora que a suas classes implementam ela (DateTimeInterface)
     private \DateTimeInterface $birthDate;
+    // com o comentário abaixo estamos informando que a propriedade privada que estamos criando ($phones) é um array do tipo Phone, coisa que auxiliará a IDE (atualmente:PHPStorm) com coisas como autocompletes e etc
+    // inicializamos este array ($phones) como um array vazio pois TODO aluno quando se cadastra, começara sem nenhum telefone cadastrado (eu poderia pedir para ele cadastrar um telefone JUNTAMENTE do restante das suas informações necessárias para se tornar um objeto válido, porém, aqui, como pude observar no curso, a REGRA DE NEGÓCIO é diferente, logo, não tomaremos este tipo de abordagem)
+    /** @var array Phone[] */
+    private array $phones = [];
 
     public function __construct(?int $id, string $name, \DateTimeInterface $birthDate)
     {
@@ -58,5 +62,18 @@ class Student
         return $this->birthDate
             ->diff(new \DateTimeImmutable())
             ->y;
+    }
+
+    public function setPhone(Phone $phone) : void
+    {
+        $this->phones[] = $phone;
+    }
+
+    /**
+     * @return array Phone[]
+     */
+    public function getPhones(): array
+    {
+        return $this->phones;
     }
 }
