@@ -102,17 +102,28 @@ class OrderPdoRepository implements OrderRepository
     /**
      * @throws DateMalformedStringException
      */
-    public function financialReport()
+    public function financialReport(): void
     {
-        $orders = $this->listAll();
-        $ordersQuantity = count($orders);
-        $total = array_sum(
-            array_map(fn($order) => $order->getTotal(), $orders)
-        ); // entender este trecho aqui depois
-        $average = $total / $ordersQuantity; // valor médio dos produtos
-        $soldUnities = array_sum(
-            array_map(fn($order) => $order->getQuantity(), $orders)
-        );
+        $orderItems = $this->listAllItems();
+        $ordersQuantity = count($this->listAll());
+
+        if ($ordersQuantity > 0) {
+            $total = 0;
+            $soldUnities = 0;
+            foreach ($orderItems as $orderItem) {
+                $total += $orderItem->getUnitPrice() * $orderItem->getQuantity();
+                $soldUnities += $orderItem->getQuantity();
+            }
+            $average = $total / $ordersQuantity; // valor médio dos produtos
+
+            echo '===== RELATÓRIO FINANCEIRO =====' . PHP_EOL;
+            echo "QUANTIDADE DE PEDIDOS: {$ordersQuantity}" . PHP_EOL;
+            echo "TOTAL: {$total}" . PHP_EOL;
+            echo "MÉDIA DE VALOR DOS PRODUTOS: {$average}" . PHP_EOL;
+            echo "UNIDADES VENDIDAS: {$soldUnities}" . PHP_EOL;
+        } else {
+            echo 'Nenhum pedido efetuado até o momento.' . PHP_EOL;
+        }
     }
 
     /**

@@ -139,8 +139,6 @@ while (true) {
                 }
             }
         }
-    } else if ($option == 0) {
-        return false;
     } else if ($option == 2) {
         $orderId = (int)readline('Informe o ID do pedido: ');
 
@@ -160,7 +158,13 @@ while (true) {
             echo $e->getMessage() . PHP_EOL;
         }
     } else if ($option == 3) {
-
+        try {
+            $orderPdoRepository->financialReport();
+        } catch (DateMalformedStringException $e) {
+            echo $e->getMessage() . PHP_EOL;
+        }
+    } else if ($option == 0) {
+        return false;
     } else {
         echo 'Opção inválida!' . PHP_EOL;
     }
