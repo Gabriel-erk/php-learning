@@ -65,37 +65,13 @@ class PdoStudentRepository implements StudentRepository
         $studentList = [];
 
         foreach ($studentDataList as $studentData) {
-            // sintaxe abaixo quer dizer que estou adicionando na última posicão do meu array studentList um objeto chamada student (com o trecho $studentList[] = $student), este objeto $student está sendo declarado no momento em que ela em que está sendo passado como valor para o array, logo, se ele é um objeto que foi DECLARADO nesta função, eu ainda tenho acesso a seus valores no ESCOPO abaixo dele(aqui, o restante do foreach, por isso, consigo passar o objeto para o método $this->fillPhoneOf($student))
-            $studentList[] = $student = new Student(
+            $studentList[] = new Student(
                 $studentData['id'],
                 $studentData['name'],
                 new \DateTimeImmutable($studentData['birth_date'])
             );
-
-            $this->fillPhonesOf($student);
         }
         return $studentList;
-    }
-
-    private function fillPhonesOf(Student $student): void
-    {
-        $sqlQuery = 'SELECT id, area_code, number FROM phones WHERE student_id = ?';
-        $stmt = $this->connection->prepare($sqlQuery);
-        $stmt->bindValue(1, $student->id(), PDO::PARAM_INT);
-        $stmt->execute();
-
-        // usando o fetchAll abaixo, os dados virão em formato de array associativo, pois foi definido um atributo da nossa conexão com o banco que permite que o formato padrão de retorno destes dados seja em array associativo (FETCH_ASSOC), logo, não é necessário exemplificar o tipo fetch que queremos (como anteriormente era = $stmt->fetchAll(PDO::FETCH_ASSOC)
-        $phoneDataList = $stmt->fetchAll();
-
-        foreach ($phoneDataList as $phoneData) {
-            $phone = new Phone(
-                $phoneData['id'],
-                $phoneData['area_code'],
-                $phoneData['number']
-            );
-
-            $student->setPhone($phone);
-        }
     }
 
     public function save(Student $student): bool
@@ -159,5 +135,22 @@ class PdoStudentRepository implements StudentRepository
         $preparedStatement = $this->connection->prepare($sqlInsert);
         $preparedStatement->bindValue(1, $student->id(), PDO::PARAM_INT);
         return $preparedStatement->execute();
+    }
+
+    // motivação para termos adotado esta abordagem é para evitar um problema famoso de banco de dados chamado de N+1, onde executamos MUITAS queries (N = muitos(as)) + 1 query, um exemplo: primeiro buscamos TODOS os dados da tabela estudantes (1 query), temos 10.000 usuários cadastrados no sistema, e sempre que uma query para trazer os usuários é feita, é feita mais 1 query para cada estudante, para que se tenha acesso a todos os telefones daquele usuário, logo, tendo em mente essa quantidade de registros na tabela (10.000), sempre que trazermos os usuários, teremos 10.001 queries (coisa que não queremos, por isso, temos um método para trazer os usuários juntamente dos seus telefones, ficando apenas em 10.000 queries
+    public function studentsWithPhone(): array
+    {
+        // abaixo estou fazendo uma JUNÇÃO de tabelas (JOIN) onde estou buscando todas as colunas abaixo (sintaxe: tabela.nomeColuna) de students e phones (JOIN) que citei no meu select com base numa condição (ON), que é: traga todos os registros das colunas dessas duas tabelas que foram juntadas (FROM students JOIN phones) onde a coluna id da tabela students (students.id) POSSUIR O MESMO VALOR da coluna student_id (phones.student_id) na tabela phones
+        $sqlQuery = 'SELECT students.id, 
+                            students.name, 
+                            students.birth_date,
+                            phones.id AS phone_id,
+                            phones.area_code,
+                            phones.number
+                     FROM students
+                     JOIN phones ON students.id = phones.student_id';
+        // como não temos nenhum parâmetro a passar, podemos executar da forma abaixo, usando o método query
+        $stmt = $this->connection->query($sqlQuery);
+
     }
 }
