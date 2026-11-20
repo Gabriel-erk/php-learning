@@ -14,6 +14,9 @@ $absoluteDatabasePath = __DIR__ . '/banco.sqlite';
 $pdo = new PDO('sqlite:' . $absoluteDatabasePath);
 echo 'Conectei';
 
+$pdo->exec("INSERT INTO phones (area_code, number, student_id) VALUES ('24', '999999999', 1), ('24', '989898989', 1)");
+//exit();
+
 $createTableSql = '
     CREATE TABLE IF NOT EXISTS students (
         id INTEGER PRIMARY KEY,

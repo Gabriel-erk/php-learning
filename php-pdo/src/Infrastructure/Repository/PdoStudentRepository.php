@@ -2,6 +2,7 @@
 
 namespace Alura\Pdo\Infrastructure\Repository;
 
+use Alura\Pdo\Domain\Model\Phone;
 use Alura\Pdo\Domain\Repository\StudentRepository;
 use Alura\Pdo\Domain\Model\Student;
 use DateMalformedStringException;
@@ -40,7 +41,7 @@ class PdoStudentRepository implements StudentRepository
     /**
      * @throws DateMalformedStringException
      */
-    public function studentsBirhAt(\DateTimeImmutable $birthDate): array
+    public function studentsBirthAt(\DateTimeImmutable $birthDate): array
     {
         $sqlQuery = 'SELECT * FROM students WHERE birth_date = ?';
         $stmt = $this->connection->prepare($sqlQuery);
@@ -64,13 +65,37 @@ class PdoStudentRepository implements StudentRepository
         $studentList = [];
 
         foreach ($studentDataList as $studentData) {
-            $studentList[] = new Student(
+            // sintaxe abaixo quer dizer que estou adicionando na última posicão do meu array studentList um objeto chamada student (com o trecho $studentList[] = $student), este objeto $student está sendo declarado no momento em que ela em que está sendo passado como valor para o array, logo, se ele é um objeto que foi DECLARADO nesta função, eu ainda tenho acesso a seus valores no ESCOPO abaixo dele(aqui, o restante do foreach, por isso, consigo passar o objeto para o método $this->fillPhoneOf($student))
+            $studentList[] = $student = new Student(
                 $studentData['id'],
                 $studentData['name'],
                 new \DateTimeImmutable($studentData['birth_date'])
             );
+
+            $this->fillPhonesOf($student);
         }
         return $studentList;
+    }
+
+    private function fillPhonesOf(Student $student): void
+    {
+        $sqlQuery = 'SELECT id, area_code, number FROM phones WHERE student_id = ?';
+        $stmt = $this->connection->prepare($sqlQuery);
+        $stmt->bindValue(1, $student->id(), PDO::PARAM_INT);
+        $stmt->execute();
+
+        // usando o fetchAll abaixo, os dados virão em formato de array associativo, pois foi definido um atributo da nossa conexão com o banco que permite que o formato padrão de retorno destes dados seja em array associativo (FETCH_ASSOC), logo, não é necessário exemplificar o tipo fetch que queremos (como anteriormente era = $stmt->fetchAll(PDO::FETCH_ASSOC)
+        $phoneDataList = $stmt->fetchAll();
+
+        foreach ($phoneDataList as $phoneData) {
+            $phone = new Phone(
+                $phoneData['id'],
+                $phoneData['area_code'],
+                $phoneData['number']
+            );
+
+            $student->setPhone($phone);
+        }
     }
 
     public function save(Student $student): bool

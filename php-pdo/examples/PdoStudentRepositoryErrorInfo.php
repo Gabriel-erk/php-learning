@@ -32,7 +32,7 @@ class PdoStudentRepositoryErrorInfo implements StudentRepository
         return $this->hydrateStudentList($stmt);
     }
 
-    public function studentsBirhAt(\DateTimeImmutable $birthDate): array
+    public function studentsBirthAt(\DateTimeImmutable $birthDate): array
     {
         $sqlQuery = 'SELECT * FROM students WHERE birth_date = ?';
         $stmt = $this->connection->prepare($sqlQuery);

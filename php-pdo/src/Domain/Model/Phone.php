@@ -39,4 +39,10 @@ class Phone
     {
         return $this->number;
     }
+
+    // areaCode == DDD, então, estamos retornando o DD + o número da pessoa
+    public function formattedPhone(): string
+    {
+        return "($this->areaCode) $this->number";
+    }
 }
