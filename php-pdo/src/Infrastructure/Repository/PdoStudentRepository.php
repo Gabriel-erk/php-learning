@@ -138,6 +138,10 @@ class PdoStudentRepository implements StudentRepository
     }
 
     // motivação para termos adotado esta abordagem é para evitar um problema famoso de banco de dados chamado de N+1, onde executamos MUITAS queries (N = muitos(as)) + 1 query, um exemplo: primeiro buscamos TODOS os dados da tabela estudantes (1 query), temos 10.000 usuários cadastrados no sistema, e sempre que uma query para trazer os usuários é feita, é feita mais 1 query para cada estudante, para que se tenha acesso a todos os telefones daquele usuário, logo, tendo em mente essa quantidade de registros na tabela (10.000), sempre que trazermos os usuários, teremos 10.001 queries (coisa que não queremos, por isso, temos um método para trazer os usuários juntamente dos seus telefones, ficando apenas em 10.000 queries
+
+    /**
+     * @throws DateMalformedStringException
+     */
     public function studentsWithPhone(): array
     {
         // abaixo estou fazendo uma JUNÇÃO de tabelas (JOIN) onde estou buscando todas as colunas abaixo (sintaxe: tabela.nomeColuna) de students e phones (JOIN) que citei no meu select com base numa condição (ON), que é: traga todos os registros das colunas dessas duas tabelas que foram juntadas (FROM students JOIN phones) onde a coluna id da tabela students (students.id) POSSUIR O MESMO VALOR da coluna student_id (phones.student_id) na tabela phones
@@ -151,6 +155,33 @@ class PdoStudentRepository implements StudentRepository
                      JOIN phones ON students.id = phones.student_id';
         // como não temos nenhum parâmetro a passar, podemos executar da forma abaixo, usando o método query
         $stmt = $this->connection->query($sqlQuery);
+        // por já ter realizado uma configuração de como quero retornar os dados do fetch quando foi criada a conexão com o banco (ConnectionCreator // foi definido que a forma de retornar os dados de um fetch de um objeto derivado do PDO/PDOStatement é trazendo os dados em forma de array associativo) não é mais necessário especificar que queremos os dados em forma de array associativo com PDO::FETCH_ASSOC
+        // array abaixo possui todos os resultados da query executada na linha acima não comentada (todos os estudantes que possuem telefones e juntamente, todos os telefones de cada estudante, caso um estudante tenha mais de um telefone, as informações principais dele (id, nome e birth_date) consequentemente aparecerão na tabela mais de uma vez, mudando apenas os valores de cada telefone que cada um tem
+        $result = $stmt->fetchAll();
+        // lista que vai armazenar objetos do tipo estudante
+        $studentList = [];
 
+        // $result é equivalente a um $studentDataList e $row é equivalente a um $studentData, aqui, $row tem acesso a todas as colunas que solicitamos na nossa query acima (students.id, students.name, phones.id...etc)
+        foreach ($result as $row) {
+            // método array_key_exists verifica se uma CHAVE específica existe em algum array (chaves/índices == $studentList[1], $studentList[2]), e estamos verificando aqui se o valor da coluna ID do row da iteração atual corresponde a alguma chave/índice no array $studentList, se a coluna 'id' da váriavel row da iteração atual do foreach for igual a algum indice dentro do array $studentList, significa que nós já salvamos aquele estudante no nosso array de objetos do tipo estudante, logo, o que precisamos fazer é ACESSAR aquele estudante e salvar o telefone que pegamos agora associado a ele ($studentList[$row['id']]->setPhone($phone)
+            // logo, abaixo, de forma defnitiva ficaria assim, usando efeito de negação no método array_key_exists, logo, se ele retornar false (ou seja, se não houver nenhuma chave com o valor que estamos pedindo ($row['id'] == id do usuário da iteração atual), entrará no dentro do corpo do if, criará um objeto do tipo student com as informações do estudantes presentes no array associativo row e atribuirá ao array $studentList, porém o indíce que ele ficará NÃO é o úlitmo indíce como viemos fazendo até agora com os colchetes do array vazios no momento da atribuição (exemplo: $lista[] = valor), agora específicamos a chave que pretendemos colocar aquele objeto, e a chave é o ID daquele estudante, nós definimos essa chave com o valor do id do estudante nesta linha aqui: $studentList[$row['id']], caso exista, receberá um valor neste indíce indicado, SE NÃO, ele criará este indíce dentro do array $studentList e colocará o valor que estamos atribuindo após os sinais de atribuição '=' (que é uma instância de objeto do tipo Student)
+            if (!array_key_exists($row['id'], $studentList)) {
+                $studentList[$row['id']] = new Student(
+                    $row['id'],
+                    $row['name'],
+                    new \DateTimeImmutable($row['birth_date'])
+                );
+            }
+            // chegou aqui, entrando no if acima ou não, será criado um telefone (objeto do tipo phone) e adicionaremos o mesmo a LISTA de telefones do estudante correspondente ($studentList[$row['id']]->setPhone($phone))
+            // se entrar no if, significa que o estudante atual (valores da váriavel $row na iteração atual) ainda não existem na nossa lista de estudantes, logo, crio ele e depois faço o processo fora do if, caso não entre no if, o estudante já está na lista de objetos do tipo Student, logo, só é necessário acessar o objeto e adicionar o telefone na sua lista de objetos do tipo Phone
+            // todo o processoa aqui evita ter que ficar criando objetos do mesmo estudante várias vezes, como está no retorno exato da query sql
+            $phone = new Phone(
+                $row['phone_id'],
+                $row['area_code'],
+                $row['number']
+            );
+            $studentList[$row['id']]->setPhone($phone);
+        }
+        return $studentList;
     }
 }
