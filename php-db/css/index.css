@@ -1,16 +1,34 @@
-.logo{
+@font-face {
+    font-family: 'Barlow';
+    src: url("../fonts/Barlow-Bold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 700;
+    /* permite o comportamento de fallback, ou seja, caso a nossa fonte atual (configurada aqui, neste font-face) não for carregada, irá para a segunda fonte configurada na chamada desta fonte que está sendo configurada (font face que estamos agora, font barlow com peso 700 (bold))*/
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Barlow';
+    src: url("../fonts/Barlow-SemiBold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
+.logo {
     width: 500px;
 }
 
-body{
+body {
     background-color: #333B1E;
     font-family: 'Barlow', sans-serif;
 }
-main{
+
+main {
     height: 100vh;
 }
 
-.container-banner{
+.container-banner {
     width: 100%;
     height: 80%;
     background-image: url("../img/banner-site.jpg");
@@ -18,7 +36,7 @@ main{
     background-repeat: no-repeat;
 }
 
-.container-texto-banner{
+.container-texto-banner {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -27,11 +45,11 @@ main{
     height: 100%;
 }
 
-.container-banner h1,p{
+.container-banner h1, p {
     color: #FFFFFF;
 }
 
-h2{
+h2 {
     text-align: center;
     font-size: 48px;
     margin: 20px 0px;
@@ -40,31 +58,32 @@ h2{
 }
 
 
-.container-cafe-manha, .container-almoco{
+.container-cafe-manha, .container-almoco {
     display: flex;
     justify-content: center;
     flex-direction: column;
 }
 
-.container-cafe-manha-titulo, .container-almoco-titulo{
+.container-cafe-manha-titulo, .container-almoco-titulo {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.container-cafe-manha-titulo h3, .container-almoco-titulo h3{
+
+.container-cafe-manha-titulo h3, .container-almoco-titulo h3 {
     font-size: 32px;
     color: #EBC181;
     text-align: center;
     margin: 15px 0px 5px;
 }
 
-.container-cafe-manha-produtos, .container-almoco-produtos{
+.container-cafe-manha-produtos, .container-almoco-produtos {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
 }
 
-.container-produto{
+.container-produto {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,29 +95,29 @@ h2{
     height: auto;
 }
 
-.container-produto img{
+.container-produto img {
     width: 350px;
     height: 270px;
     object-fit: cover;
 }
 
-.container-produto p{
+.container-produto p {
     margin: 10px 0;
     text-align: center;
 }
 
-.container-produto p:nth-child(4){
+.container-produto p:nth-child(4) {
     color: #9B8357;
     font-size: 18px;
     font-weight: 600;
 }
 
-.container-produto p:nth-child(2){
+.container-produto p:nth-child(2) {
     font-weight: bold;
     font-size: 20px;
 }
 
-.ornaments{
+.ornaments {
     width: 200px;
 }
 
