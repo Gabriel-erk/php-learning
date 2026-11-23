@@ -1,0 +1,2 @@
+SUBIR UM SERVIDOR
+- php -S localhost:8080, ex: php -S ondeQuerSubir:portaQueQuerSubir, no exemplo ao lado com localhost estamos indicando que queremos subir o servidor na minha máquina
