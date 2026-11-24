@@ -7,26 +7,26 @@
 $produtosCafe = [
         [
                 'nome' => 'Café Cremoso',
-                'descricao' => 'Café cremoso irresistivelmente suave e que envolve seu paladar',
-                'preco' => '5.00',
+                'descricao' => 'Café cremoso irresistivelmente suave e que envolve seu paladar.',
+                'preco' => '5,00',
                 'imagem' => 'img/cafe-cremoso.jpg',
         ],
         [
                 'nome' => 'Café com Leite',
-                'descricao' => 'A harmonia do café e do leite, uma experiência reconfortante',
-                'preco' => '2.00',
+                'descricao' => 'A harmonia do café e do leite, uma experiência reconfortante.',
+                'preco' => '2,00',
                 'imagem' => 'img/cafe-com-leite.jpg',
         ],
         [
                 'nome' => "Cappuccino",
-                'descricao' => "Café suave, leite cremoso e uma pitada de sabor adocicado",
-                'preco' => "7.00",
+                'descricao' => "Café suave, leite cremoso e uma pitada de sabor adocicado.",
+                'preco' => "7,00",
                 'imagem' => "img/cappuccino.jpg"
         ],
         [
                 'nome' => "Café Gelado",
                 'descricao' => "Café gelado refrescante, adoçado e com notas sutis de baunilha ou caramelo.",
-                'preco' => "3.00",
+                'preco' => "3,00",
                 'imagem' => "img/cafe-gelado.jpg"
         ]
 ];
@@ -59,14 +59,20 @@ $produtosCafe = [
             <img class="ornaments" src="img/ornaments-coffee.png" alt="ornaments">
         </div>
         <div class="container-cafe-manha-produtos">
-            <div class="container-produto">
-                <div class="container-foto">
-                    <img src="img/cafe-cremoso.jpg" alt="Café cremoso com leite e cobertura de chocolate.">
+            <!-- definindo que quero começar (estou marcando o início dele na linha abaixo) um foreach neste html -->
+            <?php foreach ($produtosCafe as $produtoCafe): ?>
+                <div class="container-produto">
+                    <div class="container-foto">
+                        <!-- como nas linhas abaixo queremos apenas IMPRIMIR/EXIBIR uma info, colocariamos apenas a palavra reservada 'echo' seguido da informação que será exibida (<?php echo $produtoCafe['imagem'] ?>), porém seria uma estrutura 'repetitiva' fazer isso em todos os campos que o necessitasem, por isso, o php nos fornecesse uma 'abreviação para isso: <?= $produtoCafe[''] ?> fazendo uso do sinal de menor, interrogação e sinal de atribuição para quando queremos apenas EXIBIR alguma informação (usar o echo basicamente, como descrito acima) -->
+                        <img src="<?= $produtoCafe['imagem'] ?>"
+                             alt="<?= $produtoCafe['descricao'] ?>">
+                    </div>
+                    <p><?= $produtoCafe['nome'] ?></p>
+                    <p><?= $produtoCafe['descricao'] ?></p>
+                    <p><?= 'R$ ' . $produtoCafe['preco'] ?></p>
                 </div>
-                <p>Café Cremoso</p>
-                <p>Café cremoso irresistivelmente suave e que envolve o seu paladar</p>
-                <p>R$ 5.00</p>
-            </div>
+                <!-- marcando o fim do foreach iniciado nas linhas acima, logo, tudo que estiver entre o começo e o fim do foreach será repetido até o fim do array escolhido ($produtosCafe)-->
+            <?php endforeach; ?>
         </div>
     </section>
     <section class="container-almoco">
