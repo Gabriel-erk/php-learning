@@ -7,9 +7,11 @@
 require_once 'src/Infrastructure/Persistence/ConnectionCreator.php';
 require_once 'src/Domain/Repository/ProdutoRepository.php';
 require_once 'src/Infrastructure/Repository/ProdutoPdoRepository.php';
+require_once 'src/Domain/Model/Produto.php';
 
 use Src\Infrastructure\Persistence\ConnectionCreator;
 use Src\Infrastructure\Repository\ProdutoPdoRepository;
+use Src\Domain\Model\Produto;
 
 // conexão com o banco de dados postgreeSQL
 $pdo = ConnectionCreator::CreateConnection();
@@ -50,12 +52,12 @@ $produtosAlmoco = $produtoPdoRepository->produtosAlmoco();
                 <div class="container-produto">
                     <div class="container-foto">
                         <!-- como nas linhas abaixo queremos apenas IMPRIMIR/EXIBIR uma info, colocariamos apenas a palavra reservada 'echo' seguido da informação que será exibida (<?php echo $produtoCafe['imagem'] ?>), porém seria uma estrutura 'repetitiva' fazer isso em todos os campos que o necessitasem, por isso, o php nos fornecesse uma 'abreviação para isso: <?= $produtoCafe[''] ?> fazendo uso do sinal de menor, interrogação e sinal de atribuição para quando queremos apenas EXIBIR alguma informação (usar o echo basicamente, como descrito acima) -->
-                        <img src="<?= $produtoCafe['imagem'] ?>"
-                             alt="<?= $produtoCafe['descricao'] ?>">
+                        <img src="<?= $produtoCafe->getImagem() ?>"
+                             alt="<?= $produtoCafe->getDescricao() ?>">
                     </div>
-                    <p><?= $produtoCafe['nome'] ?></p>
-                    <p><?= $produtoCafe['descricao'] ?></p>
-                    <p><?= 'R$ ' . $produtoCafe['preco'] ?></p>
+                    <p><?= $produtoCafe->getNome() ?></p>
+                    <p><?= $produtoCafe->getDescricao() ?></p>
+                    <p><?= 'R$ ' . $produtoCafe->preco() ?></p>
                 </div>
                 <!-- marcando o fim do foreach iniciado nas linhas acima, logo, tudo que estiver entre o começo e o fim do foreach será repetido até o fim do array escolhido ($produtosCafe)-->
             <?php endforeach; ?>
@@ -70,11 +72,11 @@ $produtosAlmoco = $produtoPdoRepository->produtosAlmoco();
             <?php foreach ($produtosAlmoco as $produtoAlmoco): ?>
                 <div class="container-produto">
                     <div class="container-foto">
-                        <img src="<?= $produtoAlmoco['imagem'] ?>" alt="<?= $produtoAlmoco['descricao'] ?>">
+                        <img src="<?= $produtoAlmoco->getImagem() ?>" alt="<?= $produtoAlmoco->getDescricao() ?>">
                     </div>
-                    <p><?= $produtoAlmoco['nome'] ?></p>
-                    <p><?= $produtoAlmoco['descricao'] ?></p>
-                    <p><?= 'R$' . $produtoAlmoco['preco'] ?></p>
+                    <p><?= $produtoAlmoco->getNome() ?></p>
+                    <p><?= $produtoAlmoco->getDescricao() ?></p>
+                    <p><?= 'R$' . $produtoAlmoco->getPreco() ?></p>
                 </div>
             <?php endforeach; ?>
         </div>
