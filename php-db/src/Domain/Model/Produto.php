@@ -1,9 +1,11 @@
 <?php
 
+namespace Src\Domain\Model;
+
 class Produto
 {
     // readonly em $id, já que não é possível ficar alterando deliberadamente o valor do atributo id do nosso objeto (baseado na regra de negócio deste sistema)
-    public function __construct(private readonly int $id, private string $nome, private string $descricao, private string $imagem, private float $preco)
+    public function __construct(private readonly int $id, private string $tipo, private string $nome, private string $descricao, private string $imagem, private float $preco)
     {
 
     }
@@ -14,6 +16,14 @@ class Produto
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTipo(): string
+    {
+        return $this->tipo;
     }
 
     /**
@@ -46,6 +56,14 @@ class Produto
     public function getPreco(): float
     {
         return $this->preco;
+    }
+
+    /**
+     * @param string $tipo
+     */
+    public function setTipo(string $tipo): void
+    {
+        $this->tipo = $tipo;
     }
 
     /**

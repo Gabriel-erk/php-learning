@@ -4,58 +4,19 @@
 <!--observação importante é que a linguagem php é uma linguagem de server-side (o que significa que é uma linguagem que é executada AO LADO (side) do servidor (server)), o que quer dizer que para geramos conteúdos dinâmicos (que se alteram em tempo real/durante a execução) é necessário que seja rodado um servidor dedicado (php -S ondeQueremosAbrir:portaQueQueremosAbrir, sem isso, não é possível gerar conteúdo que se altere em tempo real/de uso, um arquivo com a extensão .html, por exemplo, não precisa de um servidor dedicado para gerar uma página dinâmica (afinal, ele não é uma linguagem server-side/ao lado do servidor) -->
 <?php
 
-$produtosCafe = [
-        [
-                'nome' => 'Café Cremoso',
-                'descricao' => 'Café cremoso irresistivelmente suave e que envolve seu paladar.',
-                'preco' => '5.00',
-                'imagem' => 'img/cafe-cremoso.jpg',
-        ],
-        [
-                'nome' => 'Café com Leite',
-                'descricao' => 'A harmonia do café e do leite, uma experiência reconfortante.',
-                'preco' => '2.00',
-                'imagem' => 'img/cafe-com-leite.jpg',
-        ],
-        [
-                'nome' => "Cappuccino",
-                'descricao' => "Café suave, leite cremoso e uma pitada de sabor adocicado.",
-                'preco' => "7.00",
-                'imagem' => "img/cappuccino.jpg"
-        ],
-        [
-                'nome' => "Café Gelado",
-                'descricao' => "Café gelado refrescante, adoçado e com notas sutis de baunilha ou caramelo.",
-                'preco' => "3.00",
-                'imagem' => "img/cafe-gelado.jpg"
-        ]
-];
-$produtosAlmoco = [
-        [
-                'nome' => 'Bife',
-                'descricao' => 'Bife, arroz com feijão e uma deliciosa batata frita.',
-                'preco' => '27.90',
-                'imagem' => 'img/bife.jpg'
-        ],
-        [
-                'nome' => 'Filé de peixe',
-                'descricao' => 'Filé de peixe salmão assado, arroz, feijão verde e tomate.',
-                'preco' => '24.99',
-                'imagem' => 'img/prato-peixe.jpg'
-        ],
-        [
-                'nome' => 'Frango',
-                'descricao' => 'Saboroso frango à milanesa com batatas fritas, salada de repolho e molho picante.',
-                'preco' => '23.00',
-                'imagem' => 'img/prato-frango.jpg'
-        ],
-        [
-                'nome' => 'Fettuccine',
-                'descricao' => 'Prato italiano autêntico da massa do fettuccine com peito de frango grelhado.',
-                'preco' => '22.50',
-                'imagem' => 'img/fettuccine.jpg'
-        ],
-];
+require_once 'src/Infrastructure/Persistence/ConnectionCreator.php';
+require_once 'src/Domain/Repository/ProdutoRepository.php';
+require_once 'src/Infrastructure/Repository/ProdutoPdoRepository.php';
+
+use Src\Infrastructure\Persistence\ConnectionCreator;
+use Src\Infrastructure\Repository\ProdutoPdoRepository;
+
+// conexão com o banco de dados postgreeSQL
+$pdo = ConnectionCreator::CreateConnection();
+$produtoPdoRepository = new ProdutoPdoRepository($pdo);
+
+$produtosCafe = $produtoPdoRepository->produtosCafe();
+$produtosAlmoco = $produtoPdoRepository->produtosAlmoco();
 ?>
 
 <!doctype html>
