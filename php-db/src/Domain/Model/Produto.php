@@ -50,12 +50,22 @@ class Produto
         return $this->imagem;
     }
 
+    public function getImagemDiretorio(): string
+    {
+        return 'img/' . $this->imagem;
+    }
+
     /**
      * @return float
      */
     public function getPreco(): float
     {
         return $this->preco;
+    }
+
+    public function getPrecoFormatado(): float
+    {
+        return 'R$ ' . number_format($this->preco, 2);
     }
 
     /**
