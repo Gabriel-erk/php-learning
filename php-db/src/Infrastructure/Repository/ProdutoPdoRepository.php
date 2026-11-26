@@ -43,28 +43,14 @@ class ProdutoPdoRepository implements ProdutoRepository
 
     public function produtosCafe(): array
     {
-        $produtos = $this->index();
-        $produtosCafe = [];
-
-        foreach ($produtos as $produto) {
-            if ($produto->getTipo() == 'Café') {
-                $produtosCafe[] = $produto;
-            }
-        }
-        return $produtosCafe;
+        $stmt = $this->pdo->query("SELECT * FROM produtos WHERE tipo = 'Café' ORDER BY preco ASC");
+        return $this->hydrateProducts($stmt);
     }
 
     public function produtosAlmoco(): array
     {
-        $produtos = $this->index();
-        $produtosAlmoco = [];
-
-        foreach ($produtos as $produto) {
-            if ($produto->getTipo() == 'Almoço') {
-                $produtosAlmoco[] = $produto;
-            }
-        }
-        return $produtosAlmoco;
+        $stmt = $this->pdo->query("SELECT * FROM produtos WHERE tipo = 'Almoço'");
+        return $this->hydrateProducts($stmt);
     }
 
     public function findById(int $id): ?Produto
@@ -97,14 +83,15 @@ class ProdutoPdoRepository implements ProdutoRepository
             return false;
         }
 
-        $stmt = $this->pdo->prepare('UPDATE produtos SET tipo = :tipo, nome = :nome, descricao = :descricao, imagem = :imagem, preco = :preco');
+        $stmt = $this->pdo->prepare('UPDATE produtos SET tipo = :tipo, nome = :nome, descricao = :descricao, imagem = :imagem, preco = :preco WHERE id = :id');
 
         return $stmt->execute([
             ':tipo' => $produto->getTipo(),
             ':nome' => $produto->getNome(),
             ':descricao' => $produto->getDescricao(),
             ':imagem' => $produto->getImagem(),
-            ':preco' => $produto->getPreco()
+            ':preco' => $produto->getPreco(),
+            ':id' => $produto->getId()
         ]);
     }
 

@@ -52,7 +52,7 @@ $produtosAlmoco = $produtoPdoRepository->produtosAlmoco();
                 <div class="container-produto">
                     <div class="container-foto">
                         <!-- como nas linhas abaixo queremos apenas IMPRIMIR/EXIBIR uma info, colocariamos apenas a palavra reservada 'echo' seguido da informação que será exibida (<?php echo $produtoCafe['imagem'] ?>), porém seria uma estrutura 'repetitiva' fazer isso em todos os campos que o necessitasem, por isso, o php nos fornecesse uma 'abreviação para isso: <?= $produtoCafe[''] ?> fazendo uso do sinal de menor, interrogação e sinal de atribuição para quando queremos apenas EXIBIR alguma informação (usar o echo basicamente, como descrito acima) -->
-                        <img src="<?= $produtoCafe->getImagem() ?>"
+                        <img src="<?= 'img/' . $produtoCafe->getImagem() ?>"
                              alt="<?= $produtoCafe->getDescricao() ?>">
                     </div>
                     <p><?= $produtoCafe->getNome() ?></p>
