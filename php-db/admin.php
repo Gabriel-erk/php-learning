@@ -47,6 +47,7 @@ $produtos = $produtoPdoRepository->index();
             </thead>
             <tbody>
             <?php foreach ($produtos as $produto): ?>
+                <!-- tr == table row (linha de tabela), ou seja, aqui é uma representação semelhante a uma linha de registro em banco de dados, onde cada TD dentro da abertura e fechamento da tag html TR representa um dado vínculado a uma COLUNA aqui da nossa table seguindo a ordem de definição da coluna, logo, o primeiro td aparecerá como valor da primeira coluna definida aqui na tabela (colunas foram definidas no thead (table head/cabeçalho) acima do tbody (table body) que estamos dentro)  -->
                 <tr>
                     <td><?= $produto->getNome() ?></td>
                     <td><?= $produto->getTipo() ?></td>
@@ -54,8 +55,10 @@ $produtos = $produtoPdoRepository->index();
                     <td><?php $produto->getPrecoFormatado() ?></td>
                     <td><a class="botao-editar" href="editar-produto.html">Editar</a></td>
                     <td>
-                        <form>
-                            <input type="button" class="botao-excluir" value="Excluir">
+                        <form method="post" action="src/Infrastructure/Repository/ProdutoPdoRepository.php">
+                                <!-- type hidden fará com que este input abaixo esteja presente na página HTML, porém ele não será VISÍVEL para o usuário, este campo estará OCULTO (poderá ser visto apenas em caso de inspecionarem a página e etc, caso este campo tivesse o tipo number ou text, ele ocuparia um certo espaço na tela, coisa que não queremos, já que a única funcionalidade do campo abaixo é permitir que possamos enviar o valor do id do produto para o arquivo de exclusão (especificado no nosso action) QUANDO o usuário clicar no botão de excluir abaixo deste input do type hidden  -->
+                            <input type="hidden" name="id" value="<?php $produto->getId() ?>">
+                            <input type="submit" class="botao-excluir" value="Excluir">
                         </form>
                     </td>
                 </tr>

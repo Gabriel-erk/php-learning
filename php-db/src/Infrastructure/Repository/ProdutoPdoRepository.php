@@ -18,7 +18,7 @@ class ProdutoPdoRepository implements ProdutoRepository
 
     public function index(): array
     {
-        $stmt = $this->pdo->query('SELECT * FROM produtos');
+        $stmt = $this->pdo->query('SELECT * FROM produtos ORDER BY preco ASC');
         return $this->hydrateProducts($stmt);
     }
 
