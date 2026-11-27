@@ -52,13 +52,13 @@ $produtosAlmoco = $produtoPdoRepository->produtosAlmoco();
                 <div class="container-produto">
                     <div class="container-foto">
                         <!-- Como nas linhas abaixo queremos apenas IMPRIMIR/EXIBIR uma info, colocariamos apenas a palavra reservada 'echo' seguido da informação que será exibida, o que seria uma estrutura 'repetitiva' fazer isso em todos os campos que o necessitasem, por isso, o php nos fornecesse uma 'abreviação para isso: usando <'? E é feito uso do sinal de menor, interrogação e sinal de atribuição para quando queremos apenas EXIBIR alguma informação (usar o echo basicamente, como descrito acima) -->
-                        <img src="<?= $produtoCafe->getImagemDiretorio() ?>"
+                        <img src="<?php $produtoCafe->getImagemDiretorio() ?>"
                              alt="<?= $produtoCafe->getDescricao() ?>">
                     </div>
                     <p><?= $produtoCafe->getNome() ?></p>
                     <p><?= $produtoCafe->getDescricao() ?></p>
                     <!-- por ter sido atribuito o tipo float para a propriedade preco na classe Produto, um objeto que tenha como valor desta propriedade, 0 (literalmente, o valor 0) casas decimais, no momento de exibição, elas serão cortadas e não queremos isso, o método number_format pede o valor de ponto flutuante (float) a ser formatado e como segundo parâmetro a quantidade de casas decimais desejadas (aqui,2)-->
-                    <p><?= $produtoCafe->getPrecoFormatado() ?></p>
+                    <p><?php $produtoCafe->getPrecoFormatado() ?></p>
                 </div>
                 <!-- marcando o fim do foreach iniciado nas linhas acima, logo, tudo que estiver entre o começo e o fim do foreach será repetido até o fim do array escolhido ($produtosCafe)-->
             <?php endforeach; ?>
@@ -73,11 +73,11 @@ $produtosAlmoco = $produtoPdoRepository->produtosAlmoco();
             <?php foreach ($produtosAlmoco as $produtoAlmoco): ?>
                 <div class="container-produto">
                     <div class="container-foto">
-                        <img src="<?= $produtoAlmoco->getImagemDiretorio() ?>" alt="<?= $produtoAlmoco->getDescricao() ?>">
+                        <img src="<?php $produtoAlmoco->getImagemDiretorio() ?>" alt="<?= $produtoAlmoco->getDescricao() ?>">
                     </div>
                     <p><?= $produtoAlmoco->getNome() ?></p>
                     <p><?= $produtoAlmoco->getDescricao() ?></p>
-                    <p><?= $produtoAlmoco->getPrecoFormatado() ?></p>
+                    <p><?php $produtoAlmoco->getPrecoFormatado() ?></p>
                 </div>
             <?php endforeach; ?>
         </div>

@@ -50,9 +50,9 @@ class Produto
         return $this->imagem;
     }
 
-    public function getImagemDiretorio(): string
+    public function getImagemDiretorio(): void
     {
-        return 'img/' . $this->imagem;
+        echo 'img/' . $this->imagem;
     }
 
     /**
@@ -63,9 +63,9 @@ class Produto
         return $this->preco;
     }
 
-    public function getPrecoFormatado(): float
+    public function getPrecoFormatado(): void
     {
-        return 'R$ ' . number_format($this->preco, 2);
+        echo 'R$ ' . number_format($this->preco, 2);
     }
 
     /**

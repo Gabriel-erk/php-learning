@@ -1,3 +1,17 @@
+<?php
+require_once 'src/Domain/Model/Produto.php';
+require_once 'src/Domain/Repository/ProdutoRepository.php';
+require_once 'src/Infrastructure/Persistence/ConnectionCreator.php';
+require_once 'src/Infrastructure/Repository/ProdutoPdoRepository.php';
+
+use Src\Infrastructure\Persistence\ConnectionCreator;
+use Src\Infrastructure\Repository\ProdutoPdoRepository;
+
+$pdo = ConnectionCreator::CreateConnection();
+$produtoPdoRepository = new ProdutoPdoRepository($pdo);
+$produtos = $produtoPdoRepository->index();
+?>
+
 <!doctype html>
 <html lang="pt-br">
 <head>
@@ -32,43 +46,20 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Bife</td>
-                <td>Almoço</td>
-                <td>Delicioso prato</td>
-                <td>R$ 25.00</td>
-                <td><a class="botao-editar" href="editar-produto.html">Editar</a></td>
-                <td>
-                    <form>
-                        <input type="button" class="botao-excluir" value="Excluir">
-                    </form>
-                </td>
-
-            </tr>
-            <tr>
-                <td>Frango</td>
-                <td>Almoço</td>
-                <td>Delicioso prato</td>
-                <td>R$ 25.00</td>
-                <td><a class="botao-editar" href="editar-produto.html">Editar</a></td>
-                <td>
-                    <form>
-                        <input type="button" class="botao-excluir" value="Excluir">
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>Café Gelado</td>
-                <td>Café</td>
-                <td>Delicioso prato</td>
-                <td>R$ 25.00</td>
-                <td><a class="botao-editar" href="editar-produto.html">Editar</a></td>
-                <td>
-                    <form>
-                        <input type="button" class="botao-excluir" value="Excluir">
-                    </form>
-                </td>
-            </tr>
+            <?php foreach ($produtos as $produto): ?>
+                <tr>
+                    <td><?= $produto->getNome() ?></td>
+                    <td><?= $produto->getTipo() ?></td>
+                    <td><?= $produto->getDescricao() ?></td>
+                    <td><?php $produto->getPrecoFormatado() ?></td>
+                    <td><a class="botao-editar" href="editar-produto.html">Editar</a></td>
+                    <td>
+                        <form>
+                            <input type="button" class="botao-excluir" value="Excluir">
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
             </tbody>
         </table>
         <a class="botao-cadastrar" href="cadastrar-produto.html">Cadastrar produto</a>
